@@ -416,3 +416,19 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+#macos system files
+.DS_Store
+
+#Thumbs.db
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.stackdump
+*.compositebundle
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+*.dotCover
