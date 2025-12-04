@@ -9,7 +9,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
-    <link rel="shortcut icon" href="upload/school.png" type="image/x-icon">
   </head>
 
   <body class="container-fluid p-0 overflow-x-hidden">
@@ -17,7 +16,7 @@
     
     <!-- Navigation -->
     <header>
-      <nav class="navbar navbar-expand-md navbar-dark bg-primary sticky-top" aria-label="Navigazione principale">
+      <nav class="navbar navbar-expand-md navbar-dark bg-primary sticky-top" aria-label="Navigazione principale" role="navigation">
         <div class="container">
 
           <!-- Brand -->
@@ -69,7 +68,7 @@
             
             <!-- Testo -->
             <div class="col-lg-5 mb-4 mb-lg-0">
-              <h1 class="display-4 fw-bold mb-3">
+              <h1 id="page-title" class="display-4 fw-bold mb-3">
                 Questa è <br> Mensa Campus
               </h1>
               <p class="lead mb-4">
@@ -79,10 +78,10 @@
 
               <div class="d-flex flex-wrap gap-3">
                 <a class="btn btn-primary btn-lg" href="menu.html">
-                  <i class="bi bi-book me-2"></i>Vedi il Menu
+                  <i class="bi bi-book me-2" aria-hidden="true"></i>Vedi il Menu
                 </a>
                 <a class="btn btn-outline-primary btn-lg" href="register.html">
-                  <i class="bi bi-person-plus me-2"></i>Registrati ora
+                  <i class="bi bi-person-plus me-2" aria-hidden="true"></i>Registrati ora
                 </a>
               </div>
             </div>
@@ -93,6 +92,8 @@
                 src="upload/mensa.jpg" 
                 class="img-fluid rounded shadow-lg"
                 alt="Immagine della mensa universitaria"
+                loading="lazy"
+                decoding="async"
               />
             </div>
           </div>
@@ -143,14 +144,53 @@
 
 
       <!-- Come Funziona -->
-      <section>
-        <h2 class="text-center py-5">Come Funziona</h2>
+      <section class="py-5">
+        <div class="container">
+          <h2 class="text-center mb-4">Come Funziona</h2>
+
+          <div class="row mt-4">
+
+            <div class="col-md-3 text-center py-4">
+              <i class="bi bi-1-circle-fill text-primary display-2" aria-hidden="true"></i>
+              <span class="visually-hidden">Passo 1: Registrati</span>
+
+              <h3 class="h5 mt-3">Registrati</h3>
+              <p>Crea il tuo account gratuito in pochi secondi</p>
+            </div>
+
+            <div class="col-md-3 text-center py-4">
+              <i class="bi bi-2-circle-fill text-primary display-2" aria-hidden="true"></i>
+              <span class="visually-hidden">Passo 2: Consulta il Menu</span>
+
+              <h3 class="h5 mt-3">Consulta il Menu</h3>
+              <p>Sfoglia le proposte del giorno</p>
+            </div>
+
+            <div class="col-md-3 text-center py-4">
+              <i class="bi bi-3-circle-fill text-primary display-2" aria-hidden="true"></i>
+              <span class="visually-hidden">Passo 3: Prenota</span>
+
+              <h3 class="h5 mt-3">Prenota</h3>
+              <p>Scegli i piatti e conferma la prenotazione</p>
+            </div>
+
+            <div class="col-md-3 text-center py-4">
+              <i class="bi bi-4-circle-fill text-primary display-2" aria-hidden="true"></i>
+              <span class="visually-hidden">Passo 4: Ritira</span>
+
+              <h3 class="h5 mt-3">Ritira</h3>
+              <p>Vieni in mensa e ritira il tuo pasto</p>
+            </div>
+
+          </div>
+
+        </div>
       </section>
       
     </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-white py-4 mt-5">
+    <footer class="bg-dark text-white py-4">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
@@ -169,8 +209,14 @@
                 <div class="col-md-3">
                     <h4 class="h6 mb-3">Contatti</h4>
                     <ul class="list-unstyled small">
-                        <li class="text-white-50"><i class="bi bi-envelope me-2" aria-hidden="true"></i>info@mensacampus.it</li>
-                        <li class="text-white-50"><i class="bi bi-telephone me-2" aria-hidden="true"></i>+39 051 123456</li>
+                        <li class="text-white-50">
+                          <i class="bi bi-envelope me-2" aria-hidden="true"></i>
+                          <a href="mailto:info@mensacampus.it" class="text-white-50 text-decoration-none">info@mensacampus.it</a>
+                        </li>
+                        <li class="text-white-50">
+                          <i class="bi bi-telephone me-2" aria-hidden="true"></i>
+                          <a href="tel:+39051123456" class="text-white-50 text-decoration-none">+39 051 123456</a>
+                        </li>
                     </ul>
                 </div>
             </div>
