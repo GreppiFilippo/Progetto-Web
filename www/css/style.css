@@ -20,3 +20,13 @@
 .feature-icon.bg-warning {
     background-color: #ffc107;
 }
+
+
+/* Navbar */
+nav {
+    background-color: #2C5F34;
+}
+
+main > section:nth-child(1) {
+
+}
