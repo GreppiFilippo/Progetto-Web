@@ -1,32 +1,131 @@
-.feature-icon {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1rem auto;
-    color: #fff; /* icona bianca */
+/* Links */
+main a {
+    color: #2C5F34;
 }
 
-.feature-icon.bg-primary {
-    background-color: #2C5F4E;
+main a:hover {
+    color: #24492B;
+    border-bottom: solid #24492B 1.5px;
+    transition: all 0.1s ease-in-out;
 }
-
-.feature-icon.bg-success {
-    background-color: #198754;
-}
-
-.feature-icon.bg-warning {
-    background-color: #ffc107;
-}
-
 
 /* Navbar */
-nav {
+nav.navbar {
     background-color: #2C5F34;
 }
 
-main > section:nth-child(1) {
+nav.navbar ul li:hover {
+    transition: all 0.3s ease;
+    transform: translateY(-2px);
+    border-bottom: 2px solid #F0F6F1;
+    font-weight: bold;
+}
 
+/* Buttons */
+form button[type="submit"],
+a.btn:first-of-type {
+    background-color: #2C5F4E;
+    border-color: #2C5F4E;
+}
+
+form button[type="submit"] i,
+a.btn:first-of-type i {
+    color: white;
+}
+
+form button[type="submit"]:hover,
+a.btn:first-of-type:hover {
+    background-color: #24492B;
+    border-color: #24492B;
+}
+
+a.btn:nth-of-type(2) {
+    color: #2C5F4E;
+    border-color: #2C5F4E;
+}
+
+a.btn:nth-of-type(2):hover {
+    color: white;
+    background-color: #2C5F4E;
+    border-color: #2C5F4E;
+}
+
+a.btn:nth-of-type(2):hover i {
+    color: white;
+}
+
+/* Icons */
+main i.bi {
+    color: #2C5F4E;
+}
+
+/* Feature icons */
+.col:has(.bi-clock-history) .rounded-circle {
+    background-color: #2C5F4E;
+    width: 80px;
+    height: 80px;
+}
+
+.col:has(.bi-calendar-check) .rounded-circle {
+    background-color: #4D2C5F;
+    width: 80px;
+    height: 80px;
+}
+
+.col:has(.bi-star-fill) .rounded-circle {
+    background-color: #5F2C3E;
+    width: 80px;
+    height: 80px;
+}
+
+.col:has(.bi-calendar-check) .rounded-circle i,
+.col:has(.bi-star-fill) .rounded-circle i,
+.col:has(.bi-clock-history) .rounded-circle i {
+    color: white;
+}
+
+main > div.alert {
+    background-color: #F0F6F1 !important;
+    color: #1B3B20 !important;
+}
+
+/* Menu Filter */
+main form select, 
+main form input[type="date"] {
+    cursor: pointer;
+}
+
+/* Card Header */
+main form .card-header {
+    background-color: #2C5F34;
+    color: white;
+}
+
+main form .card-header > h2 > span {
+    color: #2C5F4E;
+}
+
+ul li div.card > div.card-body span.badge i.bi {
+    color: white;
+}
+
+/* Aside Submit Button */
+main form aside input[type="submit"] {
+    background-color: #2C5F4E;
+    border-color: #2C5F4E;
+}
+
+main form aside input[type="submit"]:hover {
+    background-color: #24492B;
+    border-color: #24492B;
+}
+
+/* Page Footer */
+body > footer a {
+    color: #FFFFFFB3;
+}
+
+body > footer a:hover {
+    border-bottom: solid #FFFFFFB3 1.5px;
+    transition: all 0.1s ease-in-out;
 }
