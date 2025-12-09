@@ -129,3 +129,11 @@ body > footer a:hover {
     border-bottom: solid #FFFFFFB3 1.5px;
     transition: all 0.1s ease-in-out;
 }
+
+body > header > nav {
+    background-color: #2C5F34;
+}
+
+body > main > form > fieldset > div > i, body > main > h1 > i, body > main > div > aside > div > i  {
+    color: #2C5F34;
+}
