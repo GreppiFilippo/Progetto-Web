@@ -20,3 +20,11 @@
 .feature-icon.bg-warning {
     background-color: #ffc107;
 }
+
+body > header > nav {
+    background-color: #2C5F34;
+}
+
+body > main > form > fieldset > div > i, body > main > h1 > i, body > main > div > aside > div > i  {
+    color: #2C5F34;
+}
