@@ -13,13 +13,13 @@
 
   <body class="container-fluid p-0 overflow-x-hidden">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    
+
     <!-- Navigation -->
     <nav class="navbar navbar-expand-md navbar-dark sticky-top" aria-label="Navigazione principale">
       <div class="container">
 
         <!-- Brand -->
-        <a class="navbar-brand d-flex align-items-center" href="index.html">
+        <a class="navbar-brand d-flex align-items-center" href="index.php">
           <i class="bi bi-shop fs-3 me-2" aria-hidden="true"></i>
           <span class="fw-bold">Mensa Campus</span>
         </a>
@@ -33,159 +33,24 @@
         <!-- Menu -->
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto align-items-md-center">
-
-            <li class="nav-item">
-              <a class="nav-link active text-white" aria-current="page" href="index.html">
-                <i class="bi bi-house-door me-1" aria-hidden="true"></i>Home
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link text-white" href="menu.html">
-                <i class="bi bi-book me-1" aria-hidden="true"></i>Menu
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link text-white" href="login.html">
-                <i class="bi bi-box-arrow-in-right me-1" aria-hidden="true"></i>Accedi
-              </a>
-            </li>
+            <?php foreach($templateParams["nav_items"] as $nav_item): ?>
+              <li class="nav-item">
+                <a class="nav-link active text-white" aria-current="page" href="<?php echo $nav_item["link"]; ?>">
+                  <i class="<?php echo $nav_item["iconClass"]; ?> me-1" aria-hidden="true"></i><?php echo $nav_item["name"]; ?>
+                </a>
+              </li>
+            <?php endforeach; ?>
           </ul>
         </div>
 
       </div>
     </nav>
 
-    <main>
-      <!-- Intro -->
-      <section class="py-5">
-        <div class="container">
-          <div class="row align-items-center">
-            
-            <!-- Testo -->
-            <div class="col-lg-5 mb-4 mb-lg-0">
-              <h1 class="display-4 fw-bold mb-3" aria-label="Questa è Mensa Campus">
-                <span class="d-block" aria-hidden="true">Questa è</span>
-                <span class="d-block" aria-hidden="true">Mensa Campus</span>
-              </h1>
-              <p class="lead mb-4">
-                Prenota i tuoi pasti in modo facile e veloce. <br/>
-                Menu giornaliero aggiornato, zero code, zero sprechi.
-              </p>
-
-              <div class="d-flex flex-wrap gap-3">
-                <a class="btn btn-lg text-white" href="menu.html">
-                  <i class="bi bi-book me-2" aria-hidden="true"></i>Vedi il Menu
-                </a>
-                <a class="btn btn-lg" href="register.html">
-                  <i class="bi bi-person-plus me-2" aria-hidden="true"></i>Registrati ora
-                </a>
-              </div>
-            </div>
-
-            <!-- Immagine -->
-            <div class="col-lg-7 text-center d-none d-lg-block">
-              <img 
-                src="upload/mensa.jpg" 
-                class="img-fluid rounded shadow-lg"
-                alt="Immagine della mensa universitaria"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-
-      <!-- Perché scegliere Mensa Campus -->
-      <section class="bg-light py-5">
-        <div class="container">
-          <h2 class="text-center mb-5">Perché scegliere Mensa Campus?</h2>
-
-          <div class="row row-cols-1 row-cols-md-3 g-4">
-
-            <div class="col">
-              <div class="card h-100 border-0 shadow-sm text-center p-4">
-                <div class="text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center">
-                  <i class="bi bi-clock-history fs-1" aria-hidden="true"></i>
-                </div>
-                <h3 class="h5 card-title">Risparmia Tempo</h3>
-                <p class="card-text">Prenota in anticipo e salta la fila. Il tuo pasto ti aspetta quando arrivi.</p>
-              </div>
-            </div>
-
-            <div class="col">
-              <div class="card h-100 border-0 shadow-sm text-center p-4">
-                <div class="text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center">
-                  <i class="bi bi-calendar-check fs-1" aria-hidden="true"></i>
-                </div>
-                <h3 class="h5 card-title">Menu Aggiornato</h3>
-                <p class="card-text">Consulta il menu giornaliero sempre aggiornato con disponibilità in tempo reale.</p>
-              </div>
-            </div>
-
-            <div class="col">
-              <div class="card h-100 border-0 shadow-sm text-center p-4">
-                <div class="text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center">
-                  <i class="bi bi-star-fill fs-1" aria-hidden="true"></i>
-                </div>
-                <h3 class="h5 card-title">Zero Sprechi</h3>
-                <p class="card-text">La prenotazione aiuta a ridurre gli sprechi alimentari e garantisce la freschezza.</p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-
-      <!-- Come Funziona -->
-      <section class="py-5">
-        <div class="container">
-          <h2 class="text-center mb-4">Come Funziona</h2>
-
-          <div class="row mt-4">
-
-            <div class="col-md-3 text-center py-4">
-              <i class="bi bi-1-circle-fill display-2" aria-hidden="true"></i>
-              <span class="visually-hidden">Passo 1: Registrati</span>
-
-              <h3 class="h5 mt-3" aria-label="Registrati">Registrati</h3>
-              <p>Crea il tuo account gratuito in pochi secondi</p>
-            </div>
-
-            <div class="col-md-3 text-center py-4">
-              <i class="bi bi-2-circle-fill display-2" aria-hidden="true"></i>
-              <span class="visually-hidden">Passo 2: Consulta il Menu</span>
-
-              <h3 class="h5 mt-3">Consulta il Menu</h3>
-              <p>Sfoglia le proposte del giorno</p>
-            </div>
-
-            <div class="col-md-3 text-center py-4">
-              <i class="bi bi-3-circle-fill display-2" aria-hidden="true"></i>
-              <span class="visually-hidden">Passo 3: Prenota</span>
-
-              <h3 class="h5 mt-3">Prenota</h3>
-              <p>Scegli i piatti e conferma la prenotazione</p>
-            </div>
-
-            <div class="col-md-3 text-center py-4">
-              <i class="bi bi-4-circle-fill display-2" aria-hidden="true"></i>
-              <span class="visually-hidden">Passo 4: Ritira</span>
-
-              <h3 class="h5 mt-3">Ritira</h3>
-              <p>Vieni in mensa e ritira il tuo pasto</p>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-      
-    </main>
+    <?php
+      if (isset($templateParams["content"])) {
+        require $templateParams["content"];
+      }
+    ?>
 
     <!-- Footer -->
     <footer class="bg-dark text-white py-3">
@@ -200,9 +65,9 @@
             <nav aria-label="Link utili">
               <h4 class="h5 my-3">Link Utili</h4>
               <ul class="list-unstyled small">
-                <li><a href="menu.html" class="text-decoration-none">Menu</a></li>
-                <li><a href="login.html" class="text-decoration-none">Accedi</a></li>
-                <li><a href="register.html" class="text-decoration-none">Registrati</a></li>
+                <?php foreach($templateParams["link_utili"] as $link): ?>
+                  <li><a href="<?php echo $link["link"]; ?>" class="text-decoration-none"><?php echo $link["name"]; ?></a></li>
+                <?php endforeach; ?>
               </ul>
             </nav>
           </div>
