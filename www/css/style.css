@@ -10,7 +10,7 @@ main a:hover {
 }
 
 /* Navbar */
-nav.navbar, #dashboard-hero {
+nav.navbar, main > header.welcome {
     background-color: #2C5F34;
 }
 
@@ -23,34 +23,38 @@ nav.navbar ul li:hover {
 
 /* Buttons */
 form button[type="submit"],
-a.btn:first-of-type {
+a.btn:first-child,
+aside a.btn:first-child,
+aside section a.btn:first-of-type {
     background-color: #2C5F4E;
     border-color: #2C5F4E;
 }
 
 form button[type="submit"] i,
-a.btn:first-of-type i {
+a.btn:first-child i,
+aside section a.btn:first-of-type i {
     color: white;
 }
 
 form button[type="submit"]:hover,
-a.btn:first-of-type:hover {
+a.btn:first-child:hover,
+aside section a.btn:first-of-type:hover {
     background-color: #24492B;
     border-color: #24492B;
 }
 
-a.btn:nth-of-type(2) {
+a.btn {
     color: #2C5F4E;
     border-color: #2C5F4E;
 }
 
-a.btn:nth-of-type(2):hover {
+a.btn:hover {
     color: white;
     background-color: #2C5F4E;
     border-color: #2C5F4E;
 }
 
-a.btn:nth-of-type(2):hover i {
+a.btn:hover i {
     color: white;
 }
 
@@ -110,7 +114,8 @@ ul li div.card > div.card-body span.badge i.bi {
 }
 
 /* Aside Submit Button */
-main form aside input[type="submit"] {
+main form aside input[type="submit"],
+main form aside input[type="submit"] i {
     background-color: #2C5F4E;
     border-color: #2C5F4E;
 }
@@ -136,4 +141,52 @@ body > header > nav {
 
 body > main > form > fieldset > div > i, body > main > h1 > i, body > main > div > aside > div > i  {
     color: #2C5F34;
+}
+
+/* Admin Navigation */
+nav.navbar.nav-admin {
+    background-color: #942222;
+}
+
+main h2.admin-h2 {
+    color: #942222;
+}
+
+main i.bi.admin-icon {
+    color: #942222;
+}
+
+/* Admin Buttons */
+button.admin-btn[type="reset"] {
+    background-color: #942222;
+    border-color: #942222;
+}
+
+button.admin-btn[type="reset"] i {
+    color: white;
+}
+
+button.admin-btn[type="reset"]:hover {
+    background-color: #7A1A1A;
+    border-color: #7A1A1A;
+}
+
+button.admin-btn[type="submit"] {
+    color: #942222;
+    background-color: white;
+    border-color: #942222;
+}
+
+button.admin-btn[type="submit"] i {
+    color: #942222;
+}
+
+button.admin-btn[type="submit"]:hover {
+    color: white;
+    background-color: #942222;
+    border-color: #942222;
+}
+
+button.admin-btn[type="submit"]:hover i {
+    color: white;
 }

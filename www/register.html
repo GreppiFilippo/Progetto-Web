@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Mensa Campus - Prenota il tuo pasto online" />
     <meta name="keywords" content="mensa, campus, prenotazione, pasto, online" />
-    <title>Mensa Campus - Aggiunta piatto al menù</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
+    <title>Mensa Campus - Registrazione</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
   </head>
   <body>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     
     <!-- Navigation -->
     <nav class="navbar navbar-expand-md navbar-dark sticky-top" aria-label="Navigazione principale">
@@ -56,260 +56,83 @@
       </div>
     </nav>
 
-    <main id="main-content" class="container my-5" role="main">
-      <p class="visually-hidden" id="requiredFieldsHint">
-        I campi contrassegnati con 
-        <span aria-hidden="true">*</span> 
-        sono obbligatori.
+    <main class="container my-5">
+      <p class="visually-hidden">
+        <span class="text-danger">*</span> Campo obbligatorio
       </p>
+      <form action="#" method="post" aria-labelledby="form-title"  class="border rounded-3 p-4 shadow-sm">
+        <fieldset>
+          <legend class="visually-hidden">Form di registrazione alla mensa campus</legend>
 
-      <div class="row justify-content-center">
-        <div class="col-12">
-          <h1 class="h3 mb-1">
-            <i class="bi bi-plus-circle text-primary me-2" aria-hidden="true"></i>
-            Aggiungi Nuovo Piatto
-          </h1>
+          <div class="text-center">
+            <i class="bi bi-person-fill-add fs-1" aria-hidden="true"></i>
+            <h1 id="form-title" class="h3 mt-3">Crea il tuo Account</h1>
+            <p class="text-muted">Compila i campi per registrarti</p>
+          </div>
 
-          <!-- Regione per eventuali messaggi di errore lato JS -->
-          <div class="visually-hidden" role="alert" aria-live="polite" id="formMessages"></div>
+          <div class="row">
+            <div class="col-12 col-md-6 mb-3">
+              <label for="nome" class="form-label">Nome<span class="text-danger">*</span></label>
+              <input type="text" id="nome" name="nome" class="form-control"
+                     placeholder="Inserire nome..." autocomplete="given-name" required />
+            </div>
 
-          <div class="border-0 shadow-sm p-4">
-            <form id="addDishForm" action="" aria-describedby="requiredFieldsHint">
-              
-              <!--Caricamento Immagine-->
-              <div class="row mb-4" aria-labelledby="dishImageHeading">
-                <div class="col-12">
-                  <h2 class="h5 mb-3" id="dishImageHeading">
-                    <i class="bi bi-camera me-2" aria-hidden="true"></i>Immagine del Piatto
-                  </h2>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label for="dishImage" class="form-label">
-                      Carica Immagine 
-                      <span class="text-danger" aria-hidden="true">*</span>
-                      <span class="visually-hidden">(campo obbligatorio)</span>
-                    </label>
-                    <input 
-                      type="file" 
-                      class="form-control" 
-                      id="dishImage" 
-                      accept="image/*" 
-                      required
-                      aria-required="true"
-                      aria-describedby="dishImageHelp"
-                    >
-                    <div class="form-text" id="dishImageHelp">
-                      Formati supportati: JPG, PNG, WebP. Dimensione massima: 5MB.
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <label class="form-label" for="imagePreview">Anteprima</label>
-                    <div 
-                      id="imagePreview" 
-                      class="border rounded p-3 text-center"
-                      role="img"
-                      aria-live="polite"
-                      aria-label="Anteprima dell'immagine del piatto. Al momento nessuna immagine selezionata."
-                    >
-                      <i class="bi bi-image text-muted fs-2" aria-hidden="true"></i>
-                      <p class="text-muted mb-0 mt-2">Nessuna immagine selezionata</p>
-                    </div>
-                  </div>
-                </div>
+            <div class="col-12 col-md-6 mb-3">
+              <label for="cognome" class="form-label">Cognome<span class="text-danger">*</span></label>
+              <input type="text" id="cognome" name="cognome" class="form-control"
+                     placeholder="Inserire cognome..." autocomplete="family-name" required />
+            </div>
+          </div> 
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Email<span class="text-danger">*</span></label>
+
+            <div class="input-group">
+              <span class="input-group-text" id="visible-addon"><i class="bi bi-envelope"></i></span>
+              <input type="email" class="form-control" id="email" name="email"
+                    placeholder="Inserire email..." autocomplete="email"
+                    aria-describedby="visible-addon" required />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Password<span class="text-danger">*</span></label>
+
+            <div class="input-group">
+                <span class="input-group-text" id="visible-addon-password">
+                  <i class="bi bi-file-lock" aria-hidden="true"></i>
+                </span>
+
+                <input type="password" class="form-control" id="password" name="password"
+                      placeholder="Inserire password..." aria-describedby="visible-addon-password" autocomplete="new-password" required />
               </div>
+          </div>
 
-              <hr class="my-4" role="separator" aria-hidden="true">
+          <div class="mb-3">
+            <label for="confermapassword" class="form-label">Conferma Password<span class="text-danger">*</span></label>
 
-              <!--Informazioni di Base-->
-              <div class="row mb-4" aria-labelledby="basicInfoHeading">
-                <div class="col-12">
-                  <h2 class="h5 mb-3" id="basicInfoHeading">
-                    <i class="bi bi-info-circle me-2" aria-hidden="true"></i>Informazioni Base
-                  </h2>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <label for="dishName" class="form-label">
-                      Nome Piatto 
-                      <span class="text-danger" aria-hidden="true">*</span>
-                      <span class="visually-hidden">(campo obbligatorio)</span>
-                    </label>
-                    <input 
-                      type="text" 
-                      class="form-control" 
-                      id="dishName" 
-                      placeholder="Es. Pasta al Pomodoro" 
-                      required
-                      aria-required="true"
-                    >
-                  </div>
-                  <div class="col-md-6">
-                    <label for="dishCategory" class="form-label">
-                      Categoria 
-                      <span class="text-danger" aria-hidden="true">*</span>
-                      <span class="visually-hidden">(campo obbligatorio)</span>
-                    </label>
-                    <select 
-                      class="form-select" 
-                      id="dishCategory" 
-                      required
-                      aria-required="true"
-                    >
-                      <option value="" selected disabled>Seleziona categoria...</option>
-                      <option value="primi">Primi Piatti</option>
-                      <option value="secondi">Secondi Piatti</option>
-                      <option value="contorni">Contorni</option>
-                      <option value="dessert">Dessert</option>
-                      <option value="bevande">Bevande</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="row mb-4">
-                  <div class="col-12">
-                    <label for="dishDescription" class="form-label">
-                      Descrizione del Piatto 
-                      <span class="text-danger" aria-hidden="true">*</span>
-                      <span class="visually-hidden">(campo obbligatorio)</span>
-                    </label>
-                    <textarea 
-                      class="form-control" 
-                      id="dishDescription" 
-                      rows="3" 
-                      placeholder="Descrivi gli ingredienti principali e il metodo di preparazione..."
-                      required
-                      aria-required="true"
-                    ></textarea>
-                  </div>
-                </div>
-              </div>
+            <div class="input-group">
+              <span class="input-group-text" id="visible-addon-confirm">
+                <i class="bi bi-file-lock2" aria-hidden="true"></i>
+              </span>
 
-              <hr class="my-4" role="separator" aria-hidden="true">
+              <input type="password" class="form-control" id="confermapassword" name="confermapassword"
+                    placeholder="Ripeti la password..." aria-describedby="visible-addon-confirm" autocomplete="new-password" required />
+            </div>
+          </div>
 
-              <!--Prezzo e disponibilità-->
-              <div class="row mb-4" aria-labelledby="priceAvailabilityHeading">
-                <div class="col-12">
-                  <h2 class="h5 mb-3" id="priceAvailabilityHeading">
-                    <i class="bi bi-tag me-2" aria-hidden="true"></i>Prezzo e Disponibilità
-                  </h2>
-                </div>
-                <div class="row">
-                  <div class="col-md-4">
-                    <label for="dishPrice" class="form-label">
-                      Prezzo (€) 
-                      <span class="text-danger" aria-hidden="true">*</span>
-                      <span class="visually-hidden">(campo obbligatorio)</span>
-                    </label>
-                    <div class="input-group flex-nowrap">
-                      <span class="input-group-text" id="dishPriceAddon">€</span>
-                      <input 
-                        type="number" 
-                        class="form-control" 
-                        id="dishPrice" 
-                        min="0" 
-                        step="0.50" 
-                        placeholder="0.00" 
-                        required
-                        aria-required="true"
-                        aria-describedby="dishPriceAddon"
-                      >
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="dishCalories" class="form-label">Calorie</label>
-                    <div class="input-group">
-                      <input 
-                        type="number" 
-                        class="form-control" 
-                        id="dishCalories" 
-                        min="0" 
-                        placeholder="300"
-                        aria-describedby="dishCaloriesAddon"
-                      >
-                      <span class="input-group-text" id="dishCaloriesAddon">kcal</span>
-                    </div>
-                  </div>
-                  <div class="col-md-4">
-                    <label for="dishAvailability" class="form-label">
-                      Quantità Disponibile 
-                      <span class="text-danger" aria-hidden="true">*</span>
-                      <span class="visually-hidden">(campo obbligatorio)</span>
-                    </label>
-                    <input 
-                      type="number" 
-                      class="form-control" 
-                      id="dishAvailability" 
-                      min="0" 
-                      value="20" 
-                      placeholder="20" 
-                      required
-                      aria-required="true"
-                    >
-                  </div>
-                </div>
-              </div>
-
-              <hr class="my-4" role="separator" aria-hidden="true">
-
-              <!--Informazioni Dietetiche-->
-              <div class="row mb-4" aria-labelledby="dietaryInfoHeading" role="group">
-                <div class="col-12">
-                  <h2 class="h5 mb-3" id="dietaryInfoHeading">
-                    <i class="bi bi-heart me-2" aria-hidden="true"></i>Informazioni Dietetiche
-                  </h2>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="form-check mb-2">
-                      <input class="form-check-input" type="checkbox" value="" id="dishVegetarian">
-                      <label class="form-check-label fw-medium" for="dishVegetarian">
-                        Vegetariano
-                      </label>
-                    </div>
-                    <div class="form-check mb-2">
-                      <input class="form-check-input" type="checkbox" value="" id="dishVegan">
-                      <label class="form-check-label fw-medium" for="dishVegan">
-                        Vegano
-                      </label>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-check mb-2">
-                      <input class="form-check-input" type="checkbox" value="" id="dishGlutenFree">
-                      <label class="form-check-label fw-medium" for="dishGlutenFree">
-                        Senza Glutine
-                      </label>
-                    </div>
-                    <div class="form-check mb-2">
-                      <input class="form-check-input" type="checkbox" value="" id="dishLactoseFree">
-                      <label class="form-check-label fw-medium" for="dishLactoseFree">
-                        Senza Lattosio
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Action Buttons -->
-              <div class="row">
-                <div class="col-12">
-                  <div class="d-flex gap-3 justify-content-end">
-                    <a href="admin-menu.html" class="btn btn-primary" role="button">
-                      <i class="bi bi-x-lg me-2" aria-hidden="true"></i>Annulla
-                    </a>
-                    <button type="submit" class="btn btn-primary">
-                      <i class="bi bi-check-lg me-2" aria-hidden="true"></i>Aggiungi Piatto
-                    </button>
-                  </div>
-                </div>
-              </div>
+          <div class="d-grid gap-2 mb-3">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-person-fill-add me-2" aria-hidden="true"></i> Registrati
+            </button>
+          </div>
 
           <div class="d-flex justify-content-center gap-2">
             <p class="mb-0">Hai già un account?</p>
-            <a href="#">Accedi al tuo account</a>
+            <a class="text-decoration-none fw-bold" href="login.html">Accedi al tuo account</a>
           </div>
-        </div>
-      </div>
+        </fieldset>
+      </form>
     </main>
 
     <!-- Footer -->
@@ -349,6 +172,6 @@
         </div>
       </div>
     </footer>
-    
+
   </body>
 </html>
