@@ -1,10 +1,6 @@
 <?php
     require_once 'bootstrap.php';
 
-    // Navigation Items based on Authentication Status
-    $isLoggedIn = isset($_SESSION["user_id"]);
-    $isAdmin = isset($_SESSION["is_admin"]) && $_SESSION["is_admin"] === true;
-
     // Admin template access control
     if (!isUserLoggedIn()) {
         http_response_code(403);
