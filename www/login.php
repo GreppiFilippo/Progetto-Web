@@ -22,7 +22,6 @@ if (!isUserLoggedIn()) {
     );
 }
 
-$templateParams["content"] = "template/content-login.php";
 
 require 'template/base-user.php';
 ?>
