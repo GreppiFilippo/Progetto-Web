@@ -10,7 +10,7 @@ main a:hover {
 }
 
 /* Navbar */
-nav.navbar {
+nav.navbar, #dashboard-hero {
     background-color: #2C5F34;
 }
 
