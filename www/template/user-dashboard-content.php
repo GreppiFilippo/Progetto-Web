@@ -60,17 +60,13 @@
                         $items  = $reservation["items"] ?? [];
 
                         $badgeClass = reservationBadgeClass($status);
-                        $cardClass  = reservationCardClass($status);
-                        $iconClass  = reservationIconClass($status);
-
-                        $new = isNewReservation($status);
                         $canCancel = canCancelReservation($status);
                     ?>
                 <li class="mb-3 p-3 border rounded-3">
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <div>
                         <h3 class="h6 mb-1">
-                            <i class="bi <?php echo $iconClass; ?> <?php echo $cardClass ?>" aria-hidden="true"></i>
+                            <i class="bi bi-calendar-event text-primary me-2" aria-hidden="true"></i>
                             <span>
                                 Pranzo - <?php echo $when; ?>
                             </span>

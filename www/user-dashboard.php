@@ -16,7 +16,6 @@ if (isset($_GET["cancel_id"])) {
     if ($reservationId > 0) {
         $dbh->deleteReservation($reservationId, $userId);
     }
-
     header("Location: user-dashboard.php");
     exit();
 }

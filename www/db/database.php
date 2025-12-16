@@ -246,7 +246,6 @@ class DatabaseHelper {
         return $rows;
     }
 
-    // Cancella prenotazione (solo se appartiene all'utente e NON è già ritirata)
     public function deleteReservation($reservationId, $userId) {
         $this->db->begin_transaction();
         try {
@@ -265,32 +264,31 @@ class DatabaseHelper {
 
             if (!$r) throw new Exception("Prenotazione non trovata.");
 
-            $status = $r['status'];
+            $status = $r["status"];
 
             // annullabile solo se "Da Visualizzare" o "In Preparazione"
-            if (!in_array($status, ['Da Visualizzare', 'In Preparazione'], true)) {
-                throw new Exception("Non puoi annullare una prenotazione in stato: $status");
+            if (!in_array($status, array("Da Visualizzare", "In Preparazione"), true)) {
+                throw new Exception("Non puoi annullare una prenotazione in stato: " . $status);
             }
 
-            // elimina righe figlie
-            $delItems = $this->db->prepare("DELETE FROM reservation_dishes WHERE reservation_id = ?");
-            if (!$delItems) throw new Exception($this->db->error);
-            $delItems->bind_param("i", $reservationId);
-            if (!$delItems->execute()) throw new Exception($delItems->error);
-            $delItems->close();
-
-            // invece di cancellare la testata, meglio “marcare Annullato”
-            $upd = $this->db->prepare("UPDATE reservations SET status='Annullato' WHERE reservation_id=? AND user_id=?");
+            // aggiorna solo lo stato, NON cancellare i piatti
+            $upd = $this->db->prepare(
+                "UPDATE reservations
+                SET status = 'Annullato'
+                WHERE reservation_id = ? AND user_id = ?"
+            );
             if (!$upd) throw new Exception($this->db->error);
+
             $upd->bind_param("ii", $reservationId, $userId);
             if (!$upd->execute()) throw new Exception($upd->error);
             $upd->close();
 
             $this->db->commit();
-            return ['success' => true];
+            return array("success" => true);
+
         } catch (Exception $e) {
             $this->db->rollback();
-            return ['success' => false, 'error' => $e->getMessage()];
+            return array("success" => false, "error" => $e->getMessage());
         }
     }
 
