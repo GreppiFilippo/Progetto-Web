@@ -29,9 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($dbh->emailExists($email)) {
             $errors[] = "Esiste già un account con questa email.";
         } else {
-            $hash = password_hash($password, PASSWORD_DEFAULT);
-
-            $res = $dbh->createUser($email, $hash, $nome, $cognome, false);
+            $res = $dbh->createUser($email, $password, $nome, $cognome, false);
 
             if ($res["success"]) {
                 $success = true;

@@ -106,4 +106,41 @@
 
         }
     }
+    //Mi dice lo stato della prenotazione
+    function badgeForReservation($ready, $pickedUp) {
+        if ((int)$pickedUp === 1) return ['Completata', 'bg-secondary'];
+        if ((int)$ready === 1)    return ['Pronta', 'bg-success'];
+        return ['In Attesa', 'bg-warning text-dark'];
+    }
+
+    // Formatta la data/ora in modo leggibile con "oggi", "ieri", "domani"
+    function formatWhen($dt) {
+        $ts = strtotime($dt);
+
+        $today = date('Y-m-d');
+        $yesterday = date('Y-m-d', strtotime('-1 day'));
+        $tomorrow = date('Y-m-d', strtotime('+1 day'));
+
+        $d = date('Y-m-d', $ts);
+        $time = date('H:i', $ts);
+
+        if ($d === $today) return "Oggi, $time";
+        if ($d === $yesterday) return "Ieri, $time";
+        if ($d === $tomorrow) return "Domani, $time";
+
+        // formato: "11 Settembre 2001, 13:00"
+        $months = [
+            1 => 'Gennaio', 2 => 'Febbraio', 3 => 'Marzo', 4 => 'Aprile',
+            5 => 'Maggio', 6 => 'Giugno', 7 => 'Luglio', 8 => 'Agosto',
+            9 => 'Settembre', 10 => 'Ottobre', 11 => 'Novembre', 12 => 'Dicembre'
+        ];
+
+        $day = (int)date('j', $ts);
+        $monthNum = (int)date('n', $ts);
+        $year = (int)date('Y', $ts);
+
+        $monthName = $months[$monthNum] ?? date('F', $ts);
+
+        return $day . ' ' . $monthName . ' ' . $year . ', ' . $time;
+    }
 ?>

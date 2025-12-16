@@ -18,13 +18,12 @@ INSERT INTO dietary_specifications (dietary_spec_id, dietary_spec_name) VALUES
 (3, 'Senza glutine'),
 (4, 'Senza lattosio');
 
--- Inserimento utenti (esempi con admin e utenti normali)
-INSERT INTO users (user_id, email, password, first_name, last_name, admin) VALUES
-(1, 'admin@mensa.it', 'admin123', 'Admin', 'Sistema', TRUE),
-(2, 'mario.rossi@studenti.it', 'mario123', 'Mario', 'Rossi', FALSE),
-(3, 'giulia.verdi@studenti.it', 'giulia123', 'Giulia', 'Verdi', FALSE),
-(4, 'luca.bianchi@studenti.it', 'luca123', 'Luca', 'Bianchi', FALSE),
-(5, 'anna.neri@studenti.it', 'anna123', 'Anna', 'Neri', FALSE);
+INSERT INTO users (user_id, email, password, first_name, last_name, admin, registration_date) VALUES
+(1, 'admin@mensa.it', 'admin123', 'Admin', 'Sistema', TRUE, '2024-10-01 09:00:00'),
+(2, 'mario.rossi@studenti.it', 'mario123', 'Mario', 'Rossi', FALSE,'2024-10-15 10:30:00'),
+(3, 'giulia.verdi@studenti.it', 'giulia123', 'Giulia', 'Verdi', FALSE,'2024-10-18 11:15:00'),
+(4, 'luca.bianchi@studenti.it', 'luca123', 'Luca', 'Bianchi', FALSE,'2024-10-20 12:00:00'),
+(5, 'anna.neri@studenti.it', 'anna123', 'Anna', 'Neri', FALSE,'2024-10-22 09:45:00');
 
 -- Inserimento piatti
 

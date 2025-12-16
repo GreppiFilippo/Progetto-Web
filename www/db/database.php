@@ -26,8 +26,8 @@ class DatabaseHelper {
     }
 
     // Prepare and execute an INSERT for a new user using prepared statements
-    public function createUser( $email, $passwordHash, $firstName, $lastName, $phoneNumber, $isAdmin = false ) {
-        $sql = "INSERT INTO users (email, password, first_name, last_name, admin, phone_number) VALUES (?, ?, ?, ?, ?, ?)";
+    public function createUser( $email, $passwordHash, $firstName, $lastName, $isAdmin = false ) {
+        $sql = "INSERT INTO users (email, password, first_name, last_name, admin) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
         if (!$stmt) {
             return [ 'success' => false, 'error' => $this->db->error ];
@@ -35,7 +35,7 @@ class DatabaseHelper {
 
         // admin is stored as BOOLEAN; use 1/0
         $adminInt = $isAdmin ? 1 : 0;
-        $stmt->bind_param('ssssis', $email, $passwordHash, $firstName, $lastName, $adminInt, $phoneNumber);
+        $stmt->bind_param('ssssi', $email, $passwordHash, $firstName, $lastName, $adminInt);
         $executed = $stmt->execute();
         if (!$executed) {
             $err = $stmt->error;
@@ -81,7 +81,7 @@ class DatabaseHelper {
      * @return array Returns an array with user details if credentials are valid, empty array otherwise
      */
     public function checkLogin($email, $password){
-        $query = "SELECT user_id, email, first_name, last_name, admin, phone_number 
+        $query = "SELECT user_id, email, first_name, last_name, admin
             FROM users WHERE email = ? AND password = ?";
         $stmt = $this->db->prepare($query);
         $stmt->bind_param('ss',$email, $password);
@@ -194,5 +194,112 @@ class DatabaseHelper {
             return ['success' => false, 'error' => $e->getMessage()];
         }
     }
+    
+   // Ritorna i dati dell'utente (inclusa la data di registrazione)
+    public function getUserById($userId) {
+        $sql = "SELECT * FROM users WHERE user_id = ?";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return null;
+
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+
+        $user = $res->fetch_array(MYSQLI_ASSOC);;
+        $stmt->close();
+
+        return $user;
+    }
+
+    // Conta prenotazioni attive (non ritirate) e completate (ritirate)
+    public function getReservationCountsByUser($userId) {
+        $sql = "SELECT
+                SUM(CASE WHEN picked_up = 0 THEN 1 ELSE 0 END) AS active_count,
+                SUM(CASE WHEN picked_up = 1 THEN 1 ELSE 0 END) AS completed_count
+                FROM reservations
+                WHERE user_id = ?";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return ['active_count' => 0, 'completed_count' => 0];
+
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $row = $res->fetch_assoc() ?: ['active_count' => 0, 'completed_count' => 0];
+        $stmt->close();
+        return $row;
+    }
+
+    // Lista prenotazioni (ultime N), con totale e stato
+    public function getReservationsByUser($userId, $limit = 5) {
+        $sql = "SELECT reservation_id, total_amount, date_time, ready, picked_up
+                FROM reservations
+                WHERE user_id = ?
+                ORDER BY date_time DESC
+                LIMIT ?";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return [];
+
+        $stmt->bind_param("ii", $userId, $limit);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $rows = $res->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return $rows;
+    }
+
+    // Piatti di una prenotazione (con quantità)
+    public function getReservationItems($reservationId) {
+        $sql = "SELECT d.dish_id, d.name, rd.quantity
+                FROM reservation_dishes rd
+                JOIN dishes d ON d.dish_id = rd.dish_id
+                WHERE rd.reservation_id = ?";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return [];
+
+        $stmt->bind_param("i", $reservationId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $rows = $res->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return $rows;
+    }
+
+    // Cancella prenotazione (solo se appartiene all'utente e NON è già ritirata)
+    public function deleteReservation($reservationId, $userId) {
+        $this->db->begin_transaction();
+        try {
+            // verifica ownership + stato
+            $chk = $this->db->prepare("SELECT picked_up FROM reservations WHERE reservation_id=? AND user_id=? FOR UPDATE");
+            if (!$chk) throw new Exception($this->db->error);
+            $chk->bind_param("ii", $reservationId, $userId);
+            $chk->execute();
+            $r = $chk->get_result()->fetch_assoc();
+            $chk->close();
+
+            if (!$r) throw new Exception("Prenotazione non trovata.");
+            if ((int)$r['picked_up'] === 1) throw new Exception("Non puoi annullare una prenotazione già ritirata.");
+
+            // elimina righe figlie
+            $delItems = $this->db->prepare("DELETE FROM reservation_dishes WHERE reservation_id=?");
+            if (!$delItems) throw new Exception($this->db->error);
+            $delItems->bind_param("i", $reservationId);
+            if (!$delItems->execute()) throw new Exception($delItems->error);
+            $delItems->close();
+
+            // elimina testata
+            $delRes = $this->db->prepare("DELETE FROM reservations WHERE reservation_id=? AND user_id=?");
+            if (!$delRes) throw new Exception($this->db->error);
+            $delRes->bind_param("ii", $reservationId, $userId);
+            if (!$delRes->execute()) throw new Exception($delRes->error);
+            $delRes->close();
+
+            $this->db->commit();
+            return ['success' => true];
+        } catch (Exception $e) {
+            $this->db->rollback();
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
+    }
+
 }
 ?>

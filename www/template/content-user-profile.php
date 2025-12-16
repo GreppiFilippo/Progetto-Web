@@ -18,31 +18,10 @@
             </div>
         <?php endif; ?>
 
-        <?php if (isset($_GET["saved"])): ?>
-            <div class="alert border border-dark bg-white text-dark mb-3" role="status" aria-live="polite">
-            <p class="mb-0 fw-semibold">Preferenze salvate correttamente.</p>
-            </div>
-        <?php endif; ?>
-
         <form action="user-profile.php" method="POST" class="mt-3" novalidate>
-
-            <?php if (!empty($templateParams["error"])): ?>
-            <div id="prefs-error-summary" class="border border-dark rounded p-3 mb-3">
-                <p class="mb-1 fw-semibold">Attenzione</p>
-                <p class="mb-0">
-                Si è verificato un errore durante il salvataggio. Riprova.
-                </p>
-            </div>
-            <?php endif; ?>
 
             <fieldset class="mb-3">
                 <legend class="h6 mb-2">Restrizioni alimentari</legend>
-
-                <?php if (!empty($templateParams["error"])): ?>
-                    <div id="dietary-error" class="text-body border border-dark rounded p-2 mb-2">
-                    Errore: le preferenze non sono state salvate.
-                    </div>
-                <?php endif; ?>
 
                 <?php foreach ($templateParams["dietary_specs"] as $spec): ?>
                     <?php
@@ -75,9 +54,16 @@
                 aria-labelledby="profilo-utente">
             <div class="text-center">
             <i class="bi bi-person-circle fs-1"></i>
-            <h2 id="profilo-utente" class="h3 mt-3">Mario Rossi</h2>
-            <p class="text-muted">Studente</p>
-            <p><b>Membro dal:</b> Settembre 2024.</p>
+            <h2 id="profilo-utente" class="h3 mt-3"><?php echo $templateParams["user"]["first_name"] . ' ' . $templateParams["user"]["last_name"]; ?></h2>
+            <p>
+                <b>Membro da:</b>
+                <?php
+                    $regDate = new DateTime($templateParams["user"]["registration_date"]);
+                    setlocale(LC_TIME, 'it_IT.UTF-8');
+                    echo $regDate->format('F Y');
+                ?>
+            </p>
+
             </div>
         </aside>
     </div>
