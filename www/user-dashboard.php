@@ -34,6 +34,8 @@ $templateParams["link_utili"][] = array(
     "link" => "user-profile.php",
 );
 
+$reservations = $dbh->getReservationsByUser($userId, 5);
+
 // aggiungi items per ogni prenotazione (semplice e chiaro)
 foreach ($reservations as &$r) {
     $r['items'] = $dbh->getReservationItems((int)$r['reservation_id']);
