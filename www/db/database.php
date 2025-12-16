@@ -50,5 +50,74 @@ class DatabaseHelper {
         $stmt->close();
         return $exists;
     }
+
+    // Ritorna tutte le specifiche (id + nome) così hai value=ID e label=nome
+    public function getDietarySpecifications() {
+        $sql = "SELECT dietary_spec_id, dietary_spec_name FROM dietary_specifications ORDER BY dietary_spec_name";
+        $result = $this->db->query($sql);
+
+        $specs = [];
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $specs[] = $row; // ['dietary_spec_id' => ..., 'dietary_spec_name' => ...]
+            }
+            $result->free();
+        }
+        return $specs;
+    }
+
+    // Ritorna gli ID delle preferenze selezionate dall'utente
+    public function getUserDietarySpecIds($userId) {
+        $sql = "SELECT dietary_spec_id FROM user_specifications WHERE user_id = ?";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return [];
+
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+
+        $ids = [];
+        while ($row = $res->fetch_assoc()) {
+            $ids[] = (int)$row['dietary_spec_id'];
+        }
+        $stmt->close();
+
+        return $ids;
+    }
+
+    // Salva preferenze "a rimpiazzo": delete tutte, poi insert delle nuove
+    public function saveUserDietarySpecs($userId, $specIds) {
+        // normalizza: solo interi, unici
+        $specIds = array_values(array_unique(array_map('intval', $specIds)));
+
+        $this->db->begin_transaction();
+
+        try {
+            // 1) cancella vecchie
+            $del = $this->db->prepare("DELETE FROM user_specifications WHERE user_id = ?");
+            if (!$del) throw new Exception($this->db->error);
+            $del->bind_param("i", $userId);
+            if (!$del->execute()) throw new Exception($del->error);
+            $del->close();
+
+            // 2) inserisci nuove (se ce ne sono)
+            if (count($specIds) > 0) {
+                $ins = $this->db->prepare("INSERT INTO user_specifications (user_id, dietary_spec_id) VALUES (?, ?)");
+                if (!$ins) throw new Exception($this->db->error);
+
+                foreach ($specIds as $specId) {
+                    $ins->bind_param("ii", $userId, $specId);
+                    if (!$ins->execute()) throw new Exception($ins->error);
+                }
+                $ins->close();
+            }
+
+            $this->db->commit();
+            return ['success' => true];
+        } catch (Exception $e) {
+            $this->db->rollback();
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
+    }
 }
 ?>

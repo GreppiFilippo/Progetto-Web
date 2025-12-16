@@ -3,6 +3,22 @@ require_once 'bootstrap.php';
 
 // Base Template
 $templateParams["titolo"] = "Mensa Campus - Profilo Utente";
+$templateParams["user_id"] = $_SESSION["user_id"];
+
+// --- SALVATAGGIO preferenze ---
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // preferenze[] sarà un array di dietary_spec_id
+    $selected = isset($_POST["preferenze"]) ? $_POST["preferenze"] : [];
+    $res = $dbh->saveUserDietarySpecs($userId, $selected);
+
+    if ($res["success"]) {
+        // redirect per evitare reinvio form al refresh
+        header("Location: user-profile.php?saved=1");
+        exit;
+    } else {
+        $templateParams["error"] = $res["error"];
+    }
+}
 
 $templateParams["nav_items"] = array(
     getNewNavItem("Dashboard", "user-dashboard.php", "bi bi-speedometer2"),
@@ -20,6 +36,8 @@ $templateParams["link_utili"][] = array(
 );
 
 $templateParams["content"] = "template/content-user-profile.php";
+$templateParams["dietary_specs"] = $dbh->getDietarySpecifications();
+$templateParams["user_selected_spec_ids"] = $dbh->getUserDietarySpecIds($userId);
 
 require 'template/base-user.php';
 ?>
