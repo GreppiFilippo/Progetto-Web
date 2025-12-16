@@ -1,0 +1,67 @@
+name: HTML validator (W3C vnu)
+on: [push, pull_request]
+
+jobs:
+  validate-html:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Download vnu (W3C validator)
+        run: |
+          curl -sL -o vnu.jar https://github.com/validator/validator/releases/latest/download/vnu.jar
+
+      - name: Find HTML files
+        id: find_html
+        run: |
+          mapfile -t files < <(find . -type f -name '*.html' -not -path './node_modules/*' -print)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "no_files=true" >> $GITHUB_OUTPUT
+            echo "::warning ::No HTML files found, skipping validation."
+            exit 0
+          fi
+          printf "%s\n" "${files[@]}" > html-files.txt
+          echo "no_files=false" >> $GITHUB_OUTPUT
+
+      - name: Run W3C vnu validator and produce JSON reports
+        if: steps.find_html.outputs.no_files != 'true'
+        run: |
+          set -e
+          mkdir -p validator-reports
+          # Run validator on each file and always produce JSON (even on errors)
+          while IFS= read -r f; do
+            path="${f#./}"
+            out="validator-reports/$(echo "$path" | tr '/ ' '__').json"
+            echo "Validating: $path -> $out"
+            java -jar vnu.jar --format json --exit-zero-always "$f" > "$out" || true
+          done < html-files.txt
+
+          total=0
+          for jf in validator-reports/*.json; do
+            cnt=$(jq '.messages | length' "$jf" || echo 0)
+            total=$((total + cnt))
+          done
+
+          if [ "$total" -gt 0 ]; then
+            echo "Found $total validation message(s). Summary:"
+            for jf in validator-reports/*.json; do
+              echo "==> $jf"
+              jq -r '.messages[]? | "\(.type): \(.message) (line:\(.lastLine) col:\(.firstColumn))"' "$jf" || true
+            done
+            exit 1
+          else
+            echo "No validation messages found."
+          fi
+
+      - name: Upload validator reports
+        if: steps.find_html.outputs.no_files != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-validator-reports
+          path: validator-reports
