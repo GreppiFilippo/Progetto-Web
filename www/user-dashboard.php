@@ -8,7 +8,8 @@ if (!isUserLoggedIn()) {
 }
 
 $userId = $_SESSION["user_id"];
-$templateParams["user"] = $dbh->getUserById($userId);   
+$templateParams["user"] = $dbh->getUserById($userId);  
+
 
 if (isset($_GET["cancel_id"])) {
     $reservationId = (int)$_GET["cancel_id"];
@@ -44,7 +45,13 @@ $templateParams["link_utili"][] = array(
     "link" => "user-profile.php",
 );
 
-$reservations = $dbh->getReservationsByUser($userId, 5);
+// se è presente show_all=1, mostra tutte le prenotazioni
+$showAll = isset($_GET["show_all"]) && $_GET["show_all"] == "1";
+
+// limite: 3 se non showAll, altrimenti NULL (o un numero alto)
+$limit = $showAll ? null : 3;
+
+$reservations = $dbh->getReservationsByUser($userId, $limit);;
 
 // aggiungi items per ogni prenotazione (semplice e chiaro)
 foreach ($reservations as &$r) {

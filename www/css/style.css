@@ -25,7 +25,8 @@ nav.navbar ul li:hover {
 form button[type="submit"],
 a.btn:first-child,
 aside a.btn:first-child,
-aside section a.btn:first-of-type {
+aside section a.btn:first-of-type,
+main .col-md-8 ul li .d-flex a.btn-outline-primary {
     background-color: #2C5F4E;
     border-color: #2C5F4E;
 }
@@ -38,7 +39,8 @@ aside section a.btn:first-of-type i {
 
 form button[type="submit"]:hover,
 a.btn:first-child:hover,
-aside section a.btn:first-of-type:hover {
+aside section a.btn:first-of-type:hover,
+main .col-md-8 ul li .d-flex a.btn-outline-primary:hover {
     background-color: #24492B;
     border-color: #24492B;
 }
@@ -88,7 +90,8 @@ main i.bi {
     color: white;
 }
 
-main > div.alert {
+main > div.alert,
+main .col-md-8 ul li .d-flex a.btn-outline-danger {
     background-color: #F0F6F1 !important;
     color: #1B3B20 !important;
 }

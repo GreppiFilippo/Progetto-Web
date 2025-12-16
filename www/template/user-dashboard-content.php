@@ -73,7 +73,7 @@
                         </h3>
                         <span class="badge <?php echo $badgeClass; ?>"><?php echo $status; ?></span>
                     </div>
-                    <strong><?php echo $total ?></strong>
+                    <strong>€<?php echo $total ?></strong>
                 </div>
                 <?php if (!empty($items)): ?>
                     <ul class="list-unstyled small mb-2">
@@ -93,7 +93,7 @@
                     <a class="btn btn-sm btn-outline-primary" type="button"
                     href="singolo-ordine.php?reservation_id=<?php echo (int)$reservation['reservation_id']; ?>">
                         <i class="bi bi-eye me-1" aria-hidden="true"></i>
-                        <span>Dettagli</span>
+                        <span class="text-white">Dettagli</span>
                     </a>
 
                     <!-- ANNULLA: appare solo se canCancel è true -->
@@ -109,8 +109,16 @@
                 <?php endforeach; ?> 
             </ul>
         <?php endif; ?>
-        <div class="text-center mt-3">
-            <a href="user-bookings.html" class="text-decoration-none fw-bold">Vedi tutte le prenotazioni</a>
+       <div class="text-center mt-3">
+            <?php if ($showAll): ?>
+                <a href="user-dashboard.php" class="text-decoration-none fw-bold">
+                    Mostra meno
+                </a>
+            <?php else: ?>
+                <a href="user-dashboard.php?show_all=1" class="text-decoration-none fw-bold">
+                    Visualizza tutte le prenotazioni
+                </a>
+            <?php endif; ?>
         </div>
         </section>
     </div>

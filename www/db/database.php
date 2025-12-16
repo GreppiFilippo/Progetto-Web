@@ -292,22 +292,30 @@ class DatabaseHelper {
         }
     }
 
-    public function getReservationsByUser($userId, $limit = 5) {
+    public function getReservationsByUser($userId, $limit = null) {
         $sql = "SELECT reservation_id, total_amount, date_time, status
                 FROM reservations
                 WHERE user_id = ?
-                ORDER BY date_time DESC
-                LIMIT ?";
-        $stmt = $this->db->prepare($sql);
-        if (!$stmt) return [];
+                ORDER BY date_time DESC";
 
-        $stmt->bind_param("ii", $userId, $limit);
+        if ($limit !== null) {
+            $sql .= " LIMIT ?";
+        }
+
+        $stmt = $this->db->prepare($sql);
+
+        if ($limit !== null) {
+            $stmt->bind_param("ii", $userId, $limit);
+        } else {
+            $stmt->bind_param("i", $userId);
+        }
+
         $stmt->execute();
         $res = $stmt->get_result();
         $rows = $res->fetch_all(MYSQLI_ASSOC);
         $stmt->close();
+
         return $rows;
     }
-
 }
 ?>
