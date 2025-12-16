@@ -21,8 +21,7 @@
     $templateParams["nav_items"][] = getNewNavItem("Dashboard", "admin-dashboard.php", "bi bi-speedometer2");
     $templateParams["nav_items"][] = getNewNavItem("Gestione Menù", "admin-menu.php", "bi bi-bi-book");
     $templateParams["nav_items"][] = getNewNavItem("Prenotazioni", "admin-bookings.php", "bi bi-calendar-check");
-    $templateParams["nav_items"][] = getNewNavItem("Esci", "#", "bi bi-box-arrow-right");
-
+    $templateParams["nav_items"][] = getNewNavItem("Esci", "logout.php", "bi bi-box-arrow-right");
 
     $templateParams["content"] = "template/content-admin-add-dish.php";
 

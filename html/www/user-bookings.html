@@ -69,13 +69,11 @@
           <h1 class="h3"><i class="bi bi-calendar-plus me-2" aria-hidden="true"></i>Nuova Prenotazione</h1>
 
           <!-- Step 1: Seleziona Data e Orario -->
-          <section class="card my-4 rounded-4 border-0 shadow-sm">
-            <div class="card-header">
-              <h2 class="h5 mb-0">
-                <span class="badge bg-white me-2">1</span>
-                Seleziona Data e Orario
-              </h2>
-            </div>
+          <fieldset class="card my-4 rounded-4 border-0 shadow-sm">
+            <legend class="card-header h5 mb-0 rounded-top">
+              <span class="badge bg-white me-2">1</span>
+              Seleziona Data e Orario
+            </legend>
 
             <div class="card-body py-3">
               <div class="row g-3">
@@ -84,7 +82,7 @@
                   <label for="booking-date" class="form-label fw-semibold">
                     Data <span class="text-danger">*</span>
                   </label>
-                  <input type="date" name="booking-date" id="booking-date" class="form-control" min="today" required/>
+                  <input type="date" name="booking-date" id="booking-date" class="form-control" required/>
                 </div>
 
                 <div class="col-md">
@@ -102,16 +100,14 @@
 
               </div>
             </div>
-          </section>
+          </fieldset>
 
           <!-- Step 2: Scegli i piatti -->
-          <section class="card my-4 rounded-4 border-0 shadow-sm">
-            <div class="card-header">
-              <h2 class="h5 mb-0">
-                <span class="badge bg-white me-2">2</span>
-                Scegli i piatti
-              </h2>
-            </div>
+          <fieldset class="card my-4 rounded-4 border-0 shadow-sm">
+            <legend class="card-header h5 mb-0 rounded-top">
+              <span class="badge bg-white me-2">2</span>
+              Scegli i piatti
+            </legend>
 
             <div class="card-body py-4">
               <!-- Esempio di piatti selezionabili -->
@@ -151,16 +147,14 @@
               </section>
 
             </div>
-          </section>
+          </fieldset>
           
           <!-- Step 3: Note Aggiuntive (Opzionale) -->
-           <section class="card my-4 rounded-4 border-0 shadow-sm">
-            <div class="card-header">
-              <h2 class="h5 mb-0">
-                <span class="badge bg-white me-2">3</span>
-                Note Aggiuntive (Opzionale)
-              </h2>
-            </div>
+          <fieldset class="card my-4 rounded-4 border-0 shadow-sm">
+            <legend class="card-header h5 mb-0 rounded-top">
+              <span class="badge bg-white me-2">3</span>
+              Note Aggiuntive (Opzionale)
+            </legend>
 
             <div class="card-body py-3">
               <div class="row g-3">
@@ -174,7 +168,7 @@
 
               </div>
             </div>
-          </section>
+          </fieldset>
         </section>
 
         <!-- Aside -->
@@ -236,6 +230,5 @@
         </div>
       </div>
     </footer>
-
   </body>
 </html>

@@ -105,6 +105,13 @@ main form .card-header {
     color: white;
 }
 
+/* Step badges inside legends: keep text visible on green header */
+main form .card-header .badge {
+    color: #2C5F34;
+    border: 1px solid #2C5F34;
+    background-color: white;
+}
+
 main form .card-header > h2 > span {
     color: #2C5F4E;
 }

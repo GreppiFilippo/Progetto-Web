@@ -2,7 +2,7 @@
 require_once 'bootstrap.php';
 
 // Base Template
-$templateParams["titolo"] = "Mensa Campus - Home";
+$templateParams["titolo"] = "Mensa Campus - Menu";
 
 
 if (isUserLoggedIn()) {
@@ -13,7 +13,6 @@ if (isUserLoggedIn()) {
         getNewNavItem("Profilo", "user-profile.php", "bi bi-person-circle"),
         getNewNavItem("Esci", "logout.php", "bi bi-box-arrow-right"),
     );
-
     $templateParams["link_utili"][] = array(
         "name" => "Menu",
         "link" => "menu.php",
@@ -28,7 +27,6 @@ if (isUserLoggedIn()) {
         getNewNavItem("Menu", "menu.php", "bi bi-book"),
         getNewNavItem("Accedi", "login.php", "bi bi-box-arrow-in-right")
     );
-
     $templateParams["link_utili"][] = array(
         "name" => "Menu",
         "link" => "menu.php",
@@ -43,7 +41,9 @@ if (isUserLoggedIn()) {
     );
 }
 
-$templateParams["content"] = "template/content-home.php";
+$templateParams["categorie"] = $dbh->getAllCategories();
+$templateParams["js"] = array("js/menu.js");
+$templateParams["content"] = "template/content-menu.php";
 
 require 'template/base-user.php';
 ?>
