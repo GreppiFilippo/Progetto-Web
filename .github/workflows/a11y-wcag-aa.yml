@@ -1,0 +1,77 @@
+name: Accessibility check — WCAG AA (pa11y) — PHP site
+on: [push, pull_request]
+
+jobs:
+  a11y-aa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Setup PHP (for serving)
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+
+      - name: Optional: install PHP deps if composer.json exists
+        run: |
+          if [ -f composer.json ]; then
+            composer install --no-interaction --no-progress --prefer-dist
+          else
+            echo "No composer.json, skipping composer install."
+          fi
+
+      - name: Install pa11y-ci
+        run: npm install -g pa11y-ci
+
+      - name: Start PHP built-in server (uses ./www if present)
+        run: |
+          if [ -d ./www ]; then
+            export DOCROOT=./www
+          else
+            export DOCROOT=.
+          fi
+          echo "Using docroot: $DOCROOT"
+          php -S 127.0.0.1:8080 -t "$DOCROOT" >/dev/null 2>&1 &
+          sleep 2
+
+      - name: Build pa11y-ci config (WCAG2AA)
+        id: build_pa11y
+        run: |
+          DOCROOT=${DOCROOT:-./www}
+          if [ ! -d "$DOCROOT" ]; then DOCROOT=.; fi
+          find "$DOCROOT" -type f \( -name '*.php' -o -name '*.html' \) -not -path '*/node_modules/*' -print0 > files.txt || true
+          if [ ! -s files.txt ]; then
+            echo "::warning ::No PHP/HTML files found, skipping pa11y AA check."
+            echo "no_files=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          urls=()
+          while IFS= read -r -d $'\0' f; do
+            rel="${f#./}"
+            rel="${rel#${DOCROOT}/}"
+            urls+=("\"http://127.0.0.1:8080/${rel}\"")
+          done < files.txt
+          printf '{ "defaults": { "standard": "WCAG2AA", "timeout": 30000 }, "urls": [%s], "reporter": ["html","console","json"] }' "$(IFS=,; echo "${urls[*]}")" > .pa11yci.json
+          echo "Generated .pa11yci.json with $(wc -l < files.txt) url(s)."
+          echo "no_files=false" >> $GITHUB_OUTPUT
+
+      - name: Run pa11y-ci (WCAG2AA)
+        if: steps.build_pa11y.outputs.no_files != 'true'
+        run: |
+          npx pa11y-ci --config .pa11yci.json || exit_code=$? && if [ -n "$exit_code" ]; then echo "pa11y finished with exit ${exit_code}"; exit ${exit_code}; fi
+
+      - name: Upload pa11y reports
+        if: steps.build_pa11y.outputs.no_files != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pa11y-aa-reports
+          path: |
+            .pa11yci.json
+            pa11y-reports || true
+            *.html
+            *.json
