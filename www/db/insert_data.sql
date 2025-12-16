@@ -18,6 +18,7 @@ INSERT INTO dietary_specifications (dietary_spec_id, dietary_spec_name) VALUES
 (3, 'Senza glutine'),
 (4, 'Senza lattosio');
 
+-- Inserimento utenti
 INSERT INTO users (user_id, email, password, first_name, last_name, admin, registration_date) VALUES
 (1, 'admin@mensa.it', 'admin123', 'Admin', 'Sistema', TRUE, '2024-10-01 09:00:00'),
 (2, 'mario.rossi@studenti.it', 'mario123', 'Mario', 'Rossi', FALSE,'2024-10-15 10:30:00'),
@@ -26,7 +27,6 @@ INSERT INTO users (user_id, email, password, first_name, last_name, admin, regis
 (5, 'anna.neri@studenti.it', 'anna123', 'Anna', 'Neri', FALSE,'2024-10-22 09:45:00');
 
 -- Inserimento piatti
-
 INSERT INTO dishes (dish_id, name, description, price, stock, image, calories, category_id) VALUES
 (1, 'Pasta al Pomodoro', 'Pasta con salsa di pomodoro fresco, basilico e parmigiano', 4.50, 25, 'pasta-pomodoro.svg', 350, 1),
 (2, 'Risotto ai Funghi', 'Risotto cremoso con funghi porcini e parmigiano', 5.00, 18, 'risotto.jpg', 420, 1),
@@ -41,61 +41,54 @@ INSERT INTO dishes (dish_id, name, description, price, stock, image, calories, c
 
 -- Inserimento specifiche dietetiche per i piatti
 INSERT INTO dish_specifications (dish_id, dietary_spec_id) VALUES
--- Pasta al Pomodoro - Vegetariano
-(1, 1),
--- Risotto ai Funghi - Vegetariano
-(2, 1),
--- Pollo alla Griglia - Senza glutine
-(4, 3),
--- Hamburger Vegetale - Vegano
-(5, 2),
--- Insalata Mista - Vegano
-(7, 2),
--- Patate al Forno - Vegetariano
-(8, 1),
--- Tiramisù - Vegetariano
-(9, 1),
--- Frutta di Stagione - Vegano
-(10, 2);
+(1, 1),  -- Pasta al Pomodoro - Vegetariano
+(2, 1),  -- Risotto ai Funghi - Vegetariano
+(4, 3),  -- Pollo alla Griglia - Senza glutine
+(5, 2),  -- Hamburger Vegetale - Vegano
+(7, 2),  -- Insalata Mista - Vegano
+(8, 1),  -- Patate al Forno - Vegetariano
+(9, 1),  -- Tiramisù - Vegetariano
+(10, 2); -- Frutta di Stagione - Vegano
 
 -- Inserimento specifiche dietetiche per gli utenti (esempi)
 INSERT INTO user_specifications (user_id, dietary_spec_id) VALUES
--- Giulia è vegetariana
-(3, 1),
--- Luca è vegano
-(4, 2),
--- Anna ha intolleranza al glutine
-(5, 3);
+(3, 1),  -- Giulia è vegetariana
+(4, 2),  -- Luca è vegano
+(5, 3);  -- Anna ha intolleranza al glutine
 
--- Inserimento prenotazioni di esempio
-INSERT INTO reservations (reservation_id, total_amount, date_time, ready, picked_up, user_id) VALUES
-(1, 12.00, '2024-11-20 12:30:00', TRUE, TRUE, 2),
-(2, 8.50, '2024-11-20 13:00:00', TRUE, FALSE, 3),
-(3, 15.50, '2024-11-21 12:15:00', FALSE, FALSE, 4),
-(4, 7.50, '2024-11-21 12:45:00', FALSE, FALSE, 5),
-(5, 11.00, '2024-11-21 13:30:00', FALSE, FALSE, 2);
+-- Inserimento prenotazioni di esempio (AGGIORNATO: usa "status" invece di ready/picked_up)
+INSERT INTO reservations (reservation_id, total_amount, date_time, status, user_id) VALUES
+(1, 12.00, '2024-11-20 12:30:00', 'Completato', 2),         -- prima: ready=TRUE, picked_up=TRUE
+(2, 8.50,  '2024-11-20 13:00:00', 'Pronto al ritiro', 3),   -- prima: ready=TRUE, picked_up=FALSE
+(3, 15.50, '2024-11-21 12:15:00', 'In Preparazione', 4),    -- prima: ready=FALSE, picked_up=FALSE
+(4, 7.50,  '2024-11-21 12:45:00', 'Annullato', 5),          -- esempio annullato
+(5, 11.00, '2024-11-21 13:30:00', 'Da Visualizzare', 2);    -- ordine non ancora visto
 
 -- Inserimento dettagli prenotazioni
 INSERT INTO reservation_dishes (reservation_id, dish_id, quantity) VALUES
 -- Prenotazione 1: Mario - Pasta al Pomodoro + Insalata Mista + Frutta di Stagione
-(1, 1, 1),  -- Pasta al Pomodoro
-(1, 7, 1),  -- Insalata Mista
-(1, 10, 2), -- Frutta di Stagione x2
+(1, 1, 1),
+(1, 7, 1),
+(1, 10, 2),
+
 -- Prenotazione 2: Giulia - Risotto ai Funghi + Patate al Forno
-(2, 2, 1),  -- Risotto ai Funghi
-(2, 8, 1),  -- Patate al Forno
+(2, 2, 1),
+(2, 8, 1),
+
 -- Prenotazione 3: Luca - Hamburger Vegetale + Insalata Mista + Frutta di Stagione + Tiramisù
-(3, 5, 1),  -- Hamburger Vegetale
-(3, 7, 1),  -- Insalata Mista
-(3, 10, 1), -- Frutta di Stagione
-(3, 9, 1),  -- Tiramisù
+(3, 5, 1),
+(3, 7, 1),
+(3, 10, 1),
+(3, 9, 1),
+
 -- Prenotazione 4: Anna - Pollo alla Griglia + Insalata Mista
-(4, 4, 1),  -- Pollo alla Griglia
-(4, 7, 1),  -- Insalata Mista
+(4, 4, 1),
+(4, 7, 1),
+
 -- Prenotazione 5: Mario - Lasagne alla Bolognese + Patate al Forno + Tiramisù
-(5, 3, 1),  -- Lasagne alla Bolognese
-(5, 8, 1),  -- Patate al Forno
-(5, 9, 1);  -- Tiramisù
+(5, 3, 1),
+(5, 8, 1),
+(5, 9, 1);
 
 -- Riabilita i controlli delle chiavi esterne
 SET foreign_key_checks = 1;

@@ -10,6 +10,17 @@ if (!isUserLoggedIn()) {
 $userId = $_SESSION["user_id"];
 $templateParams["user"] = $dbh->getUserById($userId);   
 
+if (isset($_GET["cancel_id"])) {
+    $reservationId = (int)$_GET["cancel_id"];
+
+    if ($reservationId > 0) {
+        $dbh->deleteReservation($reservationId, $userId);
+    }
+
+    header("Location: user-dashboard.php");
+    exit();
+}
+
 $counts = $dbh->getReservationCountsByUser($userId);
 
 $templateParams["titolo"] = "Mensa Campus - Prenotazioni";

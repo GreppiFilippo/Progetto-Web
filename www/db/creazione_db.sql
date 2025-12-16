@@ -42,8 +42,8 @@ CREATE TABLE reservations (
     reservation_id INT NOT NULL AUTO_INCREMENT,
     total_amount DECIMAL(8,2) NOT NULL,
     date_time DATETIME NOT NULL,
-    ready BOOLEAN NOT NULL,
-    picked_up BOOLEAN NOT NULL,
+    status ENUM('Da Visualizzare','In Preparazione','Pronto al ritiro','Completato','Annullato')
+        NOT NULL DEFAULT 'Da Visualizzare',
     user_id INT NOT NULL,
     PRIMARY KEY (reservation_id),
     CONSTRAINT fk_reservations_user FOREIGN KEY (user_id) REFERENCES users(user_id)

@@ -106,11 +106,52 @@
 
         }
     }
-    //Mi dice lo stato della prenotazione
-    function badgeForReservation($ready, $pickedUp) {
-        if ((int)$pickedUp === 1) return ['Completata', 'bg-secondary'];
-        if ((int)$ready === 1)    return ['Pronta', 'bg-success'];
-        return ['In Attesa', 'bg-warning text-dark'];
+
+    function reservationBadgeClass(string $status): string {
+        return match ($status) {
+            'Completato'        => 'text-bg-success',
+            'Annullato'         => 'text-bg-danger',
+            'Pronto al ritiro'  => 'text-bg-info',
+            'In Preparazione'   => 'text-bg-warning',
+            'Da Visualizzare'   => 'text-bg-secondary',
+            default             => 'text-bg-dark',
+        };
+    }
+
+    function reservationCardClass(string $status): string {
+        return match ($status) {
+            'Completato'        => 'bg-success-subtle border-success',
+            'Annullato'         => 'bg-danger-subtle border-danger',
+            'Pronto al ritiro'  => 'bg-info-subtle border-info',
+            'In Preparazione'   => 'bg-warning-subtle border-warning',
+            'Da Visualizzare'   => 'bg-body-tertiary border-secondary',
+            default             => 'bg-light border-dark',
+        };
+    }
+
+    function reservationIconClass(string $status): string {
+        // Bootstrap Icons
+        return match ($status) {
+            'Completato'        => 'bi-check-circle',
+            'Annullato'         => 'bi-x-circle',
+            'Pronto al ritiro'  => 'bi-bag-check',
+            'In Preparazione'   => 'bi-hourglass-split',
+            'Da Visualizzare'   => 'bi-bell',
+            default             => 'bi-info-circle',
+        };
+    }
+
+    function isNewReservation(string $status): bool {
+        return $status === 'Da Visualizzare';
+    }
+
+    function canCancelReservation(string $status): bool {
+        // regola “pulita”: annullabile solo prima che sia pronta
+        return in_array($status, ['Da Visualizzare', 'In Preparazione'], true);
+    }
+
+    function formatEuro($amount): string {
+        return number_format((float)$amount, 2, ',', '.');
     }
 
     // Formatta la data/ora in modo leggibile con "oggi", "ieri", "domani"

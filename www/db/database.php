@@ -211,11 +211,11 @@ class DatabaseHelper {
         return $user;
     }
 
-    // Conta prenotazioni attive (non ritirate) e completate (ritirate)
-    public function getReservationCountsByUser($userId) {
+    // Lista prenotazioni (ultime N), con totale e stato
+   public function getReservationCountsByUser($userId) {
         $sql = "SELECT
-                SUM(CASE WHEN picked_up = 0 THEN 1 ELSE 0 END) AS active_count,
-                SUM(CASE WHEN picked_up = 1 THEN 1 ELSE 0 END) AS completed_count
+                SUM(CASE WHEN status IN ('Da Visualizzare','In Preparazione','Pronto al ritiro') THEN 1 ELSE 0 END) AS active_count,
+                SUM(CASE WHEN status = 'Completato' THEN 1 ELSE 0 END) AS completed_count
                 FROM reservations
                 WHERE user_id = ?";
         $stmt = $this->db->prepare($sql);
@@ -227,24 +227,6 @@ class DatabaseHelper {
         $row = $res->fetch_assoc() ?: ['active_count' => 0, 'completed_count' => 0];
         $stmt->close();
         return $row;
-    }
-
-    // Lista prenotazioni (ultime N), con totale e stato
-    public function getReservationsByUser($userId, $limit = 5) {
-        $sql = "SELECT reservation_id, total_amount, date_time, ready, picked_up
-                FROM reservations
-                WHERE user_id = ?
-                ORDER BY date_time DESC
-                LIMIT ?";
-        $stmt = $this->db->prepare($sql);
-        if (!$stmt) return [];
-
-        $stmt->bind_param("ii", $userId, $limit);
-        $stmt->execute();
-        $res = $stmt->get_result();
-        $rows = $res->fetch_all(MYSQLI_ASSOC);
-        $stmt->close();
-        return $rows;
     }
 
     // Piatti di una prenotazione (con quantità)
@@ -268,30 +250,41 @@ class DatabaseHelper {
     public function deleteReservation($reservationId, $userId) {
         $this->db->begin_transaction();
         try {
-            // verifica ownership + stato
-            $chk = $this->db->prepare("SELECT picked_up FROM reservations WHERE reservation_id=? AND user_id=? FOR UPDATE");
+            // lock riga, verifica ownership + status
+            $chk = $this->db->prepare(
+                "SELECT status FROM reservations
+                WHERE reservation_id = ? AND user_id = ?
+                FOR UPDATE"
+            );
             if (!$chk) throw new Exception($this->db->error);
+
             $chk->bind_param("ii", $reservationId, $userId);
             $chk->execute();
             $r = $chk->get_result()->fetch_assoc();
             $chk->close();
 
             if (!$r) throw new Exception("Prenotazione non trovata.");
-            if ((int)$r['picked_up'] === 1) throw new Exception("Non puoi annullare una prenotazione già ritirata.");
+
+            $status = $r['status'];
+
+            // annullabile solo se "Da Visualizzare" o "In Preparazione"
+            if (!in_array($status, ['Da Visualizzare', 'In Preparazione'], true)) {
+                throw new Exception("Non puoi annullare una prenotazione in stato: $status");
+            }
 
             // elimina righe figlie
-            $delItems = $this->db->prepare("DELETE FROM reservation_dishes WHERE reservation_id=?");
+            $delItems = $this->db->prepare("DELETE FROM reservation_dishes WHERE reservation_id = ?");
             if (!$delItems) throw new Exception($this->db->error);
             $delItems->bind_param("i", $reservationId);
             if (!$delItems->execute()) throw new Exception($delItems->error);
             $delItems->close();
 
-            // elimina testata
-            $delRes = $this->db->prepare("DELETE FROM reservations WHERE reservation_id=? AND user_id=?");
-            if (!$delRes) throw new Exception($this->db->error);
-            $delRes->bind_param("ii", $reservationId, $userId);
-            if (!$delRes->execute()) throw new Exception($delRes->error);
-            $delRes->close();
+            // invece di cancellare la testata, meglio “marcare Annullato”
+            $upd = $this->db->prepare("UPDATE reservations SET status='Annullato' WHERE reservation_id=? AND user_id=?");
+            if (!$upd) throw new Exception($this->db->error);
+            $upd->bind_param("ii", $reservationId, $userId);
+            if (!$upd->execute()) throw new Exception($upd->error);
+            $upd->close();
 
             $this->db->commit();
             return ['success' => true];
@@ -299,6 +292,23 @@ class DatabaseHelper {
             $this->db->rollback();
             return ['success' => false, 'error' => $e->getMessage()];
         }
+    }
+
+    public function getReservationsByUser($userId, $limit = 5) {
+        $sql = "SELECT reservation_id, total_amount, date_time, status
+                FROM reservations
+                WHERE user_id = ?
+                ORDER BY date_time DESC
+                LIMIT ?";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return [];
+
+        $stmt->bind_param("ii", $userId, $limit);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $rows = $res->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return $rows;
     }
 
 }

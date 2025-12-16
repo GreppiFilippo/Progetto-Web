@@ -44,84 +44,75 @@
         <section class="border rounded-3 p-4 shadow-sm" aria-labelledby="my-bookings-heading">
         <h2 id="my-bookings-heading" class="h5">Le Mie Prenotazioni</h2>
 
-        <!--Inizio elenco prenotazioni-->
-        <ul class="list-unstyled">
-            <?php foreach($templateParams["reservations"] as $reservation): ?>
-            <li class="mb-3 p-3 border rounded-3">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-                <div>
-                    <h3 class="h6 mb-1">
-                        <i class="bi bi-calendar-event text-primary me-2" aria-hidden="true"></i>
-                        <span>Pranzo - Oggi, 13:00</span>
-                    </h3>
-                    <span class="badge bg-success">Confermata</span>
-                </div>
-                <strong>€12.50</strong>
+        <?php if (empty($templateParams["reservations"])): ?>
+            <div class="alert alert-info mb-0" role="alert">
+                Nessuna prenotazione trovata.
             </div>
-            <ul class="list-unstyled small mb-2">
-                <li>
-                    <i class="bi bi-check2 text-success me-2" aria-hidden="true"></i>
-                    <span>Pasta al Pomodoro</span>
-                </li>
-                <li>
-                    <i class="bi bi-check2 text-success me-2" aria-hidden="true"></i>
-                    <span>Pollo alla Griglia</span>
-                </li>
-                <li>
-                    <i class="bi bi-check2 text-success me-2" aria-hidden="true"></i>
-                    <span>Insalata Mista</span>
-                </li>
-            </ul>
-            <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#bookingDetailsModal">
-                    <i class="bi bi-eye me-1" aria-hidden="true"></i>
-                    <span>Dettagli</span>
-                </button>
-                <button class="btn btn-sm btn-outline-danger" type="button">
-                    <i class="bi bi-trash me-1" aria-hidden="true"></i>
-                    <span>Annulla</span>
-                </button>
-            </div>
-            </li>
-            <?php endforeach; ?>
+        <?php else: ?>
 
-            <li class="mb-3 p-3 border rounded-3">
+            <!--Inizio elenco prenotazioni-->
+            <ul class="list-unstyled">
+                <?php foreach($templateParams["reservations"] as $reservation): ?>
+                    <?php
+                        $status = (string)$reservation["status"];
+                        $when   = formatWhen($reservation["date_time"]);
+                        $total  = formatEuro($reservation["total_amount"]);
+                        $items  = $reservation["items"] ?? [];
+
+                        $badgeClass = reservationBadgeClass($status);
+                        $cardClass  = reservationCardClass($status);
+                        $iconClass  = reservationIconClass($status);
+
+                        $new = isNewReservation($status);
+                        $canCancel = canCancelReservation($status);
+                    ?>
+                <li class="mb-3 p-3 border rounded-3">
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <div>
                         <h3 class="h6 mb-1">
-                            <i class="bi bi-calendar-event text-primary me-2" aria-hidden="true"></i>
-                            <span>Pranzo - Domani, 13:00</span>
+                            <i class="bi <?php echo $iconClass; ?> <?php echo $cardClass ?>" aria-hidden="true"></i>
+                            <span>
+                                Pranzo - <?php echo $when; ?>
+                            </span>
                         </h3>
-                        <span class="badge bg-warning text-dark">In Attesa</span>
+                        <span class="badge <?php echo $badgeClass; ?>"><?php echo $status; ?></span>
                     </div>
-                    <strong>€10.00</strong>
+                    <strong><?php echo $total ?></strong>
                 </div>
-                <ul class="list-unstyled small mb-2">
-                    <li>
-                        <i class="bi bi-check2 text-success me-2" aria-hidden="true"></i>
-                        <span>Risotto ai funghi</span>
-                    </li>
-                    <li>
-                        <i class="bi bi-check2 text-success me-2" aria-hidden="true"></i>
-                        <span>Insalata Mista</span>
-                    </li>
-                    <li>
-                        <i class="bi bi-check2 text-success me-2" aria-hidden="true"></i>
-                        <span>Frutta di Stagione</span>
-                    </li>
-                </ul>
+                <?php if (!empty($items)): ?>
+                    <ul class="list-unstyled small mb-2">
+                        <?php foreach($items as $item): ?>
+                            <li>
+                                <i class="bi bi-check2 text-success me-2" aria-hidden="true"></i>
+                                <span><?php echo $item["name"] ?></span>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php else: ?>
+                    <p class="small text-body-secondary mb-2">Nessun piatto associato.</p>
+                <?php endif; ?>
                 <div class="d-flex gap-2">
-                    <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#bookingDetailsModal">
+
+                    <!-- DETTAGLI: vai a singolo-ordine.php -->
+                    <a class="btn btn-sm btn-outline-primary" type="button"
+                    href="singolo-ordine.php?reservation_id=<?php echo (int)$reservation['reservation_id']; ?>">
                         <i class="bi bi-eye me-1" aria-hidden="true"></i>
                         <span>Dettagli</span>
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger" type="button">
-                        <i class="bi bi-trash me-1" aria-hidden="true"></i>
-                        <span>Annulla</span>
-                    </button>
+                    </a>
+
+                    <!-- ANNULLA: appare solo se canCancel è true -->
+                    <?php if (canCancelReservation($reservation['status'])) { ?>
+                        <a class="btn btn-sm btn-outline-danger" type="button"
+                        href="user-dashboard.php?cancel_id=<?php echo (int)$reservation['reservation_id']; ?>">
+                            <i class="bi bi-trash me-1" aria-hidden="true"></i>
+                            <span>Annulla</span>
+                        </a>
+                    <?php } ?>
+
                 </div>
-            </li>
-        </ul>
+                <?php endforeach; ?> 
+            </ul>
+        <?php endif; ?>
         <div class="text-center mt-3">
             <a href="user-bookings.html" class="text-decoration-none fw-bold">Vedi tutte le prenotazioni</a>
         </div>
@@ -133,15 +124,15 @@
         <div class="pb-3">
             <h2 class="h5 mb-0">Azioni Rapide</h2>
         </div>
-        <a href="user-bookings.html" class="btn btn-lg text-white mb-1 w-100">
+        <a href="user-bookings.php" class="btn btn-lg text-white mb-1 w-100">
             <i class="bi bi-calendar-plus me-2" aria-hidden="true"></i>
             <span>Nuova Prenotazione</span>
         </a>
-        <a href="menu.html" class="btn btn-lg mb-1 w-100">
+        <a href="menu.php" class="btn btn-lg mb-1 w-100">
             <i class="bi bi-book me-2" aria-hidden="true"></i>
             <span>Consulta Menu</span>
         </a>
-        <a href="user-profile.html" class="btn btn-lg mb-1 w-100">
+        <a href="user-profile.php" class="btn btn-lg mb-1 w-100">
             <i class="bi bi-person me-2" aria-hidden="true"></i>
             <span>Modifica Profilo</span>
             </a>
