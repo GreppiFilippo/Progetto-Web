@@ -7,25 +7,17 @@
         <fieldset>
             <legend>Restrizioni alimentari</legend>
 
-            <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="vegetariano" name="preferenze" value="vegetariano">
-            <label class="form-check-label" for="vegetariano">Vegetariano</label>
-            </div>
+            <?php foreach($templateParams["dietary_spec_names"] as $dietary_spec_name): ?>
+
+            <?php
+                $id = strtolower(str_replace(' ', '', $dietary_spec_name));
+            ?>
 
             <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="vegano" name="preferenze" value="vegano">
-            <label class="form-check-label" for="vegano">Vegano</label>
+            <input type="checkbox" class="form-check-input" id="<?php echo $id?>" name="preferenze" value="<?php echo $id?>">
+            <label class="form-check-label" for="<?php echo $id ?>"><?php echo $dietary_spec_name?></label>
             </div>
-
-            <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="senzaglutine" name="preferenze" value="senzaglutine">
-            <label class="form-check-label" for="senzaglutine">Senza Glutine</label>
-            </div>
-
-            <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="senzalattosio" name="preferenze" value="senzalattosio">
-            <label class="form-check-label" for="senzalattosio">Senza Lattosio</label>
-            </div>
+            <?php endforeach; ?>
         </fieldset>
 
         <button type="submit" class="btn btn-success mt-3">

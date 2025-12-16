@@ -4,18 +4,34 @@
     </p>
 
     <?php if (!empty($templateParams["errors"])): ?>
-        <div class="alert alert-danger" role="alert" aria-live="assertive">
+        <div
+            class="alert border border-3 border-dark bg-white text-dark"
+            role="alert"
+            aria-live="assertive"
+        >
+            <p class="fw-bold mb-2">Errore</p>
             <ul class="mb-0">
-            <?php foreach ($templateParams["errors"] as $error): ?>
-                <li><?php echo $error; ?></li>
-            <?php endforeach; ?>
+                <?php foreach ($templateParams["errors"] as $error): ?>
+                    <li><?php echo $error; ?></li>
+                <?php endforeach; ?>
             </ul>
         </div>
     <?php endif; ?>
 
-    <?php if ($templateParams["success"]): ?>
-        <div class="alert alert-success" role="alert" aria-live="assertive">
-            Registrazione avvenuta con successo! Ora puoi <a href="login.php" class="alert-link">accedere al tuo account</a>.
+    <?php if (!empty($templateParams["success"])): ?>
+        <div
+            class="alert border border-3 border-dark bg-white text-dark"
+            role="alert"
+            aria-live="assertive"
+        >
+            <p class="fw-bold mb-2">Operazione completata</p>
+            <p class="mb-0">
+                Registrazione avvenuta con successo.
+                Ora puoi
+                <a href="login.php" class="fw-bold text-decoration-underline text-dark">
+                    accedere al tuo account
+                </a>.
+            </p>
         </div>
     <?php endif; ?>
 

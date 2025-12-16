@@ -2,7 +2,7 @@
 require_once 'bootstrap.php';
 
 // Base Template
-$templateParams["titolo"] = "Mensa Campus - Home";
+$templateParams["titolo"] = "Mensa Campus - Profilo Utente";
 
 $templateParams["nav_items"] = array(
     getNewNavItem("Dashboard", "user-dashboard.php", "bi bi-speedometer2"),
