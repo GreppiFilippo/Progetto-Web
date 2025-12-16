@@ -197,25 +197,3 @@ button.admin-btn[type="submit"]:hover {
 button.admin-btn[type="submit"]:hover i {
     color: white;
 }
-
-div.card > div.ratio,
-.card-img-top {
-    overflow: hidden;
-}
-
-div.card > div.ratio img,
-.card-img-top {
-    display: block;
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    object-position: center;
-}
-
-/* adattamento per schermi piccoli */
-@media (max-width: 576px) {
-    div.card > div.ratio img,
-    .card-img-top {
-        height: 160px;
-    }
-}
