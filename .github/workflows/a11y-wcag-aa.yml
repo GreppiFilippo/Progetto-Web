@@ -17,9 +17,10 @@ jobs:
         with:
           php-version: '8.1'
 
-      - name: Optional: install PHP deps if composer.json exists
+      - name: "Optional: install PHP deps if composer.json exists"
         run: |
           if [ -f composer.json ]; then
+            echo "composer.json found — running composer install"
             composer install --no-interaction --no-progress --prefer-dist
           else
             echo "No composer.json, skipping composer install."
@@ -31,13 +32,14 @@ jobs:
       - name: Start PHP built-in server (uses ./www if present)
         run: |
           if [ -d ./www ]; then
-            export DOCROOT=./www
+            DOCROOT=./www
           else
-            export DOCROOT=.
+            DOCROOT=.
           fi
           echo "Using docroot: $DOCROOT"
           php -S 127.0.0.1:8080 -t "$DOCROOT" >/dev/null 2>&1 &
           sleep 2
+          echo "DOCROOT=$DOCROOT" >> $GITHUB_ENV
 
       - name: Build pa11y-ci config (WCAG2AA)
         id: build_pa11y
@@ -63,7 +65,7 @@ jobs:
       - name: Run pa11y-ci (WCAG2AA)
         if: steps.build_pa11y.outputs.no_files != 'true'
         run: |
-          npx pa11y-ci --config .pa11yci.json || exit_code=$? && if [ -n "$exit_code" ]; then echo "pa11y finished with exit ${exit_code}"; exit ${exit_code}; fi
+          npx pa11y-ci --config .pa11yci.json
 
       - name: Upload pa11y reports
         if: steps.build_pa11y.outputs.no_files != 'true'
@@ -72,6 +74,5 @@ jobs:
           name: pa11y-aa-reports
           path: |
             .pa11yci.json
-            pa11y-reports || true
             *.html
             *.json

@@ -17,9 +17,10 @@ jobs:
         with:
           php-version: '8.1'
 
-      - name: Optional: install PHP deps if composer.json exists
+      - name: "Optional: install PHP deps if composer.json exists"
         run: |
           if [ -f composer.json ]; then
+            echo "composer.json found — running composer install"
             composer install --no-interaction --no-progress --prefer-dist
           else
             echo "No composer.json, skipping composer install."
@@ -31,13 +32,14 @@ jobs:
       - name: Start PHP built-in server (uses ./www if present)
         run: |
           if [ -d ./www ]; then
-            export DOCROOT=./www
+            DOCROOT=./www
           else
-            export DOCROOT=.
+            DOCROOT=.
           fi
           echo "Using docroot: $DOCROOT"
           php -S 127.0.0.1:8090 -t "$DOCROOT" >/dev/null 2>&1 &
           sleep 2
+          echo "DOCROOT=$DOCROOT" >> $GITHUB_ENV
 
       - name: Build pa11y-ci config (WCAG2AAA)
         id: build_pa11y_aaa
@@ -73,6 +75,5 @@ jobs:
           name: pa11y-aaa-reports
           path: |
             .pa11yci.aaa.json
-            pa11y-reports || true
             *.html
             *.json
