@@ -20,7 +20,6 @@ CREATE TABLE users (
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     admin BOOLEAN NOT NULL DEFAULT FALSE,
-    phone_number CHAR(10) NOT NULL,
     PRIMARY KEY (user_id),
     UNIQUE KEY (email)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

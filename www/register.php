@@ -31,9 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $hash = password_hash($password, PASSWORD_DEFAULT);
 
-            $phone = "";
-
-            $res = $dbh->createUser($email, $hash, $nome, $cognome, $phone, false);
+            $res = $dbh->createUser($email, $hash, $nome, $cognome, false);
 
             if ($res["success"]) {
                 $success = true;

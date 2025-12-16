@@ -19,25 +19,26 @@ INSERT INTO dietary_specifications (dietary_spec_id, dietary_spec_name) VALUES
 (4, 'Senza lattosio');
 
 -- Inserimento utenti (esempi con admin e utenti normali)
-INSERT INTO users (user_id, email, password, first_name, last_name, admin, phone_number) VALUES
-(1, 'admin@mensa.it', 'admin123', 'Admin', 'Sistema', TRUE, '1234567890'),
-(2, 'mario.rossi@studenti.it', 'mario123', 'Mario', 'Rossi', FALSE, '3331234567'),
-(3, 'giulia.verdi@studenti.it', 'giulia123', 'Giulia', 'Verdi', FALSE, '3337654321'),
-(4, 'luca.bianchi@studenti.it', 'luca123', 'Luca', 'Bianchi', FALSE, '3339876543'),
-(5, 'anna.neri@studenti.it', 'anna123', 'Anna', 'Neri', FALSE, '3335432167');
+INSERT INTO users (user_id, email, password, first_name, last_name, admin) VALUES
+(1, 'admin@mensa.it', 'admin123', 'Admin', 'Sistema', TRUE),
+(2, 'mario.rossi@studenti.it', 'mario123', 'Mario', 'Rossi', FALSE),
+(3, 'giulia.verdi@studenti.it', 'giulia123', 'Giulia', 'Verdi', FALSE),
+(4, 'luca.bianchi@studenti.it', 'luca123', 'Luca', 'Bianchi', FALSE),
+(5, 'anna.neri@studenti.it', 'anna123', 'Anna', 'Neri', FALSE);
 
 -- Inserimento piatti
+
 INSERT INTO dishes (dish_id, name, description, price, stock, image, calories, category_id) VALUES
-(1, 'Pasta al Pomodoro', 'Pasta con salsa di pomodoro fresco, basilico e parmigiano', 4.50, 25, 'pasta_pomodoro.jpg', 350, 1),
-(2, 'Risotto ai Funghi', 'Risotto cremoso con funghi porcini e parmigiano', 5.00, 18, 'risotto_funghi.jpg', 420, 1),
-(3, 'Lasagne alla Bolognese', 'Lasagne tradizionali con ragù di carne e besciamella', 5.50, 3, 'lasagne_bolognese.jpg', 580, 1),
-(4, 'Pollo alla Griglia', 'Petto di pollo grigliato con erbe aromatiche', 6.00, 30, 'pollo_griglia.jpg', 280, 2),
-(5, 'Hamburger Vegetale', 'Burger vegetale con insalata, pomodoro e salse', 5.50, 15, 'hamburger_vegetale.jpg', 380, 2),
-(6, 'Cotoletta alla Milanese', 'Cotoletta impanata e fritta servita con limone', 6.50, 0, 'cotoletta_milanese.jpg', 520, 2),
-(7, 'Insalata Mista', 'Insalata fresca con pomodori, carote e mais', 2.50, 40, 'insalata_mista.jpg', 80, 3),
-(8, 'Patate al Forno', 'Patate dorate al forno con rosmarino', 2.00, 35, 'patate_forno.jpg', 180, 3),
+(1, 'Pasta al Pomodoro', 'Pasta con salsa di pomodoro fresco, basilico e parmigiano', 4.50, 25, 'pasta-pomodoro.svg', 350, 1),
+(2, 'Risotto ai Funghi', 'Risotto cremoso con funghi porcini e parmigiano', 5.00, 18, 'risotto.jpg', 420, 1),
+(3, 'Lasagne alla Bolognese', 'Lasagne tradizionali con ragù di carne e besciamella', 5.50, 3, 'lasagne.png', 580, 1),
+(4, 'Pollo alla Griglia', 'Petto di pollo grigliato con erbe aromatiche', 6.00, 30, 'pollo-alla-griglia.webp', 280, 2),
+(5, 'Hamburger Vegetale', 'Burger vegetale con insalata, pomodoro e salse', 5.50, 15, 'veggie-burger.jpg', 380, 2),
+(6, 'Cotoletta alla Milanese', 'Cotoletta impanata e fritta servita con limone', 6.50, 0, 'cotoletta.png', 520, 2),
+(7, 'Insalata Mista', 'Insalata fresca con pomodori, carote e mais', 2.50, 40, 'insalata.webp', 80, 3),
+(8, 'Patate al Forno', 'Patate dorate al forno con rosmarino', 2.00, 35, 'patate.webp', 180, 3),
 (9, 'Tiramisù', 'Classico tiramisù con savoiardi e mascarpone', 3.00, 20, 'tiramisu.jpg', 320, 4),
-(10, 'Frutta di Stagione', 'Macedonia di frutta fresca di stagione', 2.50, 45, 'frutta_stagione.jpg', 120, 4);
+(10, 'Frutta di Stagione', 'Macedonia di frutta fresca di stagione', 2.50, 45, 'macedonia-di-frutta.jpg', 120, 4);
 
 -- Inserimento specifiche dietetiche per i piatti
 INSERT INTO dish_specifications (dish_id, dietary_spec_id) VALUES
