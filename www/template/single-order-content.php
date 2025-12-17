@@ -18,12 +18,12 @@ $status = $r["status"];
             </h1>
             <p class="text-muted mb-0 pt-2">
                 <i class="bi bi-calendar-event me-1" aria-hidden="true"></i>
-                <span><?php echo formatWhen($r["date_time"]); ?></span>
+                <span><?php echo htmlspecialchars((string)formatWhen($r["date_time"]), ENT_QUOTES, 'UTF-8'); ?></span>
             </p>
             </div>
             <div>
-                <span class="badge <?php echo reservationBadgeClass($status); ?>">
-                    <?php echo $status; ?>
+                <span class="badge <?php echo htmlspecialchars((string)reservationBadgeClass($status), ENT_QUOTES, 'UTF-8'); ?>">
+                    <?php echo htmlspecialchars((string)$status, ENT_QUOTES, 'UTF-8'); ?>
                 </span>
             </div>
         </div>
@@ -49,20 +49,20 @@ $status = $r["status"];
                     <li class="d-flex justify-content-between align-items-start py-3 border-bottom">
                         <div class="flex-grow-1">
                             <h3 class="h6 mb-1">
-                                <?php echo $item["name"] ?>
+                                <?php echo htmlspecialchars((string)$item["name"], ENT_QUOTES, 'UTF-8'); ?>
                                 <span class="text-muted">x<?php echo $qty; ?></span>
                             </h3>
-                            <p class="small text-muted mb-0"><?php echo $item["description"]; ?></p>
+                            <p class="small text-muted mb-0"><?php echo htmlspecialchars((string)$item["description"], ENT_QUOTES, 'UTF-8'); ?></p>
                             <div class="mt-2">
                                 <?php getTags($dishTags); ?>
                             </div>
                         </div>
                         <div class="text-end">
                             <strong>
-                                €<?php echo formatEuro($lineTotal); ?>
+                                €<?php echo htmlspecialchars((string)formatEuro($lineTotal), ENT_QUOTES, 'UTF-8'); ?>
                             </strong>
                             <div class="small text-muted">
-                                (€<?php echo formatEuro($price); ?> cad.)
+                                (€<?php echo htmlspecialchars((string)formatEuro($price), ENT_QUOTES, 'UTF-8'); ?> cad.)
                             </div>
                         </div>
                     </li>
@@ -79,7 +79,7 @@ $status = $r["status"];
             <div class="card-body">
                 <p class="mb-0">
                     <?php if(!empty($r["notes"])) {
-                        echo $r["notes"];
+                        echo htmlspecialchars((string)$r["notes"], ENT_QUOTES, 'UTF-8');
                     } else {
                         echo '<span class="text-muted">Nessuna nota aggiunta.</span>';
                     }?>
@@ -98,12 +98,12 @@ $status = $r["status"];
             <div class="card-body">
             <div class="mb-3">
                 <strong class="d-block text-muted small mb-1">Importo Totale</strong>
-                <strong>€<?php echo formatEuro($r["total_amount"]) ?></strong>
+                <strong>€<?php echo htmlspecialchars((string)formatEuro($r["total_amount"]), ENT_QUOTES, 'UTF-8'); ?></strong>
             </div>
             <div class="mb-3">
                 <strong class="d-block text-muted small mb-1">Stato</strong>
-                <span class="badge <?php echo reservationBadgeClass($status); ?>">
-                    <?php echo $status; ?>
+                <span class="badge <?php echo htmlspecialchars((string)reservationBadgeClass($status), ENT_QUOTES, 'UTF-8'); ?>">
+                    <?php echo htmlspecialchars((string)$status, ENT_QUOTES, 'UTF-8'); ?>
                 </span>
             </div>
             <div>

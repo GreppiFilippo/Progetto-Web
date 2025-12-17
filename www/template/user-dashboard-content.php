@@ -3,7 +3,7 @@
     <!-- Intestazione Dashboard -->
     <header class="welcome border rounded-3 p-4 mb-3 shadow-sm">
     <h1 class="h3 mb-2 text-white">
-        Benvenuto, <?php echo $templateParams["user"]["first_name"] . ' ' . $templateParams["user"]["last_name"]; ?>!
+        Benvenuto, <?php echo htmlspecialchars($templateParams["user"]["first_name"] . ' ' . $templateParams["user"]["last_name"], ENT_QUOTES, 'UTF-8'); ?>!
     </h1>
     <p class="mb-0 opacity-75 text-white">Gestisci le tue prenotazioni e consulta il menu del giorno</p>
     </header>
@@ -18,7 +18,7 @@
             </div>
             <div class="ms-3">
             <h2 class="h6 mb-1">Prenotazioni attive</h2>
-            <p class="h3 mb-0"><?php echo $templateParams["active_count"]; ?></p>
+            <p class="h3 mb-0"><?php echo htmlspecialchars((string)$templateParams["active_count"], ENT_QUOTES, 'UTF-8'); ?></p>
             </div>
         </div>
         </section>
@@ -32,7 +32,7 @@
             </div>
             <div class="ms-3">
             <h2 class="h6 mb-1">Prenotazioni completate</h2>
-            <p class="h3 mb-0"><?php echo $templateParams["completed_count"]; ?></p>
+            <p class="h3 mb-0"><?php echo htmlspecialchars((string)$templateParams["completed_count"], ENT_QUOTES, 'UTF-8'); ?></p>
             </div>
         </div>
         </section>
@@ -68,19 +68,19 @@
                         <h3 class="h6 mb-1">
                             <i class="bi bi-calendar-event text-primary me-2" aria-hidden="true"></i>
                             <span>
-                                Pranzo - <?php echo $when; ?>
+                                Pranzo - <?php echo htmlspecialchars((string)$when, ENT_QUOTES, 'UTF-8'); ?>
                             </span>
                         </h3>
-                        <span class="badge <?php echo $badgeClass; ?>"><?php echo $status; ?></span>
+                        <span class="badge <?php echo htmlspecialchars((string)$badgeClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars((string)$status, ENT_QUOTES, 'UTF-8'); ?></span>
                     </div>
-                    <strong>€<?php echo $total ?></strong>
+                    <strong>€<?php echo htmlspecialchars((string)$total, ENT_QUOTES, 'UTF-8'); ?></strong>
                 </div>
                 <?php if (!empty($items)): ?>
                     <ul class="list-unstyled small mb-2">
                         <?php foreach($items as $item): ?>
                             <li>
                                 <i class="bi bi-check2 text-success me-2" aria-hidden="true"></i>
-                                <span><?php echo $item["name"] ?></span>
+                                <span><?php echo htmlspecialchars((string)$item["name"], ENT_QUOTES, 'UTF-8'); ?></span>
                             </li>
                         <?php endforeach; ?>
                     </ul>

@@ -14,7 +14,7 @@
         <?php if (!empty($templateParams["error"])): ?>
             <div class="alert border border-dark bg-white text-dark mb-3" role="alert" aria-live="assertive">
             <p class="mb-1 fw-semibold">Non è stato possibile salvare le preferenze.</p>
-            <p class="mb-0"><?php echo $templateParams["error"]; ?></p>
+            <p class="mb-0"><?php echo htmlspecialchars((string)$templateParams["error"], ENT_QUOTES, 'UTF-8'); ?></p>
             </div>
         <?php endif; ?>
 
@@ -39,7 +39,7 @@
                         <?php echo $checked; ?>
                     >
                     <label class="form-check-label" for="diet_<?php echo $id; ?>">
-                        <?php echo $name; ?>
+                        <?php echo htmlspecialchars((string)$name, ENT_QUOTES, 'UTF-8'); ?>
                     </label>
                     </div>
                 <?php endforeach; ?>
@@ -54,13 +54,13 @@
                 aria-labelledby="profilo-utente">
             <div class="text-center">
             <i class="bi bi-person-circle fs-1"></i>
-            <h2 id="profilo-utente" class="h3 mt-3"><?php echo $templateParams["user"]["first_name"] . ' ' . $templateParams["user"]["last_name"]; ?></h2>
+            <h2 id="profilo-utente" class="h3 mt-3"><?php echo htmlspecialchars($templateParams["user"]["first_name"] . ' ' . $templateParams["user"]["last_name"], ENT_QUOTES, 'UTF-8'); ?></h2>
             <p>
                 <b>Membro da:</b>
                 <?php
                     $regDate = new DateTime($templateParams["user"]["registration_date"]);
                     setlocale(LC_TIME, 'it_IT.UTF-8');
-                    echo $regDate->format('F Y');
+                    echo htmlspecialchars((string)$regDate->format('F Y'), ENT_QUOTES, 'UTF-8');
                 ?>
             </p>
 

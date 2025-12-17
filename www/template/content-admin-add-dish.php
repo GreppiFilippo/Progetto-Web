@@ -2,7 +2,7 @@
   <div class="alert alert-danger">
     <ul class="mb-0">
       <?php foreach ($errors as $e): ?>
-        <li><?php echo htmlspecialchars($e); ?></li>
+        <li><?php echo htmlspecialchars((string)$e, ENT_QUOTES, 'UTF-8'); ?></li>
       <?php endforeach; ?>
     </ul>
   </div>
@@ -90,7 +90,7 @@
                   id="dishName"
                   name="dishName"
                   placeholder="Es. Pasta al Pomodoro"
-                  value="<?php echo htmlspecialchars($_POST['dishName'] ?? ''); ?>"
+                  value="<?php echo htmlspecialchars((string)($_POST['dishName'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
                   required
                 >
               </div>
@@ -110,7 +110,7 @@
                       value="<?php echo (int)$category['category_id']; ?>"
                       <?php echo ((int)($_POST['dishCategory'] ?? 0) === (int)$category['category_id']) ? 'selected' : ''; ?>
                     >
-                      <?php echo htmlspecialchars($category['category_name']); ?>
+                      <?php echo htmlspecialchars((string)$category['category_name'], ENT_QUOTES, 'UTF-8'); ?>
                     </option>
                   <?php endforeach; ?>
                 </select>
@@ -130,7 +130,7 @@
                   rows="3"
                   placeholder="Descrivi gli ingredienti principali e il metodo di preparazione..."
                   required
-                ><?php echo htmlspecialchars($_POST['dishDescription'] ?? ''); ?></textarea>
+                ><?php echo htmlspecialchars((string)($_POST['dishDescription'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></textarea>
               </div>
             </div>
           </div>
@@ -161,7 +161,7 @@
                     min="0"
                     step="0.50"
                     placeholder="0.00"
-                    value="<?php echo htmlspecialchars($_POST['dishPrice'] ?? ''); ?>"
+                    value="<?php echo htmlspecialchars((string)($_POST['dishPrice'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
                     required
                   >
                 </div>
@@ -179,7 +179,7 @@
                     name="dishCalories"
                     min="0"
                     placeholder="300"
-                    value="<?php echo htmlspecialchars($_POST['dishCalories'] ?? ''); ?>"
+                    value="<?php echo htmlspecialchars((string)($_POST['dishCalories'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
                   >
                   <span class="input-group-text">kcal</span>
                 </div>
@@ -196,7 +196,7 @@
                   id="dishAvailability"
                   name="dishAvailability"
                   min="0"
-                  value="<?php echo htmlspecialchars($_POST['dishAvailability'] ?? '20'); ?>"
+                  value="<?php echo htmlspecialchars((string)($_POST['dishAvailability'] ?? '20'), ENT_QUOTES, 'UTF-8'); ?>"
                   required
                 >
               </div>
@@ -227,7 +227,7 @@
                       <?php echo in_array($sid, $oldSpecs, true) ? 'checked' : ''; ?>
                     >
                     <label class="form-check-label fw-medium" for="spec_<?php echo $sid; ?>">
-                      <?php echo htmlspecialchars($dietary_spec["dietary_spec_name"]); ?>
+                      <?php echo htmlspecialchars((string)$dietary_spec["dietary_spec_name"], ENT_QUOTES, 'UTF-8'); ?>
                     </label>
                   </div>
                 <?php endforeach; ?>

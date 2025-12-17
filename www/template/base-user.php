@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Mensa Campus - Prenota il tuo pasto online" />
     <meta name="keywords" content="mensa, campus, prenotazione, pasto, online" />
-    <title><?php echo $templateParams["titolo"]; ?></title>
+    <title><?php echo htmlspecialchars((string)$templateParams["titolo"], ENT_QUOTES, 'UTF-8'); ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" type="text/css" href="css/style.css" />
@@ -13,7 +13,7 @@
       if(isset($templateParams["js"])):
           foreach($templateParams["js"] as $script):
       ?>
-          <script src="<?php echo $script; ?>"></script>
+          <script src="<?php echo htmlspecialchars((string)$script, ENT_QUOTES, 'UTF-8'); ?>"></script>
       <?php
           endforeach;
       endif;
@@ -44,8 +44,8 @@
           <ul class="navbar-nav ms-auto align-items-md-center">
             <?php foreach($templateParams["nav_items"] as $nav_item): ?>
               <li class="nav-item">
-                <a class="nav-link active text-white" aria-current="page" href="<?php echo $nav_item["link"]; ?>">
-                  <i class="<?php echo $nav_item["iconClass"]; ?> me-1" aria-hidden="true"></i><?php echo $nav_item["name"]; ?>
+                <a class="nav-link active text-white" aria-current="page" href="<?php echo htmlspecialchars((string)$nav_item["link"], ENT_QUOTES, 'UTF-8'); ?>">
+                  <i class="<?php echo htmlspecialchars((string)$nav_item["iconClass"], ENT_QUOTES, 'UTF-8'); ?> me-1" aria-hidden="true"></i><?php echo htmlspecialchars((string)$nav_item["name"], ENT_QUOTES, 'UTF-8'); ?>
                 </a>
               </li>
             <?php endforeach; ?>
@@ -75,7 +75,7 @@
               <h4 class="h5 my-3">Link Utili</h4>
               <ul class="list-unstyled small">
                 <?php foreach($templateParams["link_utili"] as $link): ?>
-                  <li><a href="<?php echo $link["link"]; ?>" class="text-decoration-none"><?php echo $link["name"]; ?></a></li>
+                  <li><a href="<?php echo htmlspecialchars((string)$link["link"], ENT_QUOTES, 'UTF-8'); ?>" class="text-decoration-none"><?php echo htmlspecialchars((string)$link["name"], ENT_QUOTES, 'UTF-8'); ?></a></li>
                 <?php endforeach; ?>
               </ul>
             </nav>
