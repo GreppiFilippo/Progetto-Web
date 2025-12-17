@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnReset = document.getElementById("btnReset");
 
     if (!input || !previewImg || !previewText || !previewIcon) {
-        return; // sicurezza se la pagina non è quella giusta
+        return;
     }
 
     function resetPreview() {
@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Controllo base: deve essere immagine
         if (!file.type.startsWith("image/")) {
             alert("Il file selezionato non è un'immagine valida.");
             input.value = "";
@@ -45,11 +44,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (btnReset) {
         btnReset.addEventListener("click", () => {
-            // timeout per aspettare il reset del form
             setTimeout(resetPreview, 0);
         });
     }
 
-    // stato iniziale
     resetPreview();
 });
