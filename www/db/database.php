@@ -317,5 +317,66 @@ class DatabaseHelper {
 
         return $rows;
     }
+
+    // 1) Prendi un ordine verificando che appartenga all'utente
+    public function getReservationById($reservationId, $userId) {
+        $sql = "SELECT reservation_id, total_amount, date_time, notes, status
+                FROM reservations
+                WHERE reservation_id = ? AND user_id = ?
+                LIMIT 1";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return null;
+
+        $stmt->bind_param("ii", $reservationId, $userId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $row = $res->fetch_assoc();
+        $stmt->close();
+
+        return $row ?: null;
+    }
+
+    // 2) Items dell’ordine con quantità + prezzo + descrizione
+    public function getReservationItemsDetailed($reservationId) {
+        $sql = "SELECT d.dish_id, d.name, d.description, d.price, rd.quantity
+                FROM reservation_dishes rd
+                JOIN dishes d ON d.dish_id = rd.dish_id
+                WHERE rd.reservation_id = ?";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return [];
+
+        $stmt->bind_param("i", $reservationId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $rows = $res->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+
+        return $rows;
+    }
+
+    // 3) Tag per tutti i piatti di un ordine (in 1 query)
+    public function getDietaryTagsForReservation($reservationId) {
+        $sql = "SELECT rd.dish_id, ds.dietary_spec_name
+                FROM reservation_dishes rd
+                JOIN dish_specifications dsp ON dsp.dish_id = rd.dish_id
+                JOIN dietary_specifications ds ON ds.dietary_spec_id = dsp.dietary_spec_id
+                WHERE rd.reservation_id = ?";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return [];
+
+        $stmt->bind_param("i", $reservationId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $rows = $res->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+
+        // Raggruppa per dish_id: [dish_id => [tag1, tag2...]]
+        $map = [];
+        foreach ($rows as $r) {
+            $dishId = (int)$r["dish_id"];
+            $map[$dishId][] = ["dietary_spec_name" => $r["dietary_spec_name"]];
+        }
+        return $map;
+    }
 }
 ?>

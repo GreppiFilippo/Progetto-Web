@@ -89,9 +89,9 @@
                 <?php endif; ?>
                 <div class="d-flex gap-2">
 
-                    <!-- DETTAGLI: vai a singolo-ordine.php -->
+                    <!-- DETTAGLI: vai a single-order.php -->
                     <a class="btn btn-sm btn-outline-primary" type="button"
-                    href="singolo-ordine.php?reservation_id=<?php echo (int)$reservation['reservation_id']; ?>">
+                    href="single-order.php?reservation_id=<?php echo (int)$reservation['reservation_id']; ?>">
                         <i class="bi bi-eye me-1" aria-hidden="true"></i>
                         <span class="text-white">Dettagli</span>
                     </a>
@@ -101,7 +101,7 @@
                         <a class="btn btn-sm btn-outline-danger" type="button"
                         href="user-dashboard.php?cancel_id=<?php echo (int)$reservation['reservation_id']; ?>">
                             <i class="bi bi-trash me-1" aria-hidden="true"></i>
-                            <span>Annulla</span>
+                            <span>Annulla ordine</span>
                         </a>
                     <?php } ?>
 
