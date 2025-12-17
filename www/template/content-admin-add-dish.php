@@ -1,3 +1,13 @@
+<?php if (!empty($errors)): ?>
+  <div class="alert alert-danger">
+    <ul class="mb-0">
+      <?php foreach ($errors as $e): ?>
+        <li><?php echo $e; ?></li>
+      <?php endforeach; ?>
+    </ul>
+  </div>
+<?php endif; ?>
+
 <main class="container my-5" >
     <p class="visually-hidden">
     <span class="text-danger">*</span> Campo obbligatorio
@@ -9,28 +19,17 @@
         Aggiungi Nuovo Piatto
         </h1>
         <div class="border-0 shadow-sm p-4">
-        <form action="#" method="post">
+        <form action="" method="post">
             <!--Caricamento Immagine-->
             <div class="row mb-4">
-            <div class="col-12">
-                <h2 class="admin-h2 h5 mb-3">
-                    <i class="bi admin-icon bi-camera me-2"></i>Immagine del Piatto
-                </h2>
-            </div>
-            <div class="row">
                 <div class="col-md-6">
-                <label for="dishImage" class="form-label">Carica Immagine <span class="text-danger">*</span></label>
-                <input type="file" class="form-control" id="dishImage" accept="image/*" required>
-                <div class="form-text">Formati supportati: JPG, PNG, WebP. Max 5MB.</div>
+                    <h2 class="admin-h2 h5 mb-3">
+                        <i class="bi admin-icon bi-camera me-2"></i>Immagine del Piatto
+                    </h2>
+                    <label for="dishImage" class="form-label">Carica Immagine <span class="text-danger">*</span></label>
+                    <input type="file" class="form-control" id="dishImage" accept="image/*" required>
+                    <div class="form-text">Formati supportati: JPG, PNG, WebP. Max 5MB.</div>
                 </div>
-                <div class="col-md-6">
-                <label class="form-label">Anteprima</label>
-                <div id="imagePreview" class="border rounded p-3 text-center">
-                    <i class="bi bi-image text-muted fs-2"></i>
-                    <p class="text-muted mb-0 mt-2">Nessuna immagine selezionata</p>
-                </div>
-                </div>
-            </div>
             </div>
 
             <hr class="my-4">
@@ -51,11 +50,11 @@
                     <label for="dishCategory" class="form-label">Categoria <span class="text-danger">*</span></label>
                     <select class="form-select" id="dishCategory" required>
                         <option value="" selected disabled>Seleziona categoria...</option>
-                        <option value="primi">Primi Piatti</option>
-                        <option value="secondi">Secondi Piatti</option>
-                        <option value="contorni">Contorni</option>
-                        <option value="dessert">Dessert</option>
-                        <option value="bevande">Bevande</option>
+                        <?php foreach($templateParams["categories"] as $category): ?>
+                        <option value="<?php echo getIdFromName($category['category_id']); ?>">
+                            <?php echo htmlspecialchars($category['category_name']); ?>
+                        </option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </div>
@@ -112,32 +111,14 @@
             </div>
             <div class="row">
                 <div class="col-md-6">
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" value="" id="dishVegetarian">
-                    <label class="form-check-label fw-medium" for="dishVegetarian">
-                    Vegetariano
-                    </label>
-                </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" value="" id="dishVegan">
-                    <label class="form-check-label fw-medium" for="dishVegan">
-                    Vegano
-                    </label>
-                </div>
-                </div>
-                <div class="col-md-6">
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" value="" id="dishGlutenFree">
-                    <label class="form-check-label fw-medium" for="dishGlutenFree">
-                    Senza Glutine
-                    </label>
-                </div>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" value="" id="dishLactoseFree">
-                    <label class="form-check-label fw-medium" for="dishLactoseFree">
-                    Senza Lattosio
-                    </label>
-                </div>
+                    <?php foreach($templateParams["dietary_specs"] as $dietary_spec): ?>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" value="" id="<?php echo getIdFromName($dietary_spec["dietary_spec_name"]); ?>">
+                        <label class="form-check-label fw-medium" for="<?php echo getIdFromName($dietary_spec["dietary_spec_name"]); ?>">
+                        <?php echo htmlspecialchars($dietary_spec["dietary_spec_name"]); ?>
+                        </label>
+                    </div>
+                    <?php endforeach; ?>    
                 </div>
             </div>
             </div>

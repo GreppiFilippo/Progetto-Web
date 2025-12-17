@@ -378,5 +378,48 @@ class DatabaseHelper {
         }
         return $map;
     }
+
+    public function createDish($name, $description, $price, $stock, $imagePath, $calories, $categoryId, $specIds = []) {
+        $this->db->begin_transaction();
+
+        try {
+            $sql = "INSERT INTO dishes (name, description, price, stock, image, calories, category_id)
+                    VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $this->db->prepare($sql);
+            if (!$stmt) throw new Exception($this->db->error);
+
+            $stmt->bind_param("ssdisii", $name, $description, $price, $stock, $imagePath, $calories, $categoryId);
+            if (!$stmt->execute()) throw new Exception($stmt->error);
+
+            $dishId = $stmt->insert_id;
+            $stmt->close();
+
+            // salva N:M specifiche
+            $specIds = array_values(array_unique(array_map("intval", $specIds)));
+            if (count($specIds) > 0) {
+                $ins = $this->db->prepare("INSERT INTO dish_specifications (dish_id, dietary_spec_id) VALUES (?, ?)");
+                if (!$ins) throw new Exception($this->db->error);
+
+                foreach ($specIds as $sid) {
+                    $ins->bind_param("ii", $dishId, $sid);
+                    if (!$ins->execute()) throw new Exception($ins->error);
+                }
+                $ins->close();
+            }
+
+            $this->db->commit();
+            return ["success" => true, "dish_id" => $dishId];
+
+        } catch (Exception $e) {
+            $this->db->rollback();
+            return ["success" => false, "error" => $e->getMessage()];
+        }
+    }
+
+    public function getCategories() {
+        $sql = "SELECT category_id, category_name FROM categories ORDER BY category_name";
+        $res = $this->db->query($sql);
+        return $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
+    }
 }
 ?>
