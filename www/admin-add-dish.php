@@ -15,7 +15,12 @@
         exit();
     }*/
 
-    define("UPLOAD_DIR", "./upload/");
+    $templateParams["nav_items"] = array(
+        getNewNavItem("Dashboard", "user-dashboard.php", "bi bi-speedometer2"),
+        getNewNavItem("Gestione menu", "admin-menu.php", "bi bi-calendar-plus me-1"),
+        getNewNavItem("Prenotazioni", "damin-dashboard.php", "bi bi-person-circle"),
+        getNewNavItem("Esci", "logout.php", "bi bi-box-arrow-right me-1")
+    );
 
     $errors = [];
 
