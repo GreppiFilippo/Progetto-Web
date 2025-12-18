@@ -104,7 +104,7 @@ if (!defined('IN_APP')) {
 
                     <!-- ANNULLA: appare solo se canCancel è true -->
                     <?php if (canCancelReservation($reservation['status'])) { ?>
-                        <a class="btn btn-sm btn-outline-danger" type="button"
+                        <a class="btn btn-sm" type="button"
                         href="user-dashboard.php?cancel_id=<?php echo (int)$reservation['reservation_id']; ?>">
                             <i class="bi bi-trash me-1" aria-hidden="true"></i>
                             <span>Annulla ordine</span>

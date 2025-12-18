@@ -200,3 +200,12 @@ small.text-muted,
 .badge.bg-success.text-white {
     color: #ffffff !important;
 }
+
+/* Disable red flash on outline-danger buttons */
+a.btn-outline-danger:active,
+a.btn-outline-danger:focus {
+    background-color: #2C5F4E !important;
+    border-color: #2C5F4E !important;
+    color: white !important;
+    box-shadow: none !important;
+}
