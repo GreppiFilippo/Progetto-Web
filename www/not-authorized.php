@@ -20,7 +20,7 @@ require_once 'bootstrap.php';
             </span>
             
             <h2 class="mb-3 text-dark">Accesso negato</h2>
-            <p class="text-secondary mb-4">
+            <p class="text-dark mb-4">
                 Non hai le autorizzazioni necessarie per accedere a questa sezione del sito.
             </p>
             
