@@ -1,3 +1,9 @@
+<?php
+if (!defined('IN_APP')) {
+    http_response_code(403);
+    exit('Access denied');
+}
+?>
 <main class="container">
     <form action="#" method="post" class="row g-4 my-5">
         <section class="col-xl-7">

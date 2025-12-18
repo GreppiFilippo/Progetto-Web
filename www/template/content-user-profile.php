@@ -1,3 +1,9 @@
+<?php
+if (!defined('IN_APP')) {
+    http_response_code(403);
+    exit('Access denied');
+}
+?>
 <main class="container my-5">
     <h1 class="mb-4"><i class="bi bi-person-circle"></i> Il Mio Profilo</h1>
     <div class="row">

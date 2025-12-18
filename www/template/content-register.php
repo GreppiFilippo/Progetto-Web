@@ -1,3 +1,9 @@
+<?php
+if (!defined('IN_APP')) {
+    http_response_code(403);
+    exit('Access denied');
+}
+?>
 <main class="container my-5">
     <p class="visually-hidden">
     <span class="text-danger">*</span> Campo obbligatorio

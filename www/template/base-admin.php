@@ -1,3 +1,9 @@
+<?php
+if (!defined('IN_APP')) {
+  http_response_code(403);
+  exit('Access denied');
+}
+?>
 <!DOCTYPE html>
 <html lang="it-IT">
   <head>

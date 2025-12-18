@@ -1,4 +1,9 @@
 <?php
+if (!defined('IN_APP')) {
+    http_response_code(403);
+    exit('Access denied');
+}
+
 $r = $templateParams["reservation"];
 $items = $templateParams["items"];
 $tagsMap = $templateParams["tagsMap"];
