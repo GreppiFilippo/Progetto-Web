@@ -1,0 +1,114 @@
+nav.navbar ul li:hover {
+    transition: all 0.3s ease;
+    transform: translateY(-2px);
+    border-bottom: 2px solid #F0F6F1;
+    font-weight: bold;
+}
+
+.col:has(.bi-calendar-check) .rounded-circle {
+    background-color: #4D2C5F;
+    width: 80px;
+    height: 80px;
+}
+
+.col:has(.bi-star-fill) .rounded-circle {
+    background-color: #5F2C3E;
+    width: 80px;
+    height: 80px;
+}
+
+.col:has(.bi-calendar-check) .rounded-circle i,
+.col:has(.bi-star-fill) .rounded-circle i,
+.col:has(.bi-clock-history) .rounded-circle i {
+    color: white;
+}
+
+/* Menu Filter */
+main form select, 
+main form input[type="date"] {
+    cursor: pointer;
+}
+
+ul li div.card > div.card-body span.badge i.bi {
+    color: white;
+}
+
+/* Page Footer */
+body > footer a {
+    color: #FFFFFFB3;
+}
+
+body > footer a:hover {
+    border-bottom: solid #FFFFFFB3 1.5px;
+    transition: all 0.1s ease-in-out;
+}
+
+/* Admin Navigation */
+nav.navbar.nav-admin {
+    background-color: #942222;
+}
+
+main h2.admin-h2 {
+    color: #942222;
+}
+
+main i.bi.admin-icon {
+    color: #942222;
+}
+
+/* Admin Buttons */
+button.admin-btn[type="reset"] {
+    background-color: #942222;
+    border-color: #942222;
+}
+
+button.admin-btn[type="reset"] i {
+    color: white;
+}
+
+button.admin-btn[type="reset"]:hover {
+    background-color: #7A1A1A;
+    border-color: #7A1A1A;
+}
+
+button.admin-btn[type="submit"] {
+    color: #942222;
+    background-color: white;
+    border-color: #942222;
+}
+
+button.admin-btn[type="submit"] i {
+    color: #942222;
+}
+
+button.admin-btn[type="submit"]:hover {
+    color: white;
+    background-color: #942222;
+    border-color: #942222;
+}
+
+button.admin-btn[type="submit"]:hover i {
+    color: white;
+}
+
+div.card > div.ratio,
+.card-img-top {
+    overflow: hidden;
+}
+
+div.card > div.ratio img,
+.card-img-top {
+    display: block;
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* adattamento per schermi piccoli */
+@media (max-width: 576px) {
+    div.card > div.ratio img,
+    .card-img-top {
+        height: 160px;
+    }
+}

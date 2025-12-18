@@ -22,9 +22,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 $templateParams["nav_items"] = array(
     getNewNavItem("Dashboard", "user-dashboard.php", "bi bi-speedometer2"),
-    getNewNavItem("Nuova Prenotazione", "user-booking.php", "bi bi-calendar-plus me-1"),
+    getNewNavItem("Nuova Prenotazione", "user-bookings.php", "bi bi-calendar-plus me-1"),
     getNewNavItem("Profilo", "user-profile.php", "bi bi-person-circle"),
-    getNewNavItem("Esci", "#", "bi bi-box-arrow-right me-1")
+    getNewNavItem("Esci", "logout.php", "bi bi-box-arrow-right me-1")
 );
 $templateParams["link_utili"][] = array(
     "name" => "Menu",

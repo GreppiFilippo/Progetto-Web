@@ -12,7 +12,7 @@
             <p class="fw-bold mb-2">Errore</p>
             <ul class="mb-0">
                 <?php foreach ($templateParams["errors"] as $error): ?>
-                    <li><?php echo $error; ?></li>
+                    <li><?php echo htmlspecialchars((string)$error, ENT_QUOTES, 'UTF-8'); ?></li>
                 <?php endforeach; ?>
             </ul>
         </div>
