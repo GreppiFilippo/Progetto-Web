@@ -112,3 +112,8 @@ div.card > div.ratio img,
         height: 160px;
     }
 }
+
+.admin-page .form-text,
+.admin-page .text-muted {
+  color: #444444 !important; /* contrasto AAA su #ffffff */
+}
