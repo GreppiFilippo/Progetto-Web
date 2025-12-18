@@ -1,3 +1,9 @@
+<?php
+if (!defined('IN_APP')) {
+  http_response_code(403);
+  exit('Access denied');
+}
+?>
 <!DOCTYPE html>
 <html lang="it-IT">
   <head>
@@ -56,8 +62,22 @@
     </nav>
 
     <?php
+      // Determine the appropriate footer heading tag based
+      // on the last <h1>-<h6> present in the page content.
+      // Default fallback: use level 1 when no headings are found.
+      $nextLevel = 1;
       if (isset($templateParams["content"])) {
+        ob_start();
         require $templateParams["content"];
+        $pageContent = ob_get_clean();
+
+        if (preg_match_all('/<h([1-6])\b[^>]*>/i', $pageContent, $matches)) {
+          $levels = array_map('intval', $matches[1]);
+          $lastLevel = end($levels);
+          $nextLevel = min($lastLevel + 1, 6);
+        }
+
+        echo $pageContent;
       }
     ?>
 
@@ -66,13 +86,13 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-6">
-            <h3 class="h5 my-3">Mensa Campus</h3>
+            <?php echo "<h{$nextLevel} class=\"h5 my-3\">Mensa Campus</h{$nextLevel}>"; ?>
             <p class="small">Sistema di prenotazione pasti per studenti e personale universitario.</p>
             <p class="small mb-0">&copy; 2025 Mensa Campus. Tutti i diritti riservati.</p>
           </div>
           <div class="col-lg-3">
             <nav aria-label="Link utili">
-              <h4 class="h5 my-3">Link Utili</h4>
+              <?php echo "<h" . min($nextLevel + 1, 6) . " class=\"h5 my-3\">Link Utili</h" . min($nextLevel + 1, 6) . ">"; ?>
               <ul class="list-unstyled small">
                 <?php foreach($templateParams["link_utili"] as $link): ?>
                   <li><a href="<?php echo htmlspecialchars((string)$link["link"], ENT_QUOTES, 'UTF-8'); ?>" class="text-decoration-none"><?php echo htmlspecialchars((string)$link["name"], ENT_QUOTES, 'UTF-8'); ?></a></li>
@@ -81,7 +101,7 @@
             </nav>
           </div>
           <div class="col-lg-3">
-            <h4 class="h5 my-3">Contatti</h4>
+            <?php echo "<h" . min($nextLevel + 1, 6) . " class=\"h5 my-3\">Contatti</h" . min($nextLevel + 1, 6) . ">"; ?>
             <address>
               <ul class="list-unstyled small">
                 <li class="text-white-50">

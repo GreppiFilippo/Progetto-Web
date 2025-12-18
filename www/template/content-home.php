@@ -1,3 +1,9 @@
+<?php
+if (!defined('IN_APP')) {
+    http_response_code(403);
+    exit('Access denied');
+}
+?>
 <main>
     <!-- Intro -->
     <section class="py-5">

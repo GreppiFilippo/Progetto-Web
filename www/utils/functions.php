@@ -1,4 +1,8 @@
 <?php
+if (!defined('IN_APP')) {
+    http_response_code(403);
+    exit('Access denied');
+}
 
     /**
      * Create a new navigation item.

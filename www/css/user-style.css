@@ -152,3 +152,51 @@ body > header > nav {
 body > main > form > fieldset > div > i, body > main > h1 > i, body > main > div > aside > div > i  {
     color: #2C5F34;
 }
+
+
+div.card > div.ratio,
+.card-img-top {
+    overflow: hidden;
+}
+
+div.card > div.ratio img,
+.card-img-top {
+    display: block;
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* adattamento per schermi piccoli */
+@media (max-width: 576px) {
+    div.card > div.ratio img,
+    .card-img-top {
+        height: 160px;
+    }
+}
+
+/* Accessibility fixes: improve color contrast to meet WCAG AAA (enhanced) */
+.lead.text-muted,
+.text-muted,
+.card-text.text-muted,
+small.text-muted,
+.card .small,
+.card small {
+    color: #222222 !important;
+}
+
+/* Darker badge backgrounds so white text meets enhanced contrast */
+.badge.bg-primary {
+    background-color: #084298 !important;
+}
+
+.badge.bg-success {
+    background-color: #0b5d38 !important;
+}
+
+/* Ensure badges with white text keep full contrast */
+.badge.bg-primary.text-white,
+.badge.bg-success.text-white {
+    color: #ffffff !important;
+}

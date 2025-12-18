@@ -1,3 +1,9 @@
+<?php
+if (!defined('IN_APP')) {
+  http_response_code(403);
+  exit('Access denied');
+}
+?>
 <?php if (!empty($errors)): ?>
   <div class="alert alert-danger">
     <ul class="mb-0">
