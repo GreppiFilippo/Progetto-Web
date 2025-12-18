@@ -2,6 +2,10 @@
 require_once 'bootstrap.php';
 
 if (isUserLoggedIn()) {
+    if (isAdmin()) {
+        header("Location: admin-add-dish.php");
+        exit();
+    }
     header("Location: index.php");
     exit();
 }
@@ -13,6 +17,10 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
         $templateParams["login_error"] = "Errore! Controllare username o password!";
     } else {
         registerLoggedUser($login_result[0]);
+        if (isAdmin()) {
+            header("Location: admin-add-dish.php");
+            exit();
+        }
         header("Location: index.php");
         exit();
     }

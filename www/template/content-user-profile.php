@@ -51,9 +51,7 @@ if (!defined('IN_APP')) {
                 <?php endforeach; ?>
             </fieldset>
 
-            <button type="submit" class="btn btn-dark">
-            <span>Salva preferenze</span>
-            </button>
+            <input type="submit" class="btn text-white" value="Salva preferenze" />
         </form>
         </section>
         <aside class="col-md-5 order-1 order-md-2 border rounded-3 shadow p-4 mb-4 offset-md-1"
@@ -64,9 +62,27 @@ if (!defined('IN_APP')) {
             <p>
                 <b>Membro da:</b>
                 <?php
-                    $regDate = new DateTime($templateParams["user"]["registration_date"]);
-                    setlocale(LC_TIME, 'it_IT.UTF-8');
-                    echo htmlspecialchars((string)$regDate->format('F Y'), ENT_QUOTES, 'UTF-8');
+                   $regDate = new DateTime($templateParams["user"]["registration_date"]);
+
+                    $mesi = [
+                        1 => 'Gennaio',
+                        2 => 'Febbraio',
+                        3 => 'Marzo',
+                        4 => 'Aprile',
+                        5 => 'Maggio',
+                        6 => 'Giugno',
+                        7 => 'Luglio',
+                        8 => 'Agosto',
+                        9 => 'Settembre',
+                        10 => 'Ottobre',
+                        11 => 'Novembre',
+                        12 => 'Dicembre'
+                    ];
+
+                    $mese = $mesi[(int)$regDate->format('n')];
+                    $anno = $regDate->format('Y');
+
+                    echo htmlspecialchars("$mese $anno", ENT_QUOTES, 'UTF-8');
                 ?>
             </p>
 

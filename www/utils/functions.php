@@ -49,7 +49,7 @@ if (!defined('IN_APP')) {
         $_SESSION["user_id"] = $user["user_id"];
         $_SESSION["first_name"] = $user["first_name"];
         $_SESSION["last_name"] = $user["last_name"];
-        $_SESSION["is_admin"] = $user["admin"];
+        $_SESSION["is_admin"] = (bool)$user["admin"];
         $_SESSION["phone_number"] = $user["phone_number"];
     }
 

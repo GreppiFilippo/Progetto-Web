@@ -1,7 +1,7 @@
 <?php
 require_once "bootstrap.php";
 
-/* // Admin template access control
+// Admin template access control
 if (!isUserLoggedIn()) {
     http_response_code(403);
     require "login.php";
@@ -12,7 +12,7 @@ if (!isAdmin()) {
     http_response_code(401);
     require "not-authorized.php";
     exit();
-} */
+}
 
 $templateParams["nav_items"] = array(
     getNewNavItem("Dashboard", "user-dashboard.php", "bi bi-speedometer2 me-1"),

@@ -22,13 +22,14 @@ nav.navbar ul li:hover {
 }
 
 /* Buttons */
+form input[type="submit"],
 form button[type="submit"],
 a.btn:first-child,
 aside a.btn:first-child,
 aside section a.btn:first-of-type,
 main .col-md-8 ul li .d-flex a.btn-outline-primary {
-    background-color: #2C5F4E;
-    border-color: #2C5F4E;
+    background-color: #2C5F4E !important;
+    border-color: #2C5F4E !important;
 }
 
 form button[type="submit"] i,
@@ -36,7 +37,7 @@ a.btn:first-child i,
 aside section a.btn:first-of-type i {
     color: white;
 }
-
+form input[type="submit"]:hover,
 form button[type="submit"]:hover,
 a.btn:first-child:hover,
 aside section a.btn:first-of-type:hover,
@@ -208,4 +209,92 @@ a.btn-outline-danger:focus {
     border-color: #2C5F4E !important;
     color: white !important;
     box-shadow: none !important;
+}
+
+/* ===== WCAG AAA Focus Styles ===== */
+
+/* Links focus */
+a:focus,
+a:focus-visible {
+    outline: 3px solid #2C5F34;
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+/* Navigation links focus */
+nav.navbar a.nav-link:focus,
+nav.navbar a.nav-link:focus-visible,
+nav.navbar a.navbar-brand:focus,
+nav.navbar a.navbar-brand:focus-visible {
+    outline: 3px solid #F0F6F1;
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* Buttons focus */
+button:focus,
+button:focus-visible,
+.btn:focus,
+.btn:focus-visible,
+input[type="submit"]:focus,
+input[type="submit"]:focus-visible,
+input[type="reset"]:focus,
+input[type="reset"]:focus-visible,
+input[type="button"]:focus,
+input[type="button"]:focus-visible {
+    outline: 3px solid #1B3B20;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(44, 95, 52, 0.25);
+}
+
+/* Form controls focus */
+input:focus,
+input:focus-visible,
+textarea:focus,
+textarea:focus-visible,
+select:focus,
+select:focus-visible,
+.form-control:focus,
+.form-control:focus-visible,
+.form-select:focus,
+.form-select:focus-visible {
+    border-color: #2C5F34;
+    outline: 3px solid #2C5F34;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 4px rgba(44, 95, 52, 0.15);
+}
+
+/* Checkboxes and radio buttons focus */
+input[type="checkbox"]:focus,
+input[type="checkbox"]:focus-visible,
+input[type="radio"]:focus,
+input[type="radio"]:focus-visible,
+.form-check-input:focus,
+.form-check-input:focus-visible {
+    border-color: #2C5F34;
+    outline: 3px solid #2C5F34;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(44, 95, 52, 0.2);
+}
+
+/* Navbar toggler focus */
+.navbar-toggler:focus,
+.navbar-toggler:focus-visible {
+    outline: 3px solid #F0F6F1;
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px rgba(240, 246, 241, 0.3);
+}
+
+/* Card links focus (menu items) */
+.card a:focus,
+.card a:focus-visible {
+    outline: 3px solid #2C5F34;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Remove default focus for non-keyboard users */
+*:focus:not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
 }
