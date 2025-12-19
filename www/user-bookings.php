@@ -27,6 +27,7 @@ $templateParams["link_utili"][] = array(
 );
 
 $templateParams["categories"] = $dbh->getAllCategories();
+$templateParams["time_slots"] = $dbh->getTimeSlotsByDate(date('Y-m-d'));
 $templateParams["content"] = "template/user-bookings-content.php";
 // include JS for booking page
 $templateParams["js"][] = "js/user-bookings.js";
