@@ -1,8 +1,9 @@
 <?php
 // Prevent direct access
-if (php_sapi_name() !== 'cli' && realpath(__FILE__) === realpath($_SERVER['SCRIPT_FILENAME'])) {
-	http_response_code(403);
-	exit('Access denied');
+if (php_sapi_name() !== 'cli' && isset($_SERVER['SCRIPT_FILENAME']) && is_string($_SERVER['SCRIPT_FILENAME']) && realpath($_SERVER['SCRIPT_FILENAME']) === realpath(__FILE__)) {
+    http_response_code(403);
+    header('Location: not-authorized.php');
+    exit;
 }
 
 session_start();

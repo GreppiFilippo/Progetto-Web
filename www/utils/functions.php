@@ -7,12 +7,12 @@ if (!defined('IN_APP')) {
     /**
      * Create a new navigation item.
      * 
-     * @param mixed $name The name of the navigation item
-     * @param mixed $link The link URL of the navigation item
-     * @param mixed $iconClass The CSS class for the icon of the navigation item
-     * @return array{iconClass: mixed, link: mixed, name: mixed}
+     * @param string $name The name of the navigation item
+     * @param string $link The link URL of the navigation item
+     * @param string $iconClass The CSS class for the icon of the navigation item
+     * @return array{name: string, link: string, iconClass: string}
      */
-    function getNewNavItem($name, $link, $iconClass) {
+    function getNewNavItem(string $name, string $link, string $iconClass): array {
         return array(
             "name" => $name,
             "link" => $link,
@@ -25,7 +25,7 @@ if (!defined('IN_APP')) {
      * 
      * @return bool Returns true if a user is logged in, false otherwise
      */
-    function isUserLoggedIn(){
+    function isUserLoggedIn(): bool {
         return !empty($_SESSION['user_id']);
     }
 
@@ -34,23 +34,35 @@ if (!defined('IN_APP')) {
      * 
      * @return bool Returns true if the user is an admin, false otherwise
      */
-    function isAdmin() {
+    function isAdmin(): bool {
         return !empty($_SESSION['is_admin']) && $_SESSION['is_admin'] === true;
     }
 
     /**
      * Register a logged-in user in the session.
      * 
-     * @param mixed $user The user data
+     * @param array<string, mixed> $user The user data
      * @return void
      */
-    function registerLoggedUser($user){
-        $_SESSION["email"] = $user["email"];
-        $_SESSION["user_id"] = $user["user_id"];
-        $_SESSION["first_name"] = $user["first_name"];
-        $_SESSION["last_name"] = $user["last_name"];
-        $_SESSION["is_admin"] = (bool)$user["admin"];
-        $_SESSION["phone_number"] = $user["phone_number"];
+    function registerLoggedUser(array $user): void {
+        if (isset($user["email"])) {
+            $_SESSION["email"] = is_scalar($user["email"]) ? (string)$user["email"] : '';
+        }
+        if (isset($user["user_id"])) {
+            $_SESSION["user_id"] = is_numeric($user["user_id"]) ? (int)$user["user_id"] : 0;
+        }
+        if (isset($user["first_name"])) {
+            $_SESSION["first_name"] = is_scalar($user["first_name"]) ? (string)$user["first_name"] : '';
+        }
+        if (isset($user["last_name"])) {
+            $_SESSION["last_name"] = is_scalar($user["last_name"]) ? (string)$user["last_name"] : '';
+        }
+        if (isset($user["admin"])) {
+            $_SESSION["is_admin"] = (bool)$user["admin"];
+        }
+        if (isset($user["phone_number"])) {
+            $_SESSION["phone_number"] = is_scalar($user["phone_number"]) ? (string)$user["phone_number"] : '';
+        }
     }
 
     /**
@@ -59,19 +71,21 @@ if (!defined('IN_APP')) {
      * @param string $name The input name
      * @return string Returns a valid HTML ID
      */
-    function getIdFromName($name){
-        return preg_replace("/[^a-z]/", '', strtolower($name));
+    function getIdFromName(string $name): string {
+        $result = preg_replace("/[^a-z]/", '', strtolower($name));
+        return is_string($result) ? $result : '';
     }
 
     /**
      * Display dietary tags for a dish.
      * 
-     * @param array $tags An array of dietary tags
+     * @param array<int, array<string, mixed>> $tags An array of dietary tags
      * @return void
      */
-    function getTags($tags) {
+    function getTags(array $tags): void {
         foreach($tags as $tag) {
-            echo match ($tag["dietary_spec_name"]) {
+            $specName = isset($tag["dietary_spec_name"]) && is_string($tag["dietary_spec_name"]) ? $tag["dietary_spec_name"] : "";
+            echo match ($specName) {
                 "Vegano" =>
                     '<span class="badge bg-success text-white p-2">Vegano</span>',
 
@@ -89,7 +103,13 @@ if (!defined('IN_APP')) {
         }
     }
 
-    function availableBadge($stock) {
+    /**
+     * Display available badge based on stock
+     * @param int $stock
+     * @return void
+     */
+    function availableBadge(int $stock): void {
+        $stock = (int)$stock;
         if ($stock > 10) {
             echo '
             <span class="badge bg-success text-white p-2">
@@ -154,13 +174,31 @@ if (!defined('IN_APP')) {
         return in_array($status, ['Da Visualizzare', 'In Preparazione'], true);
     }
 
-    function formatEuro($amount): string {
+    /**
+     * Format amount in Euro
+     * @param float|int|string $amount
+     * @return string
+     */
+    function formatEuro(float|int|string $amount): string {
         return number_format((float)$amount, 2, ',', '.');
     }
 
-    // Formatta la data/ora in modo leggibile con "oggi", "ieri", "domani"
-    function formatWhen($dt) {
-        $ts = strtotime($dt);
+    /**
+     * Formatta la data/ora in modo leggibile con "oggi", "ieri", "domani"
+     * @param string $dt
+     * @return string
+     */
+    function formatWhen(DateTimeInterface|string|int $dt): string {
+        if ($dt instanceof DateTimeInterface) {
+            $ts = $dt->getTimestamp();
+        } elseif (is_int($dt)) {
+            $ts = $dt;
+        } else {
+            $ts = strtotime((string)$dt);
+        }
+        if ($ts === false) {
+            return '';
+        }
 
         $today = date('Y-m-d');
         $yesterday = date('Y-m-d', strtotime('-1 day'));
@@ -184,26 +222,34 @@ if (!defined('IN_APP')) {
         $monthNum = (int)date('n', $ts);
         $year = (int)date('Y', $ts);
 
-        $monthName = $months[$monthNum] ?? date('F', $ts);
+        $monthName = $months[$monthNum];
 
         return $day . ' ' . $monthName . ' ' . $year . ', ' . $time;
     }
 
-    function uploadImage($path, $image){
-        $imageName = basename($image["name"]);
-        $fullPath = $path.$imageName;
-        
+    /**
+     * Upload image file
+     * @param string $path
+     * @param array<string, mixed> $image
+     * @return array{result: int, msg: string, filename?: string}
+     */
+    function uploadImage(string $path, array $image): array {
+        $imageName = basename(isset($image['name']) && is_scalar($image['name']) ? (string)$image['name'] : '');
+        $fullPath = $path . $imageName;
+
         $maxKB = 500;
         $acceptedExtensions = array("jpg", "jpeg", "png", "gif");
         $result = 0;
         $msg = "";
         //Controllo se immagine è veramente un'immagine
-        $imageSize = getimagesize($image["tmp_name"]);
+        $tmpName = isset($image['tmp_name']) && is_scalar($image['tmp_name']) ? (string)$image['tmp_name'] : '';
+        $imageSize = $tmpName !== '' ? getimagesize($tmpName) : false;
         if($imageSize === false) {
             $msg .= "File caricato non è un'immagine! ";
         }
         //Controllo dimensione dell'immagine < 500KB
-        if ($image["size"] > $maxKB * 1024) {
+        $fileSize = isset($image['size']) && is_numeric($image['size']) ? (int)$image['size'] : 0;
+        if ($fileSize > $maxKB * 1024) {
             $msg .= "File caricato pesa troppo! Dimensione massima è $maxKB KB. ";
         }
 
@@ -214,11 +260,12 @@ if (!defined('IN_APP')) {
         }
 
         //Controllo se esiste file con stesso nome ed eventualmente lo rinomino
-        if (file_exists($fullPath)) {
+        if ($imageName !== '' && file_exists($fullPath)) {
             $i = 1;
+            $originalName = isset($image['name']) && is_scalar($image['name']) ? (string)$image['name'] : '';
             do{
                 $i++;
-                $imageName = pathinfo(basename($image["name"]), PATHINFO_FILENAME)."_$i.".$imageFileType;
+                $imageName = pathinfo(basename($originalName), PATHINFO_FILENAME)."_$i.".$imageFileType;
             }
             while(file_exists($path.$imageName));
             $fullPath = $path.$imageName;
@@ -226,14 +273,20 @@ if (!defined('IN_APP')) {
 
         //Se non ci sono errori, sposto il file dalla posizione temporanea alla cartella di destinazione
         if(strlen($msg)==0){
-            if(!move_uploaded_file($image["tmp_name"], $fullPath)){
-                $msg.= "Errore nel caricamento dell'immagine.";
-            }
-            else{
+            if(!move_uploaded_file($tmpName, $fullPath)){
+                $msg .= "Errore nel caricamento dell'immagine.";
+            } else {
                 $result = 1;
-                $msg = $imageName;
+                $msg = "OK";
             }
         }
-        return array($result, $msg);
+        $ret = [
+            'result' => $result,
+            'msg' => $msg
+        ];
+        if ($result === 1) {
+            $ret['filename'] = $imageName;
+        }
+        return $ret;
     }
 ?>

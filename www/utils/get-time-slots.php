@@ -9,7 +9,7 @@ if (!isUserLoggedIn()) {
     exit();
 }
 
-$date = $_GET['date'] ?? '';
+$date = (isset($_GET['date']) && is_string($_GET['date'])) ? $_GET['date'] : '';
 
 if (empty($date)) {
     http_response_code(400);
@@ -34,13 +34,30 @@ if ($dateObj < $today) {
     exit();
 }
 
-$slots = $dbh->getTimeSlotsByDate($date);
 
-// Format slots for response
+// Ensure database helper is available and callable
+global $dbh;
+/** @var mixed $dbh */
+if (!isset($dbh) || !is_object($dbh) || !method_exists($dbh, 'getTimeSlotsByDate')) {
+    http_response_code(500);
+    echo json_encode(['error' => 'Server error']);
+    exit();
+}
+
+$slots = $dbh->getTimeSlotsByDate($date);
+if (!is_array($slots)) {
+    $slots = [];
+}
+
+// Format slots for response (guard types)
 $formattedSlots = array_map(function($slot) {
+    if (!is_array($slot) || !isset($slot['slot_time']) || !is_string($slot['slot_time'])) {
+        return ['value' => '', 'label' => ''];
+    }
+    $time = $slot['slot_time'];
     return [
-        'value' => substr($slot['slot_time'], 0, 5),
-        'label' => $slot['slot_time']
+        'value' => substr($time, 0, 5),
+        'label' => $time
     ];
 }, $slots);
 
