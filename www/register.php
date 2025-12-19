@@ -51,7 +51,7 @@ $templateParams["titolo"] = "Mensa Campus - Registrazione";
 $templateParams["nav_items"] = array(
     getNewNavItem("Home", "index.php", "bi bi-house-door"),
     getNewNavItem("Menu", "menu.php", "bi bi-book"),
-    getNewNavItem("Accedi", "login.html", "bi bi-box-arrow-in-right")
+    getNewNavItem("Accedi", "login.php", "bi bi-box-arrow-in-right")
 );
 
 $templateParams["link_utili"][] = array(
