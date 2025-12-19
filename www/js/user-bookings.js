@@ -1,10 +1,59 @@
-//TODO: fix this file
+// Date change handler - load time slots dynamically
+document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.getElementById('booking-date');
+    const timeSelect = document.getElementById('booking-time');
+    
+    if (dateInput && timeSelect) {
+        // Disable time select initially
+        timeSelect.disabled = true;
+        
+        dateInput.addEventListener('change', function() {
+            const selectedDate = this.value;
+            
+            if (!selectedDate) {
+                timeSelect.disabled = true;
+                timeSelect.innerHTML = '<option value="" disabled selected>Seleziona prima la data</option>';
+                return;
+            }
+            
+            // Load time slots for selected date
+            fetch(`utils/get-time-slots.php?date=${encodeURIComponent(selectedDate)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to load time slots');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Clear existing options
+                    timeSelect.innerHTML = '<option value="" disabled selected>Seleziona orario</option>';
+                    
+                    if (data.slots && data.slots.length > 0) {
+                        data.slots.forEach(slot => {
+                            const option = document.createElement('option');
+                            option.value = slot.value;
+                            option.textContent = slot.label;
+                            timeSelect.appendChild(option);
+                        });
+                        timeSelect.disabled = false;
+                    } else {
+                        timeSelect.innerHTML = '<option value="" disabled selected>Nessun orario disponibile</option>';
+                        timeSelect.disabled = true;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading time slots:', error);
+                    timeSelect.innerHTML = '<option value="" disabled selected>Errore nel caricamento</option>';
+                    timeSelect.disabled = true;
+                });
+        });
+    }
+});
 
-
-function aggiornaRiepilogo(dishName, dishId, quantity) {
+function updateSummary(dishName, dishId, quantity) {
     // Accept both signatures:
-    // - aggiornaRiepilogo(dishName, dishId, quantity)
-    // - legacy: aggiornaRiepilogo(dishId, quantity)
+    // - updateSummary(dishName, dishId, quantity)
+    // - legacy: updateSummary(dishId, quantity)
     if (quantity === undefined && dishId !== undefined) {
         // called with (dishId, quantity)
         quantity = dishId;
@@ -75,10 +124,10 @@ function aggiornaRiepilogo(dishName, dishId, quantity) {
     }
 
     // aggiorna totale e visibilità
-    aggiornaTotale();
+    updateTotal();
 }
 
-function aggiornaTotale() {
+function updateTotal() {
     const tbody = document.getElementById('riepilogo-table-body');
     const hr = document.getElementById('riepilogo-hr');
     const placeholder = document.getElementById('riepilogo-placeholder');

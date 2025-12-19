@@ -109,7 +109,7 @@ if (!defined('IN_APP')) {
         </div>
         <div class="d-flex justify-content-center gap-2">
         <p class="mb-0">Hai già un account?</p>
-        <a class="text-decoration-none fw-bold" href="login.html">Accedi al tuo account</a>
+        <a class="text-decoration-none fw-bold" href="login.php">Accedi al tuo account</a>
         </div>
     </fieldset>
     </form>
