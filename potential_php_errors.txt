@@ -255,37 +255,37 @@
          🪪  argument.type                                                                 
   :11    Parameter #1 $string of function trim expects string, mixed given.                
          🪪  argument.type                                                                 
-  :29    Cannot call method emailExists() on mixed.                                        
+  :39    Cannot call method emailExists() on mixed.                                        
          🪪  method.nonObject                                                              
-  :29    Variable $dbh might not be defined.                                               
+  :39    Variable $dbh might not be defined.                                               
          🪪  variable.undefined                                                            
-  :32    Cannot call method createUser() on mixed.                                         
+  :42    Cannot call method createUser() on mixed.                                         
          🪪  method.nonObject                                                              
-  :32    Variable $dbh might not be defined.                                               
+  :42    Variable $dbh might not be defined.                                               
          🪪  variable.undefined                                                            
-  :34    Cannot access offset 'success' on mixed.                                          
+  :44    Cannot access offset 'success' on mixed.                                          
          🪪  offsetAccess.nonOffsetAccessible                                              
-  :39    Binary operation "." between 'Errore durante la…' and mixed results in an error.  
+  :49    Binary operation "." between 'Errore durante la…' and mixed results in an error.  
          🪪  binaryOp.invalid                                                              
-  :39    Cannot access offset 'error' on mixed.                                            
+  :49    Cannot access offset 'error' on mixed.                                            
          🪪  offsetAccess.nonOffsetAccessible                                              
-  :45    Cannot access offset 'errors' on mixed.                                           
+  :55    Cannot access offset 'errors' on mixed.                                           
          🪪  offsetAccess.nonOffsetAccessible                                              
-  :46    Cannot access offset 'success' on mixed.                                          
+  :56    Cannot access offset 'success' on mixed.                                          
          🪪  offsetAccess.nonOffsetAccessible                                              
-  :49    Cannot access offset 'titolo' on mixed.                                           
+  :59    Cannot access offset 'titolo' on mixed.                                           
          🪪  offsetAccess.nonOffsetAccessible                                              
-  :51    Cannot access offset 'nav_items' on mixed.                                        
+  :61    Cannot access offset 'nav_items' on mixed.                                        
          🪪  offsetAccess.nonOffsetAccessible                                              
-  :57    Cannot access an offset on mixed.                                                 
+  :67    Cannot access an offset on mixed.                                                 
          🪪  offsetAccess.nonOffsetAccessible                                              
-  :57    Cannot access offset 'link_utili' on mixed.                                       
+  :67    Cannot access offset 'link_utili' on mixed.                                       
          🪪  offsetAccess.nonOffsetAccessible                                              
-  :61    Cannot access an offset on mixed.                                                 
+  :71    Cannot access an offset on mixed.                                                 
          🪪  offsetAccess.nonOffsetAccessible                                              
-  :65    Cannot access an offset on mixed.                                                 
+  :75    Cannot access an offset on mixed.                                                 
          🪪  offsetAccess.nonOffsetAccessible                                              
-  :70    Cannot access offset 'content' on mixed.                                          
+  :80    Cannot access offset 'content' on mixed.                                          
          🪪  offsetAccess.nonOffsetAccessible                                              
  ------ ---------------------------------------------------------------------------------- 
 
