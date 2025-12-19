@@ -5,7 +5,21 @@ if (!defined('IN_APP')) {
 }
 ?>
 <main class="container">
-    <form action="#" method="post" class="row g-4 my-5">
+    <?php if (isset($_SESSION['success_message'])): ?>
+        <div class="alert alert-success alert-dismissible fade show mt-4" role="alert">
+            <?php echo htmlspecialchars($_SESSION['success_message']); unset($_SESSION['success_message']); ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+    
+    <?php if (isset($_SESSION['error_message'])): ?>
+        <div class="alert alert-danger alert-dismissible fade show mt-4" role="alert">
+            <?php echo htmlspecialchars($_SESSION['error_message']); unset($_SESSION['error_message']); ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    <?php endif; ?>
+    
+    <form action="user-bookings.php" method="post" class="row g-4 my-5">
         <section class="col-xl-7">
             <h1 class="h3"><i class="bi bi-calendar-plus me-2" aria-hidden="true"></i>Nuova Prenotazione</h1>
 
@@ -29,12 +43,8 @@ if (!defined('IN_APP')) {
                             <label for="booking-time" class="form-label fw-semibold">
                                 Orario <span class="text-danger">*</span>
                             </label>
-                            <select name="booking-time" id="booking-time" class="form-select" required>
-                                <option value="" disabled selected>Seleziona orario</option>
-                                <option value="12:00">12:00</option>
-                                <option value="12:30">12:30</option>
-                                <option value="13:00">13:00</option>
-                                <option value="13:30">13:30</option>
+                            <select name="booking-time" id="booking-time" class="form-select" required disabled>
+                                <option value="" disabled selected>Seleziona prima la data</option>
                             </select>
                         </div>
                     </div>
@@ -75,7 +85,7 @@ if (!defined('IN_APP')) {
                                                     id="<?php echo getIdFromName($dish["name"]) ?>" name="<?php echo getIdFromName($dish["name"]) ?>" 
                                                     min="0" max="<?php echo htmlspecialchars($dish["stock"]); ?>" value="0" placeholder="0" 
                                                     data-price="<?php echo htmlspecialchars($dish["price"]); ?>"
-                                                    onchange="aggiornaRiepilogo('<?php echo $dish["name"] ?>', this.id, this.value)"
+                                                    onchange="updateSummary('<?php echo $dish["name"] ?>', this.id, this.value)"
                                                 />
                                         </div>
                                     </div>
@@ -106,7 +116,7 @@ if (!defined('IN_APP')) {
                         </div>
                     </div>
                 </div>
-            </fieldwset>
+            </fieldset>
         </section>
 
         <!-- Aside -->
