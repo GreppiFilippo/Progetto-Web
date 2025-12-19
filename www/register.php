@@ -6,9 +6,9 @@ $errors = [];
 $success = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nome = trim($_POST['nome'] ?? '');
-    $cognome = trim($_POST['cognome'] ?? '');
-    $email = trim($_POST['email'] ?? '');
+    $nome = ucfirst(strtolower(trim($_POST['nome'] ?? '')));
+    $cognome = ucfirst(strtolower(trim($_POST['cognome'] ?? '')));
+    $email = strtolower(trim($_POST['email'] ?? ''));
     $password = $_POST['password'] ?? '';
     $confermapassword = $_POST['confermapassword'] ?? '';
 
@@ -21,10 +21,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     if (empty($email)) {
         $errors[] = "Il campo Email è obbligatorio.";    
-    } 
+    }
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Il formato dell'email non è valido.";    
-    } 
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Il formato dell'email non è valido.";    
+    }
+    if (empty($password)) {
+        $errors[] = "Il campo Password è obbligatorio.";    
+    }
+    if ($password !== $confermapassword) {
+        $errors[] = "Le password non corrispondono.";    
+    }
+
     if (empty($errors)) {
         if ($dbh->emailExists($email)) {
             $errors[] = "Esiste già un account con questa email.";
