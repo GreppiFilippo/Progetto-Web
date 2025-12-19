@@ -9,7 +9,7 @@ if (isUserLoggedIn()) {
     $templateParams["nav_items"] = array(
         getNewNavItem("Dashboard", "user-dashboard.php", "bi bi-speedometer2"),
         getNewNavItem("Menu", "menu.php", "bi bi-book"),
-        getNewNavItem("Prenotazioni", "user-bookings.php", "bi bi-calendar-check"),
+        getNewNavItem("Nuova Prenotazione", "user-bookings.php", "bi bi-calendar-check"),
         getNewNavItem("Profilo", "user-profile.php", "bi bi-person-circle"),
         getNewNavItem("Esci", "logout.php", "bi bi-box-arrow-right"),
     );
