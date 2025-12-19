@@ -129,5 +129,6 @@ INSERT INTO reservation_dishes (reservation_id, dish_id, quantity) VALUES
 (10, 8, 1),
 (10, 10, 1);
 
+
 -- Riabilita i controlli delle chiavi esterne
 SET foreign_key_checks = 1;

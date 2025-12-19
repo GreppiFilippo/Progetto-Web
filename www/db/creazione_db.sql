@@ -91,6 +91,15 @@ CREATE TABLE reservation_dishes (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- =========================
+-- TIME SLOTS (AVAILABLE RESERVATION SLOTS)
+-- =========================
+CREATE TABLE time_slots (
+    slot_date DATE NOT NULL,
+    slot_time TIME NOT NULL,
+    PRIMARY KEY (slot_date, slot_time)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- =========================
 -- USER - DIETARY SPECIFICATIONS (N:M)
 -- =========================
 CREATE TABLE user_specifications (
@@ -119,3 +128,51 @@ CREATE TABLE dish_specifications (
         FOREIGN KEY (dietary_spec_id)
         REFERENCES dietary_specifications(dietary_spec_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- 1) (Opzionale) crea tabella metadata
+CREATE TABLE IF NOT EXISTS time_slots_meta (
+  id TINYINT PRIMARY KEY DEFAULT 1,
+  generated_until DATE NOT NULL,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 2) Procedure che popola per N giorni gli slot 11:30 -> 15:45 ogni 15 min
+DELIMITER $$
+CREATE PROCEDURE populate_time_slots(IN p_days INT)
+BEGIN
+  DECLARE i INT DEFAULT 0;
+  DECLARE slot_date DATE;
+  DECLARE t TIME;
+  DECLARE end_time TIME DEFAULT '15:45:00';
+
+  IF p_days <= 0 THEN
+    SET p_days = 14;
+  END IF;
+
+  WHILE i < p_days DO
+    SET slot_date = DATE_ADD(CURDATE(), INTERVAL i DAY);
+    SET t = '11:30:00';
+    WHILE t <= end_time DO
+      INSERT IGNORE INTO time_slots (slot_date, slot_time) VALUES (slot_date, t);
+      SET t = ADDTIME(t, '00:15:00');
+    END WHILE;
+    SET i = i + 1;
+  END WHILE;
+
+  REPLACE INTO time_slots_meta (id, generated_until, updated_at)
+    VALUES (1, DATE_ADD(CURDATE(), INTERVAL p_days-1 DAY), NOW());
+END$$
+DELIMITER ;
+
+-- 3) Abilita scheduler (necessario privilegi GLOBAL)
+SET GLOBAL event_scheduler = ON;
+
+-- 4) Evento giornaliero che mantiene la finestra (14 giorni)
+CREATE EVENT IF NOT EXISTS ev_populate_time_slots_daily
+ON SCHEDULE EVERY 1 DAY
+DO
+  CALL populate_time_slots(14);
+
+-- 5) Esegui subito per popolare ora (opzionale)
+CALL populate_time_slots(14);
