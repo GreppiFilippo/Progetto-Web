@@ -25,13 +25,17 @@ class DatabaseHelper {
         $this->db->set_charset('utf8mb4');
     }
 
-    // Return raw mysqli connection when needed
-    public function getConnection() {
-        return $this->db;
-    }
-
-    // Prepare and execute an INSERT for a new user using prepared statements
-    public function createUser( $email, $passwordHash, $firstName, $lastName, $isAdmin = false ) {
+    /**
+     * Create a new user in the database.
+     * 
+     * @param mixed $email The user's email
+     * @param mixed $password The user's password
+     * @param mixed $firstName The user's first name
+     * @param mixed $lastName The user's last name
+     * @param mixed $isAdmin Whether the user is an admin
+     * @return array{error: string, success: bool|array{insert_id: int|string, success: bool}}
+     */
+    public function createUser( $email, $password, $firstName, $lastName, $isAdmin = false ) {
         $sql = "INSERT INTO users (email, password, first_name, last_name, admin) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
         if (!$stmt) {
@@ -40,7 +44,7 @@ class DatabaseHelper {
 
         // admin is stored as BOOLEAN; use 1/0
         $adminInt = $isAdmin ? 1 : 0;
-        $stmt->bind_param('ssssi', $email, $passwordHash, $firstName, $lastName, $adminInt);
+        $stmt->bind_param('ssssi', $email, $password, $firstName, $lastName, $adminInt);
         $executed = $stmt->execute();
         if (!$executed) {
             $err = $stmt->error;
@@ -52,7 +56,11 @@ class DatabaseHelper {
         return [ 'success' => true, 'insert_id' => $insertId ];
     }
 
-    // Helper to check if an email already exists
+    /**
+     * Check if an email already exists in the database.
+     * @param mixed $email The email to check
+     * @return bool Returns true if the email exists, false otherwise
+     */
     public function emailExists( $email ) {
         $sql = "SELECT user_id FROM users WHERE email = ? LIMIT 1";
         $stmt = $this->db->prepare($sql);
@@ -129,9 +137,10 @@ class DatabaseHelper {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-
-
-    // Ritorna tutte le specifiche (id + nome) così hai value=ID e label=nome
+    /**
+     * Fetch all dietary specifications from the database.
+     * @return array Returns an array of dietary specifications
+     */
     public function getDietarySpecifications() {
         $sql = "SELECT dietary_spec_id, dietary_spec_name FROM dietary_specifications ORDER BY dietary_spec_name";
         $result = $this->db->query($sql);
@@ -146,7 +155,11 @@ class DatabaseHelper {
         return $specs;
     }
 
-    // Ritorna gli ID delle preferenze selezionate dall'utente
+    /**
+     * Fetch dietary specification IDs selected by a user.
+     * @param mixed $userId The user ID
+     * @return int[] Returns an array of dietary specification IDs
+     */
     public function getUserDietarySpecIds($userId) {
         $sql = "SELECT dietary_spec_id FROM user_specifications WHERE user_id = ?";
         $stmt = $this->db->prepare($sql);
@@ -165,22 +178,26 @@ class DatabaseHelper {
         return $ids;
     }
 
-    // Salva preferenze "a rimpiazzo": delete tutte, poi insert delle nuove
+    /**
+     * Save dietary specifications selected by a user.
+     * @param mixed $userId The user ID
+     * @param mixed $specIds An array of dietary specification IDs
+     * @throws Exception on database errors
+     * @return array{error: string, success: bool|array{success: bool}}
+     */
     public function saveUserDietarySpecs($userId, $specIds) {
-        // normalizza: solo interi, unici
         $specIds = array_values(array_unique(array_map('intval', $specIds)));
-
         $this->db->begin_transaction();
 
         try {
-            // 1) cancella vecchie
+            // 1) Remove old specifications
             $del = $this->db->prepare("DELETE FROM user_specifications WHERE user_id = ?");
             if (!$del) throw new Exception($this->db->error);
             $del->bind_param("i", $userId);
             if (!$del->execute()) throw new Exception($del->error);
             $del->close();
 
-            // 2) inserisci nuove (se ce ne sono)
+            // 2) Insert new specifications (if any)
             if (count($specIds) > 0) {
                 $ins = $this->db->prepare("INSERT INTO user_specifications (user_id, dietary_spec_id) VALUES (?, ?)");
                 if (!$ins) throw new Exception($this->db->error);
@@ -420,11 +437,34 @@ class DatabaseHelper {
             return ["success" => false, "error" => $e->getMessage()];
         }
     }
-
+    
     public function getCategories() {
         $sql = "SELECT category_id, category_name FROM categories ORDER BY category_name";
         $res = $this->db->query($sql);
         return $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
+    }
+
+    /**
+     * Get time slots for a given date.
+     *
+     * @param string $slot_date Date in YYYY-MM-DD
+     * @return array List of time slots
+     */
+    public function getTimeSlotsByDate($slot_date){
+        $sql = "SELECT slot_time
+                FROM time_slots
+                WHERE slot_date = ?
+                ORDER BY slot_time ASC";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return [];
+
+        $stmt->bind_param("s", $slot_date);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $rows = $res->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+
+        return $rows;
     }
 }
 ?>
