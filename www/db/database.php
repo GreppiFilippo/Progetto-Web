@@ -446,11 +446,13 @@ class DatabaseHelper {
 
     /**
      * Get time slots for a given date.
+     * Filters out slots that are in the past or too close to current time.
      *
      * @param string $slot_date Date in YYYY-MM-DD
-     * @return array List of time slots
+     * @param int $minHoursAdvance Minimum hours in advance required (default: 1)
+     * @return array List of available time slots
      */
-    public function getTimeSlotsByDate($slot_date){
+    public function getTimeSlotsByDate($slot_date, $minHoursAdvance = 1){
         $sql = "SELECT slot_time
                 FROM time_slots
                 WHERE slot_date = ?
@@ -464,7 +466,140 @@ class DatabaseHelper {
         $rows = $res->fetch_all(MYSQLI_ASSOC);
         $stmt->close();
 
-        return $rows;
+        // If date is not today, return all slots
+        $today = date('Y-m-d');
+        if ($slot_date !== $today) {
+            return $rows;
+        }
+
+        // For today, filter slots that are at least minHoursAdvance in the future
+        $now = new DateTime();
+        $minTime = clone $now;
+        $minTime->add(new DateInterval('PT' . $minHoursAdvance . 'H'));
+
+        $filteredRows = [];
+        foreach ($rows as $row) {
+            $slotDateTime = DateTime::createFromFormat('Y-m-d H:i:s', $slot_date . ' ' . $row['slot_time']);
+            if ($slotDateTime && $slotDateTime >= $minTime) {
+                $filteredRows[] = $row;
+            }
+        }
+
+        return $filteredRows;
+    }
+
+    /**
+     * Create a new reservation with dishes using a transaction.
+     * Validates stock availability and calculates total amount.
+     *
+     * @param int $userId The user ID
+     * @param string $dateTime The reservation date/time (YYYY-MM-DD HH:MM:SS)
+     * @param array $items Array of items: [['dish_id' => int, 'quantity' => int], ...]
+     * @param string|null $notes Optional notes for the reservation
+     * @return array{success: bool, error?: string, reservation_id?: int}
+     */
+    public function setNewReservation($userId, $dateTime, $items, $notes = null) {
+        $this->db->begin_transaction();
+
+        try {
+            // Validate input
+            if (empty($items) || !is_array($items)) {
+                throw new Exception("No items provided for reservation.");
+            }
+
+            $totalAmount = 0;
+            $validatedItems = [];
+
+            // Lock and validate each dish for stock and price
+            foreach ($items as $item) {
+                $dishId = (int)$item['dish_id'];
+                $quantity = (int)$item['quantity'];
+
+                if ($quantity <= 0) {
+                    throw new Exception("Invalid quantity for dish ID: " . $dishId);
+                }
+
+                // Lock row and fetch dish details
+                $stmt = $this->db->prepare(
+                    "SELECT dish_id, name, price, stock 
+                    FROM dishes 
+                    WHERE dish_id = ? 
+                    FOR UPDATE"
+                );
+                if (!$stmt) throw new Exception($this->db->error);
+
+                $stmt->bind_param("i", $dishId);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $dish = $result->fetch_assoc();
+                $stmt->close();
+
+                if (!$dish) {
+                    throw new Exception("Dish ID " . $dishId . " not found.");
+                }
+
+                // Check stock availability
+                if ($dish['stock'] < $quantity) {
+                    throw new Exception("Insufficient stock for dish: " . $dish['name'] . ". Available: " . $dish['stock'] . ", requested: " . $quantity);
+                }
+
+                // Calculate subtotal
+                $subtotal = $dish['price'] * $quantity;
+                $totalAmount += $subtotal;
+
+                // Store validated item
+                $validatedItems[] = [
+                    'dish_id' => $dishId,
+                    'quantity' => $quantity,
+                    'new_stock' => $dish['stock'] - $quantity
+                ];
+            }
+
+            // Insert reservation
+            $stmt = $this->db->prepare(
+                "INSERT INTO reservations (user_id, total_amount, date_time, notes, status) 
+                VALUES (?, ?, ?, ?, 'Da Visualizzare')"
+            );
+            if (!$stmt) throw new Exception($this->db->error);
+
+            $stmt->bind_param("idss", $userId, $totalAmount, $dateTime, $notes);
+            if (!$stmt->execute()) throw new Exception($stmt->error);
+
+            $reservationId = $stmt->insert_id;
+            $stmt->close();
+
+            // Insert reservation items and update stock
+            $stmtInsert = $this->db->prepare(
+                "INSERT INTO reservation_dishes (reservation_id, dish_id, quantity) 
+                VALUES (?, ?, ?)"
+            );
+            if (!$stmtInsert) throw new Exception($this->db->error);
+
+            $stmtUpdate = $this->db->prepare(
+                "UPDATE dishes SET stock = ? WHERE dish_id = ?"
+            );
+            if (!$stmtUpdate) throw new Exception($this->db->error);
+
+            foreach ($validatedItems as $item) {
+                // Insert reservation dish
+                $stmtInsert->bind_param("iii", $reservationId, $item['dish_id'], $item['quantity']);
+                if (!$stmtInsert->execute()) throw new Exception($stmtInsert->error);
+
+                // Update stock
+                $stmtUpdate->bind_param("ii", $item['new_stock'], $item['dish_id']);
+                if (!$stmtUpdate->execute()) throw new Exception($stmtUpdate->error);
+            }
+
+            $stmtInsert->close();
+            $stmtUpdate->close();
+
+            $this->db->commit();
+            return ['success' => true, 'reservation_id' => $reservationId];
+
+        } catch (Exception $e) {
+            $this->db->rollback();
+            return ['success' => false, 'error' => $e->getMessage()];
+        }
     }
 }
 ?>
