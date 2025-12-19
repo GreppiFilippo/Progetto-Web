@@ -35,7 +35,7 @@ class DatabaseHelper {
      * @param mixed $isAdmin Whether the user is an admin
      * @return array{error: string, success: bool|array{insert_id: int|string, success: bool}}
      */
-    public function createUser( $email, $password, $firstName, $lastName, $isAdmin = false ) {
+    public function createUser($email, $password, $firstName, $lastName, $isAdmin = false) {
         $sql = "INSERT INTO users (email, password, first_name, last_name, admin) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
         if (!$stmt) {
@@ -45,12 +45,14 @@ class DatabaseHelper {
         // admin is stored as BOOLEAN; use 1/0
         $adminInt = $isAdmin ? 1 : 0;
         $stmt->bind_param('ssssi', $email, $password, $firstName, $lastName, $adminInt);
+
         $executed = $stmt->execute();
         if (!$executed) {
             $err = $stmt->error;
             $stmt->close();
             return [ 'success' => false, 'error' => $err ];
         }
+
         $insertId = $stmt->insert_id;
         $stmt->close();
         return [ 'success' => true, 'insert_id' => $insertId ];
@@ -61,12 +63,18 @@ class DatabaseHelper {
      * @param mixed $email The email to check
      * @return bool Returns true if the email exists, false otherwise
      */
-    public function emailExists( $email ) {
+    public function emailExists($email) {
         $sql = "SELECT user_id FROM users WHERE email = ? LIMIT 1";
         $stmt = $this->db->prepare($sql);
         if (!$stmt) return false;
+
         $stmt->bind_param('s', $email);
-        $stmt->execute();
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return false;
+        }
+
         $stmt->store_result();
         $exists = $stmt->num_rows > 0;
         $stmt->close();
@@ -79,11 +87,20 @@ class DatabaseHelper {
      * @return array Returns an array of categories
      */
     public function getAllCategories() {
-        $stmt = $this->db->prepare("SELECT * FROM categories");
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $sql = "SELECT * FROM categories";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return [];
 
-        return $result->fetch_all(MYSQLI_ASSOC);
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return [];
+        }
+
+        $result = $stmt->get_result();
+        $rows = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        $stmt->close();
+
+        return $rows;
     }
 
     /**
@@ -93,15 +110,25 @@ class DatabaseHelper {
      * @param string $password The user's password
      * @return array Returns an array with user details if credentials are valid, empty array otherwise
      */
-    public function checkLogin($email, $password){
+    public function checkLogin($email, $password) {
         $query = "SELECT user_id, email, first_name, last_name, admin
-            FROM users WHERE email = ? AND password = ?";
+                  FROM users
+                  WHERE email = ? AND password = ?";
         $stmt = $this->db->prepare($query);
-        $stmt->bind_param('ss',$email, $password);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        if (!$stmt) return [];
 
-        return $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->bind_param('ss', $email, $password);
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return [];
+        }
+
+        $result = $stmt->get_result();
+        $rows = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        $stmt->close();
+
+        return $rows;
     }
 
     /**
@@ -111,12 +138,22 @@ class DatabaseHelper {
      * @return array Returns an array of dishes
      */
     public function getAllDishes($categoryId) {
-        $stmt = $this->db->prepare("SELECT * FROM dishes WHERE category_id = ?");
-        $stmt->bind_param('i', $categoryId);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $sql = "SELECT * FROM dishes WHERE category_id = ?";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return [];
 
-        return $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->bind_param('i', $categoryId);
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return [];
+        }
+
+        $result = $stmt->get_result();
+        $rows = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        $stmt->close();
+
+        return $rows;
     }
 
     /**
@@ -126,15 +163,25 @@ class DatabaseHelper {
      * @return array Returns an array of dietary tags
      */
     public function getDietaryTagsForDish($dishId) {
-        $stmt = $this->db->prepare("SELECT ds.dietary_spec_name 
-            FROM dietary_specifications ds
-            JOIN dish_specifications dsp ON ds.dietary_spec_id = dsp.dietary_spec_id
-            WHERE dsp.dish_id = ?");
-        $stmt->bind_param('i', $dishId);
-        $stmt->execute();
-        $result = $stmt->get_result();
+        $sql = "SELECT ds.dietary_spec_name 
+                FROM dietary_specifications ds
+                JOIN dish_specifications dsp ON ds.dietary_spec_id = dsp.dietary_spec_id
+                WHERE dsp.dish_id = ?";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return [];
 
-        return $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->bind_param('i', $dishId);
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return [];
+        }
+
+        $result = $stmt->get_result();
+        $rows = $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
+        $stmt->close();
+
+        return $rows;
     }
 
     /**
@@ -142,16 +189,22 @@ class DatabaseHelper {
      * @return array Returns an array of dietary specifications
      */
     public function getDietarySpecifications() {
-        $sql = "SELECT dietary_spec_id, dietary_spec_name FROM dietary_specifications ORDER BY dietary_spec_name";
-        $result = $this->db->query($sql);
+        $sql = "SELECT dietary_spec_id, dietary_spec_name
+                FROM dietary_specifications
+                ORDER BY dietary_spec_name";
 
-        $specs = [];
-        if ($result) {
-            while ($row = $result->fetch_assoc()) {
-                $specs[] = $row; // ['dietary_spec_id' => ..., 'dietary_spec_name' => ...]
-            }
-            $result->free();
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return [];
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return [];
         }
+
+        $res = $stmt->get_result();
+        $specs = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
+        $stmt->close();
+
         return $specs;
     }
 
@@ -166,7 +219,12 @@ class DatabaseHelper {
         if (!$stmt) return [];
 
         $stmt->bind_param("i", $userId);
-        $stmt->execute();
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return [];
+        }
+
         $res = $stmt->get_result();
 
         $ids = [];
@@ -193,6 +251,7 @@ class DatabaseHelper {
             // 1) Remove old specifications
             $del = $this->db->prepare("DELETE FROM user_specifications WHERE user_id = ?");
             if (!$del) throw new Exception($this->db->error);
+
             $del->bind_param("i", $userId);
             if (!$del->execute()) throw new Exception($del->error);
             $del->close();
@@ -217,38 +276,49 @@ class DatabaseHelper {
         }
     }
     
-   // Ritorna i dati dell'utente (inclusa la data di registrazione)
+    // Ritorna i dati dell'utente (inclusa la data di registrazione)
     public function getUserById($userId) {
         $sql = "SELECT * FROM users WHERE user_id = ?";
         $stmt = $this->db->prepare($sql);
         if (!$stmt) return null;
 
         $stmt->bind_param("i", $userId);
-        $stmt->execute();
-        $res = $stmt->get_result();
 
-        $user = $res->fetch_array(MYSQLI_ASSOC);;
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return null;
+        }
+
+        $res = $stmt->get_result();
+        $user = $res ? $res->fetch_array(MYSQLI_ASSOC) : null;
         $stmt->close();
 
         return $user;
     }
 
     // Lista prenotazioni (ultime N), con totale e stato
-   public function getReservationCountsByUser($userId) {
+    public function getReservationCountsByUser($userId) {
         $sql = "SELECT
-                SUM(CASE WHEN status IN ('Da Visualizzare','In Preparazione','Pronto al ritiro') THEN 1 ELSE 0 END) AS active_count,
-                SUM(CASE WHEN status = 'Completato' THEN 1 ELSE 0 END) AS completed_count
+                    SUM(CASE WHEN status IN ('Da Visualizzare','In Preparazione','Pronto al ritiro') THEN 1 ELSE 0 END) AS active_count,
+                    SUM(CASE WHEN status = 'Completato' THEN 1 ELSE 0 END) AS completed_count
                 FROM reservations
                 WHERE user_id = ?";
+
         $stmt = $this->db->prepare($sql);
         if (!$stmt) return ['active_count' => 0, 'completed_count' => 0];
 
         $stmt->bind_param("i", $userId);
-        $stmt->execute();
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return ['active_count' => 0, 'completed_count' => 0];
+        }
+
         $res = $stmt->get_result();
-        $row = $res->fetch_assoc() ?: ['active_count' => 0, 'completed_count' => 0];
+        $row = $res ? ($res->fetch_assoc() ?: null) : null;
         $stmt->close();
-        return $row;
+
+        return $row ?: ['active_count' => 0, 'completed_count' => 0];
     }
 
     // Piatti di una prenotazione (con quantità)
@@ -257,14 +327,21 @@ class DatabaseHelper {
                 FROM reservation_dishes rd
                 JOIN dishes d ON d.dish_id = rd.dish_id
                 WHERE rd.reservation_id = ?";
+
         $stmt = $this->db->prepare($sql);
         if (!$stmt) return [];
 
         $stmt->bind_param("i", $reservationId);
-        $stmt->execute();
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return [];
+        }
+
         $res = $stmt->get_result();
-        $rows = $res->fetch_all(MYSQLI_ASSOC);
+        $rows = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
         $stmt->close();
+
         return $rows;
     }
 
@@ -274,14 +351,16 @@ class DatabaseHelper {
             // lock riga, verifica ownership + status
             $chk = $this->db->prepare(
                 "SELECT status FROM reservations
-                WHERE reservation_id = ? AND user_id = ?
-                FOR UPDATE"
+                 WHERE reservation_id = ? AND user_id = ?
+                 FOR UPDATE"
             );
             if (!$chk) throw new Exception($this->db->error);
 
             $chk->bind_param("ii", $reservationId, $userId);
-            $chk->execute();
-            $r = $chk->get_result()->fetch_assoc();
+            if (!$chk->execute()) throw new Exception($chk->error);
+
+            $res = $chk->get_result();
+            $r = $res ? $res->fetch_assoc() : null;
             $chk->close();
 
             if (!$r) throw new Exception("Prenotazione non trovata.");
@@ -296,8 +375,8 @@ class DatabaseHelper {
             // aggiorna solo lo stato, NON cancellare i piatti
             $upd = $this->db->prepare(
                 "UPDATE reservations
-                SET status = 'Annullato'
-                WHERE reservation_id = ? AND user_id = ?"
+                 SET status = 'Annullato'
+                 WHERE reservation_id = ? AND user_id = ?"
             );
             if (!$upd) throw new Exception($this->db->error);
 
@@ -325,6 +404,7 @@ class DatabaseHelper {
         }
 
         $stmt = $this->db->prepare($sql);
+        if (!$stmt) return [];
 
         if ($limit !== null) {
             $stmt->bind_param("ii", $userId, $limit);
@@ -332,9 +412,13 @@ class DatabaseHelper {
             $stmt->bind_param("i", $userId);
         }
 
-        $stmt->execute();
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return [];
+        }
+
         $res = $stmt->get_result();
-        $rows = $res->fetch_all(MYSQLI_ASSOC);
+        $rows = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
         $stmt->close();
 
         return $rows;
@@ -346,13 +430,19 @@ class DatabaseHelper {
                 FROM reservations
                 WHERE reservation_id = ? AND user_id = ?
                 LIMIT 1";
+
         $stmt = $this->db->prepare($sql);
         if (!$stmt) return null;
 
         $stmt->bind_param("ii", $reservationId, $userId);
-        $stmt->execute();
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return null;
+        }
+
         $res = $stmt->get_result();
-        $row = $res->fetch_assoc();
+        $row = $res ? $res->fetch_assoc() : null;
         $stmt->close();
 
         return $row ?: null;
@@ -364,13 +454,19 @@ class DatabaseHelper {
                 FROM reservation_dishes rd
                 JOIN dishes d ON d.dish_id = rd.dish_id
                 WHERE rd.reservation_id = ?";
+
         $stmt = $this->db->prepare($sql);
         if (!$stmt) return [];
 
         $stmt->bind_param("i", $reservationId);
-        $stmt->execute();
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return [];
+        }
+
         $res = $stmt->get_result();
-        $rows = $res->fetch_all(MYSQLI_ASSOC);
+        $rows = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
         $stmt->close();
 
         return $rows;
@@ -383,13 +479,19 @@ class DatabaseHelper {
                 JOIN dish_specifications dsp ON dsp.dish_id = rd.dish_id
                 JOIN dietary_specifications ds ON ds.dietary_spec_id = dsp.dietary_spec_id
                 WHERE rd.reservation_id = ?";
+
         $stmt = $this->db->prepare($sql);
         if (!$stmt) return [];
 
         $stmt->bind_param("i", $reservationId);
-        $stmt->execute();
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return [];
+        }
+
         $res = $stmt->get_result();
-        $rows = $res->fetch_all(MYSQLI_ASSOC);
+        $rows = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
         $stmt->close();
 
         // Raggruppa per dish_id: [dish_id => [tag1, tag2...]]
@@ -440,8 +542,19 @@ class DatabaseHelper {
     
     public function getCategories() {
         $sql = "SELECT category_id, category_name FROM categories ORDER BY category_name";
-        $res = $this->db->query($sql);
-        return $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return [];
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return [];
+        }
+
+        $res = $stmt->get_result();
+        $rows = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
+        $stmt->close();
+
+        return $rows;
     }
 
     /**
@@ -452,18 +565,24 @@ class DatabaseHelper {
      * @param int $minHoursAdvance Minimum hours in advance required (default: 1)
      * @return array List of available time slots
      */
-    public function getTimeSlotsByDate($slot_date, $minHoursAdvance = 1){
+    public function getTimeSlotsByDate($slot_date, $minHoursAdvance = 1) {
         $sql = "SELECT slot_time
                 FROM time_slots
                 WHERE slot_date = ?
                 ORDER BY slot_time ASC";
+
         $stmt = $this->db->prepare($sql);
         if (!$stmt) return [];
 
         $stmt->bind_param("s", $slot_date);
-        $stmt->execute();
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return [];
+        }
+
         $res = $stmt->get_result();
-        $rows = $res->fetch_all(MYSQLI_ASSOC);
+        $rows = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
         $stmt->close();
 
         // If date is not today, return all slots
@@ -522,16 +641,17 @@ class DatabaseHelper {
                 // Lock row and fetch dish details
                 $stmt = $this->db->prepare(
                     "SELECT dish_id, name, price, stock 
-                    FROM dishes 
-                    WHERE dish_id = ? 
-                    FOR UPDATE"
+                     FROM dishes 
+                     WHERE dish_id = ? 
+                     FOR UPDATE"
                 );
                 if (!$stmt) throw new Exception($this->db->error);
 
                 $stmt->bind_param("i", $dishId);
-                $stmt->execute();
+                if (!$stmt->execute()) throw new Exception($stmt->error);
+
                 $result = $stmt->get_result();
-                $dish = $result->fetch_assoc();
+                $dish = $result ? $result->fetch_assoc() : null;
                 $stmt->close();
 
                 if (!$dish) {
@@ -558,7 +678,7 @@ class DatabaseHelper {
             // Insert reservation
             $stmt = $this->db->prepare(
                 "INSERT INTO reservations (user_id, total_amount, date_time, notes, status) 
-                VALUES (?, ?, ?, ?, 'Da Visualizzare')"
+                 VALUES (?, ?, ?, ?, 'Da Visualizzare')"
             );
             if (!$stmt) throw new Exception($this->db->error);
 
@@ -571,7 +691,7 @@ class DatabaseHelper {
             // Insert reservation items and update stock
             $stmtInsert = $this->db->prepare(
                 "INSERT INTO reservation_dishes (reservation_id, dish_id, quantity) 
-                VALUES (?, ?, ?)"
+                 VALUES (?, ?, ?)"
             );
             if (!$stmtInsert) throw new Exception($this->db->error);
 
