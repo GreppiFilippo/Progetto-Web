@@ -37,7 +37,6 @@ class DatabaseHelper {
      * @return array{success: bool, error?: string, insert_id?: int}
      */
     public function createUser($email, $password, $firstName, $lastName, $isAdmin = false) {
-    public function createUser($email, $password, $firstName, $lastName, $isAdmin = false) {
         $sql = "INSERT INTO users (email, password, first_name, last_name, admin) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
         if (!$stmt) {
@@ -65,7 +64,6 @@ class DatabaseHelper {
      * @param string $email The email to check
      * @return bool Returns true if the email exists, false otherwise
      */
-    public function emailExists($email) {
     public function emailExists($email) {
         $sql = "SELECT user_id FROM users WHERE email = ? LIMIT 1";
         $stmt = $this->db->prepare($sql);
