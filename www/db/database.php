@@ -278,9 +278,10 @@ class DatabaseHelper {
     }
     
    /**
-    * Ritorna i dati dell'utente (inclusa la data di registrazione)
-    * @param int $userId
-    * @return array<string, mixed>|null
+    * Get user data by user ID (including registration date).
+    * 
+    * @param int $userId The user ID
+    * @return array<string, mixed>|null Returns user data array or null if not found
     */
     public function getUserById($userId) {
         $sql = "SELECT * FROM users WHERE user_id = ?";
@@ -302,9 +303,10 @@ class DatabaseHelper {
     }
 
     /**
-     * Lista prenotazioni (ultime N), con totale e stato
-     * @param int $userId
-     * @return array<string, int>
+     * Get reservation counts by user (active and completed).
+     * 
+     * @param int $userId The user ID
+     * @return array<string, int> Returns array with 'active_count' and 'completed_count' keys
      */
    public function getReservationCountsByUser($userId): array {
         $sql = "SELECT
@@ -331,9 +333,10 @@ class DatabaseHelper {
     }
 
     /**
-     * Piatti di una prenotazione (con quantità)
-     * @param int $reservationId
-     * @return array<int, array<string, mixed>>
+     * Get dishes for a reservation with quantities.
+     * 
+     * @param int $reservationId The reservation ID
+     * @return array<int, array<string, mixed>> Returns array of dishes with quantities
      */
     public function getReservationItems($reservationId): array {
         $sql = "SELECT d.dish_id, d.name, rd.quantity
@@ -359,9 +362,12 @@ class DatabaseHelper {
     }
 
     /**
-     * @param int $reservationId
-     * @param int $userId
-     * @return array{success: bool, error?: string}
+     * Cancel a reservation by setting its status to 'Annullato'.
+     * Only reservations with status 'Da Visualizzare' or 'In Preparazione' can be cancelled.
+     * 
+     * @param int $reservationId The reservation ID
+     * @param int $userId The user ID (to verify ownership)
+     * @return array{success: bool, error?: string} Returns success status and optional error message
      */
     public function deleteReservation($reservationId, $userId): array {
         $this->db->begin_transaction();
@@ -412,9 +418,11 @@ class DatabaseHelper {
     }
 
     /**
-     * @param int $userId
-     * @param int|null $limit
-     * @return array<int, array<string, mixed>>
+     * Get reservations for a user, ordered by date (most recent first).
+     * 
+     * @param int $userId The user ID
+     * @param int|null $limit Optional limit for number of results
+     * @return array<int, array<string, mixed>> Returns array of reservations
      */
     public function getReservationsByUser($userId, $limit = null): array {
         $sql = "SELECT reservation_id, total_amount, date_time, status
@@ -448,10 +456,11 @@ class DatabaseHelper {
     }
 
     /**
-     * Prendi un ordine verificando che appartenga all'utente
-     * @param int $reservationId
-     * @param int $userId
-     * @return array<string, mixed>|null
+     * Get a reservation by ID, verifying it belongs to the user.
+     * 
+     * @param int $reservationId The reservation ID
+     * @param int $userId The user ID (to verify ownership)
+     * @return array<string, mixed>|null Returns reservation data or null if not found
      */
     public function getReservationById($reservationId, $userId) {
         $sql = "SELECT reservation_id, total_amount, date_time, notes, status
@@ -476,7 +485,12 @@ class DatabaseHelper {
         return $row ?: null;
     }
 
-    // 2) Items dell’ordine con quantità + prezzo + descrizione
+    /**
+     * Get detailed reservation items with quantity, price, and description.
+     * 
+     * @param int $reservationId The reservation ID
+     * @return array<int, array<string, mixed>> Returns array of detailed dish items
+     */
     public function getReservationItemsDetailed($reservationId) {
         $sql = "SELECT d.dish_id, d.name, d.description, d.price, rd.quantity
                 FROM reservation_dishes rd
@@ -500,7 +514,12 @@ class DatabaseHelper {
         return $rows;
     }
 
-    // 3) Tag per tutti i piatti di un ordine (in 1 query)
+    /**
+     * Get dietary tags for all dishes in a reservation (single query).
+     * 
+     * @param int $reservationId The reservation ID
+     * @return array<int, array<int, array<string, mixed>>> Returns array grouped by dish_id with dietary tags
+     */
     public function getDietaryTagsForReservation($reservationId) {
         $sql = "SELECT rd.dish_id, ds.dietary_spec_name
                 FROM reservation_dishes rd
@@ -531,6 +550,19 @@ class DatabaseHelper {
         return $map;
     }
 
+    /**
+     * Create a new dish with dietary specifications.
+     * 
+     * @param string $name The dish name
+     * @param string $description The dish description
+     * @param float $price The dish price
+     * @param int $stock The available stock quantity
+     * @param string $imagePath The path to the dish image
+     * @param int $calories The calorie count
+     * @param int $categoryId The category ID
+     * @param array<int> $specIds Array of dietary specification IDs (optional)
+     * @return array{success: bool, error?: string, dish_id?: int} Returns success status and dish ID or error message
+     */
     public function createDish($name, $description, $price, $stock, $imagePath, $calories, $categoryId, $specIds = []) {
         $this->db->begin_transaction();
 
@@ -568,6 +600,11 @@ class DatabaseHelper {
         }
     }
     
+    /**
+     * Get all categories ordered by name.
+     * 
+     * @return array<int, array<string, mixed>> Returns array of categories
+     */
     public function getCategories() {
         $sql = "SELECT category_id, category_name FROM categories ORDER BY category_name";
         $stmt = $this->db->prepare($sql);
