@@ -28,5 +28,7 @@ Mensa Campus provides user registration/login, daily menu browsing, reservations
 - Start Apache/MySQL (e.g. XAMPP Control Panel).
 - Visit http://localhost/your-project-folder/www/index.php
 
+![](use-case-diagram.svg)
+
 ## License
 MIT — see [LICENSE](LICENSE)
