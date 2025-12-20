@@ -16,19 +16,17 @@ Mensa Campus provides user registration/login, daily menu browsing, reservations
 3. Configure database credentials in [www/bootstrap.php](www/bootstrap.php) / [www/db/database.php](www/db/database.php).
 4. Start the server and open [www/index.php](www/index.php) in your browser.
 
-## Main files
-- Frontend pages: [www/index.php](www/index.php), [www/menu.php](www/menu.php), [www/login.php](www/login.php), [www/register.php](www/register.php), [www/user-profile.php](www/user-profile.php), [www/user-bookings.php](www/user-bookings.php)
-- Admin pages: [www/admin-add-dish.php](www/admin-add-dish.php), admin templates under [www/template](www/template)
-- Templates: [www/template/base-user.php](www/template/base-user.php), [www/template/base-admin.php](www/template/base-admin.php)
-- Styles & assets: [www/css/style.css](www/css/style.css), [www/js/menu.js](www/js/menu.js), [www/upload/](www/upload/)
-- Utilities: [`getNewNavItem`](www/utils/functions.php), [`isUserLoggedIn`](www/utils/functions.php) in [www/utils/functions.php](www/utils/functions.php)
-- DB helper: [`DatabaseHelper`](www/db/database.php) in [www/db/database.php](www/db/database.php)
+## Report
+Report available [here](doc/report.md).
 
 ## Run locally
 - Start Apache/MySQL (e.g. XAMPP Control Panel).
-- Visit http://localhost/your-project-folder/www/index.php
-
-![](use-case-diagram.svg)
+- Visit http://localhost/progetto-web/www/
 
 ## License
 MIT — see [LICENSE](LICENSE)
+
+## Authors
+- Filippo Greppi
+- Ettore Spaccini
+- Marcello Spagnoli
