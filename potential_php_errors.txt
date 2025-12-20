@@ -53,99 +53,70 @@
          🪪  offsetAccess.nonOffsetAccessible                                                    
  ------ ---------------------------------------------------------------------------------------- 
 
- ------ ------------------------------------------------------------------------------------------------------------------------------------------------------ 
-  Line   db/database.php                                                                                                                                       
- ------ ------------------------------------------------------------------------------------------------------------------------------------------------------ 
-  :59    Method DatabaseHelper::createUser() should return array{success: bool, error?: string, insert_id?: int} but returns array{success: true, insert_id:   
-         int|string}.                                                                                                                                          
-         🪪  return.type                                                                                                                                       
-         💡  Offset 'insert_id' (int) does not accept type int|string.                                                                                         
-  :104   Method DatabaseHelper::getAllCategories() should return array<int, array<string, mixed>> but returns list<array>.                                     
-         🪪  return.type                                                                                                                                       
-  :132   Method DatabaseHelper::checkLogin() should return array<int, array<string, mixed>> but returns list<array>.                                           
-         🪪  return.type                                                                                                                                       
-  :157   Method DatabaseHelper::getAllDishes() should return array<int, array<string, mixed>> but returns list<array>.                                         
-         🪪  return.type                                                                                                                                       
-  :185   Method DatabaseHelper::getDietaryTagsForDish() should return array<int, array<string, mixed>> but returns list<array>.                                
-         🪪  return.type                                                                                                                                       
-  :209   Method DatabaseHelper::getDietarySpecifications() should return array<int, array<string, mixed>> but returns list<array>.                             
-         🪪  return.type                                                                                                                                       
-  :232   Cannot call method fetch_assoc() on mysqli_result|false.                                                                                              
-         🪪  method.nonObject                                                                                                                                  
-  :301   Method DatabaseHelper::getUserById() should return array<string, mixed>|null but returns array|false|null.                                            
-         🪪  return.type                                                                                                                                       
-  :330   Method DatabaseHelper::getReservationCountsByUser() should return array<string, int> but returns array<string, float|int|string|null>.                
-         🪪  return.type                                                                                                                                       
-  :358   Method DatabaseHelper::getReservationItems() should return array<int, array<string, mixed>> but returns list<array>.                                  
-         🪪  return.type                                                                                                                                       
-  :447   Method DatabaseHelper::getReservationsByUser() should return array<int, array<string, mixed>> but returns list<array>.                                
-         🪪  return.type                                                                                                                                       
-  :480   Method DatabaseHelper::getReservationItemsDetailed() has no return type specified.                                                                    
-         🪪  missingType.return                                                                                                                                
-  :480   Method DatabaseHelper::getReservationItemsDetailed() has parameter $reservationId with no type specified.                                             
-         🪪  missingType.parameter                                                                                                                             
-  :504   Method DatabaseHelper::getDietaryTagsForReservation() has no return type specified.                                                                   
-         🪪  missingType.return                                                                                                                                
-  :504   Method DatabaseHelper::getDietaryTagsForReservation() has parameter $reservationId with no type specified.                                            
-         🪪  missingType.parameter                                                                                                                             
-  :528   Cannot cast mixed to int.                                                                                                                             
-         🪪  cast.int                                                                                                                                          
-  :534   Method DatabaseHelper::createDish() has no return type specified.                                                                                     
-         🪪  missingType.return                                                                                                                                
-  :534   Method DatabaseHelper::createDish() has parameter $calories with no type specified.                                                                   
-         🪪  missingType.parameter                                                                                                                             
-  :534   Method DatabaseHelper::createDish() has parameter $categoryId with no type specified.                                                                 
-         🪪  missingType.parameter                                                                                                                             
-  :534   Method DatabaseHelper::createDish() has parameter $description with no type specified.                                                                
-         🪪  missingType.parameter                                                                                                                             
-  :534   Method DatabaseHelper::createDish() has parameter $imagePath with no type specified.                                                                  
-         🪪  missingType.parameter                                                                                                                             
-  :534   Method DatabaseHelper::createDish() has parameter $name with no type specified.                                                                       
-         🪪  missingType.parameter                                                                                                                             
-  :534   Method DatabaseHelper::createDish() has parameter $price with no type specified.                                                                      
-         🪪  missingType.parameter                                                                                                                             
-  :534   Method DatabaseHelper::createDish() has parameter $specIds with no type specified.                                                                    
-         🪪  missingType.parameter                                                                                                                             
-  :534   Method DatabaseHelper::createDish() has parameter $stock with no type specified.                                                                      
-         🪪  missingType.parameter                                                                                                                             
-  :550   Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, 'intval' given.                                                   
-         🪪  argument.type                                                                                                                                     
-         💡  Type #1 from the union: Type array|bool|float|int|resource|string|null of parameter #1 $value of passed callable needs to be same or wider than   
-         parameter type mixed of accepting callable.                                                                                                           
-  :550   Parameter #2 $array of function array_map expects array, mixed given.                                                                                 
-         🪪  argument.type                                                                                                                                     
-  :571   Method DatabaseHelper::getCategories() has no return type specified.                                                                                  
-         🪪  missingType.return                                                                                                                                
-  :596   Method DatabaseHelper::getTimeSlotsByDate() return type has no value type specified in iterable type array.                                           
-         🪪  missingType.iterableValue                                                                                                                         
-         💡  See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type                                                            
-  :629   Binary operation "." between non-falsy-string and mixed results in an error.                                                                          
-         🪪  binaryOp.invalid                                                                                                                                  
-  :648   Method DatabaseHelper::setNewReservation() has parameter $items with no value type specified in iterable type array.                                  
-         🪪  missingType.iterableValue                                                                                                                         
-         💡  See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type                                                            
-  :653   Call to function is_array() with non-empty-array will always evaluate to true.                                                                        
-         🪪  function.alreadyNarrowedType                                                                                                                      
-         💡  Because the type is coming from a PHPDoc, you can turn off this check by setting treatPhpDocTypesAsCertain: false in your phpstan.neon.           
-  :662   Cannot access offset 'dish_id' on mixed.                                                                                                              
-         🪪  offsetAccess.nonOffsetAccessible                                                                                                                  
-  :662   Cannot cast mixed to int.                                                                                                                             
-         🪪  cast.int                                                                                                                                          
-  :663   Cannot access offset 'quantity' on mixed.                                                                                                             
-         🪪  offsetAccess.nonOffsetAccessible                                                                                                                  
-  :663   Cannot cast mixed to int.                                                                                                                             
-         🪪  cast.int                                                                                                                                          
-  :695   Binary operation "*" between float|int|string|null and int<1, max> results in an error.                                                               
-         🪪  binaryOp.invalid                                                                                                                                  
-  :696   Binary operation "+=" between (float|int) and mixed results in an error.                                                                              
-         🪪  assignOp.invalid                                                                                                                                  
-  :702   Binary operation "-" between float|int<1, max>|string and int<1, max> results in an error.                                                            
-         🪪  binaryOp.invalid                                                                                                                                  
-  :745   Method DatabaseHelper::setNewReservation() should return array{success: bool, error?: string, reservation_id?: int} but returns array{success: true,  
-         reservation_id: int|string}.                                                                                                                          
-         🪪  return.type                                                                                                                                       
-         💡  Offset 'reservation_id' (int) does not accept type int|string.                                                                                    
- ------ ------------------------------------------------------------------------------------------------------------------------------------------------------ 
+ ------ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+  Line   db/database.php                                                                                                                                                                    
+ ------ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+  :59    Method DatabaseHelper::createUser() should return array{success: bool, error?: string, insert_id?: int} but returns array{success: true, insert_id: int|string}.                   
+         🪪  return.type                                                                                                                                                                    
+         💡  Offset 'insert_id' (int) does not accept type int|string.                                                                                                                      
+  :104   Method DatabaseHelper::getAllCategories() should return array<int, array<string, mixed>> but returns list<array>.                                                                  
+         🪪  return.type                                                                                                                                                                    
+  :132   Method DatabaseHelper::checkLogin() should return array<int, array<string, mixed>> but returns list<array>.                                                                        
+         🪪  return.type                                                                                                                                                                    
+  :157   Method DatabaseHelper::getAllDishes() should return array<int, array<string, mixed>> but returns list<array>.                                                                      
+         🪪  return.type                                                                                                                                                                    
+  :185   Method DatabaseHelper::getDietaryTagsForDish() should return array<int, array<string, mixed>> but returns list<array>.                                                             
+         🪪  return.type                                                                                                                                                                    
+  :209   Method DatabaseHelper::getDietarySpecifications() should return array<int, array<string, mixed>> but returns list<array>.                                                          
+         🪪  return.type                                                                                                                                                                    
+  :232   Cannot call method fetch_assoc() on mysqli_result|false.                                                                                                                           
+         🪪  method.nonObject                                                                                                                                                               
+  :302   Method DatabaseHelper::getUserById() should return array<string, mixed>|null but returns array|false|null.                                                                         
+         🪪  return.type                                                                                                                                                                    
+  :332   Method DatabaseHelper::getReservationCountsByUser() should return array<string, int> but returns array<string, float|int|string|null>.                                             
+         🪪  return.type                                                                                                                                                                    
+  :361   Method DatabaseHelper::getReservationItems() should return array<int, array<string, mixed>> but returns list<array>.                                                               
+         🪪  return.type                                                                                                                                                                    
+  :455   Method DatabaseHelper::getReservationsByUser() should return array<int, array<string, mixed>> but returns list<array>.                                                             
+         🪪  return.type                                                                                                                                                                    
+  :514   Method DatabaseHelper::getReservationItemsDetailed() should return array<int, array<string, mixed>> but returns list<array>.                                                       
+         🪪  return.type                                                                                                                                                                    
+  :547   Cannot cast mixed to int.                                                                                                                                                          
+         🪪  cast.int                                                                                                                                                                       
+  :595   Method DatabaseHelper::createDish() should return array{success: bool, error?: string, dish_id?: int} but returns array{success: true, dish_id: int|string}.                       
+         🪪  return.type                                                                                                                                                                    
+         💡  Offset 'dish_id' (int) does not accept type int|string.                                                                                                                        
+  :622   Method DatabaseHelper::getCategories() should return array<int, array<string, mixed>> but returns list<array>.                                                                     
+         🪪  return.type                                                                                                                                                                    
+  :633   Method DatabaseHelper::getTimeSlotsByDate() return type has no value type specified in iterable type array.                                                                        
+         🪪  missingType.iterableValue                                                                                                                                                      
+         💡  See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type                                                                                         
+  :666   Binary operation "." between non-falsy-string and mixed results in an error.                                                                                                       
+         🪪  binaryOp.invalid                                                                                                                                                               
+  :685   Method DatabaseHelper::setNewReservation() has parameter $items with no value type specified in iterable type array.                                                               
+         🪪  missingType.iterableValue                                                                                                                                                      
+         💡  See: https://phpstan.org/blog/solving-phpstan-no-value-type-specified-in-iterable-type                                                                                         
+  :690   Call to function is_array() with non-empty-array will always evaluate to true.                                                                                                     
+         🪪  function.alreadyNarrowedType                                                                                                                                                   
+         💡  Because the type is coming from a PHPDoc, you can turn off this check by setting treatPhpDocTypesAsCertain: false in your phpstan.neon.                                        
+  :699   Cannot access offset 'dish_id' on mixed.                                                                                                                                           
+         🪪  offsetAccess.nonOffsetAccessible                                                                                                                                               
+  :699   Cannot cast mixed to int.                                                                                                                                                          
+         🪪  cast.int                                                                                                                                                                       
+  :700   Cannot access offset 'quantity' on mixed.                                                                                                                                          
+         🪪  offsetAccess.nonOffsetAccessible                                                                                                                                               
+  :700   Cannot cast mixed to int.                                                                                                                                                          
+         🪪  cast.int                                                                                                                                                                       
+  :732   Binary operation "*" between float|int|string|null and int<1, max> results in an error.                                                                                            
+         🪪  binaryOp.invalid                                                                                                                                                               
+  :733   Binary operation "+=" between (float|int) and mixed results in an error.                                                                                                           
+         🪪  assignOp.invalid                                                                                                                                                               
+  :739   Binary operation "-" between float|int<1, max>|string and int<1, max> results in an error.                                                                                         
+         🪪  binaryOp.invalid                                                                                                                                                               
+  :782   Method DatabaseHelper::setNewReservation() should return array{success: bool, error?: string, reservation_id?: int} but returns array{success: true, reservation_id: int|string}.  
+         🪪  return.type                                                                                                                                                                    
+         💡  Offset 'reservation_id' (int) does not accept type int|string.                                                                                                                 
+ ------ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 
  ------ --------------------------------------------- 
   Line   index.php                                    
@@ -424,62 +395,62 @@
          🪪  cast.string                                                                        
  ------ --------------------------------------------------------------------------------------- 
 
- ------ ----------------------------------------------------------------------------------------------------------------------------------------------------- 
-  Line   template/content-admin-add-dish.php                                                                                                                  
- ------ ----------------------------------------------------------------------------------------------------------------------------------------------------- 
-  :10    Argument of an invalid type mixed supplied for foreach, only iterables are supported.                                                                
-         🪪  foreach.nonIterable                                                                                                                              
-  :11    Cannot cast mixed to string.                                                                                                                         
-         🪪  cast.string                                                                                                                                      
-  :20    Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, 'intval' given.                                                  
-         🪪  argument.type                                                                                                                                    
-         💡  Type #1 from the union: Type array|bool|float|int|resource|string|null of parameter #1 $value of passed callable needs to be same or wider than  
-         parameter type mixed of accepting callable.                                                                                                          
-  :99    Cannot cast mixed to string.                                                                                                                         
-         🪪  cast.string                                                                                                                                      
-  :114   Argument of an invalid type mixed supplied for foreach, only iterables are supported.                                                                
-         🪪  foreach.nonIterable                                                                                                                              
-  :114   Cannot access offset 'categories' on mixed.                                                                                                          
-         🪪  offsetAccess.nonOffsetAccessible                                                                                                                 
-  :114   Variable $templateParams might not be defined.                                                                                                       
-         🪪  variable.undefined                                                                                                                               
-  :116   Cannot access offset 'category_id' on mixed.                                                                                                         
-         🪪  offsetAccess.nonOffsetAccessible                                                                                                                 
-  :116   Cannot cast mixed to int.                                                                                                                            
-         🪪  cast.int                                                                                                                                         
-  :117   Cannot access offset 'category_id' on mixed.                                                                                                         
-         🪪  offsetAccess.nonOffsetAccessible                                                                                                                 
-  :117   Cannot cast mixed to int.                                                                                                                            
-         🪪  cast.int                                                                                                                                         
-  :117   Cannot cast mixed to int.                                                                                                                            
-         🪪  cast.int                                                                                                                                         
-  :119   Cannot access offset 'category_name' on mixed.                                                                                                       
-         🪪  offsetAccess.nonOffsetAccessible                                                                                                                 
-  :119   Cannot cast mixed to string.                                                                                                                         
-         🪪  cast.string                                                                                                                                      
-  :139   Cannot cast mixed to string.                                                                                                                         
-         🪪  cast.string                                                                                                                                      
-  :170   Cannot cast mixed to string.                                                                                                                         
-         🪪  cast.string                                                                                                                                      
-  :188   Cannot cast mixed to string.                                                                                                                         
-         🪪  cast.string                                                                                                                                      
-  :205   Cannot cast mixed to string.                                                                                                                         
-         🪪  cast.string                                                                                                                                      
-  :223   Argument of an invalid type mixed supplied for foreach, only iterables are supported.                                                                
-         🪪  foreach.nonIterable                                                                                                                              
-  :223   Cannot access offset 'dietary_specs' on mixed.                                                                                                       
-         🪪  offsetAccess.nonOffsetAccessible                                                                                                                 
-  :223   Variable $templateParams might not be defined.                                                                                                       
-         🪪  variable.undefined                                                                                                                               
-  :224   Cannot access offset 'dietary_spec_id' on mixed.                                                                                                     
-         🪪  offsetAccess.nonOffsetAccessible                                                                                                                 
-  :224   Cannot cast mixed to int.                                                                                                                            
-         🪪  cast.int                                                                                                                                         
-  :236   Cannot access offset 'dietary_spec_name' on mixed.                                                                                                   
-         🪪  offsetAccess.nonOffsetAccessible                                                                                                                 
-  :236   Cannot cast mixed to string.                                                                                                                         
-         🪪  cast.string                                                                                                                                      
- ------ ----------------------------------------------------------------------------------------------------------------------------------------------------- 
+ ------ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+  Line   template/content-admin-add-dish.php                                                                                                                                          
+ ------ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
+  :10    Argument of an invalid type mixed supplied for foreach, only iterables are supported.                                                                                        
+         🪪  foreach.nonIterable                                                                                                                                                      
+  :11    Cannot cast mixed to string.                                                                                                                                                 
+         🪪  cast.string                                                                                                                                                              
+  :20    Parameter #1 $callback of function array_map expects (callable(mixed): mixed)|null, 'intval' given.                                                                          
+         🪪  argument.type                                                                                                                                                            
+         💡  Type #1 from the union: Type array|bool|float|int|resource|string|null of parameter #1 $value of passed callable needs to be same or wider than parameter type mixed of  
+         accepting callable.                                                                                                                                                          
+  :99    Cannot cast mixed to string.                                                                                                                                                 
+         🪪  cast.string                                                                                                                                                              
+  :114   Argument of an invalid type mixed supplied for foreach, only iterables are supported.                                                                                        
+         🪪  foreach.nonIterable                                                                                                                                                      
+  :114   Cannot access offset 'categories' on mixed.                                                                                                                                  
+         🪪  offsetAccess.nonOffsetAccessible                                                                                                                                         
+  :114   Variable $templateParams might not be defined.                                                                                                                               
+         🪪  variable.undefined                                                                                                                                                       
+  :116   Cannot access offset 'category_id' on mixed.                                                                                                                                 
+         🪪  offsetAccess.nonOffsetAccessible                                                                                                                                         
+  :116   Cannot cast mixed to int.                                                                                                                                                    
+         🪪  cast.int                                                                                                                                                                 
+  :117   Cannot access offset 'category_id' on mixed.                                                                                                                                 
+         🪪  offsetAccess.nonOffsetAccessible                                                                                                                                         
+  :117   Cannot cast mixed to int.                                                                                                                                                    
+         🪪  cast.int                                                                                                                                                                 
+  :117   Cannot cast mixed to int.                                                                                                                                                    
+         🪪  cast.int                                                                                                                                                                 
+  :119   Cannot access offset 'category_name' on mixed.                                                                                                                               
+         🪪  offsetAccess.nonOffsetAccessible                                                                                                                                         
+  :119   Cannot cast mixed to string.                                                                                                                                                 
+         🪪  cast.string                                                                                                                                                              
+  :139   Cannot cast mixed to string.                                                                                                                                                 
+         🪪  cast.string                                                                                                                                                              
+  :170   Cannot cast mixed to string.                                                                                                                                                 
+         🪪  cast.string                                                                                                                                                              
+  :188   Cannot cast mixed to string.                                                                                                                                                 
+         🪪  cast.string                                                                                                                                                              
+  :205   Cannot cast mixed to string.                                                                                                                                                 
+         🪪  cast.string                                                                                                                                                              
+  :223   Argument of an invalid type mixed supplied for foreach, only iterables are supported.                                                                                        
+         🪪  foreach.nonIterable                                                                                                                                                      
+  :223   Cannot access offset 'dietary_specs' on mixed.                                                                                                                               
+         🪪  offsetAccess.nonOffsetAccessible                                                                                                                                         
+  :223   Variable $templateParams might not be defined.                                                                                                                               
+         🪪  variable.undefined                                                                                                                                                       
+  :224   Cannot access offset 'dietary_spec_id' on mixed.                                                                                                                             
+         🪪  offsetAccess.nonOffsetAccessible                                                                                                                                         
+  :224   Cannot cast mixed to int.                                                                                                                                                    
+         🪪  cast.int                                                                                                                                                                 
+  :236   Cannot access offset 'dietary_spec_name' on mixed.                                                                                                                           
+         🪪  offsetAccess.nonOffsetAccessible                                                                                                                                         
+  :236   Cannot cast mixed to string.                                                                                                                                                 
+         🪪  cast.string                                                                                                                                                              
+ ------ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- 
 
  ------ ------------------------------------------------------------- 
   Line   template/content-login.php                                   
@@ -1051,5 +1022,5 @@
          🪪  variable.undefined                                   
  ------ --------------------------------------------------------- 
 
- [ERROR] Found 471 errors                                                                                               
+ [ERROR] Found 458 errors                                                                                               
 
