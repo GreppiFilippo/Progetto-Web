@@ -1,7 +1,7 @@
 <?php
 if (!defined('IN_APP')) {
-    http_response_code(403);
-    exit('Access denied');
+  http_response_code(404);
+  exit;
 }
 ?>
 <main class="container">
