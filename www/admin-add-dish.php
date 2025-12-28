@@ -15,9 +15,9 @@ if (!isAdmin()) {
 }
 
 $templateParams["nav_items"] = array(
-    getNewNavItem("Dashboard", "user-dashboard.php", "bi bi-speedometer2 me-1"),
+    getNewNavItem("Dashboard", "admin-dashboard.php", "bi bi-speedometer2 me-1"),
     getNewNavItem("Gestione menu", "admin-menu.php", "bi bi-book me-1"),
-    getNewNavItem("Prenotazioni", "damin-bookings.php", "bi bi-calendar-check me-1"),
+    getNewNavItem("Prenotazioni", "admin-bookings.php", "bi bi-calendar-check me-1"),
     getNewNavItem("Esci", "logout.php", "bi bi-box-arrow-right me-1")
 );
 

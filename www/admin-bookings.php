@@ -1,4 +1,4 @@
-<?php 
+<?php
     require_once "bootstrap.php";
 
     // Admin template access control
@@ -14,6 +14,7 @@
         exit();
     }
 
+
     $templateParams["nav_items"] = array(
         getNewNavItem("Dashboard", "admin-dashboard.php", "bi bi-speedometer2 me-1"),
         getNewNavItem("Gestione menu", "admin-menu.php", "bi bi-book me-1"),
@@ -21,8 +22,8 @@
         getNewNavItem("Esci", "logout.php", "bi bi-box-arrow-right me-1")
     );
 
-    $templateParams["titolo"] = "Mensa Campus - Gestione menù";
-    $templateParams["content"] = "template/content-admin-menu.php";
+    $templateParams["titolo"] = "Mensa Campus - Dashboard";
+    $templateParams["content"] = "template/content-admin-dashboard.php";
 
     require "template/base-admin.php"
 ?>

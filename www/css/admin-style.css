@@ -60,6 +60,7 @@ main i.bi.admin-icon {
 button.admin-btn[type="reset"] {
     background-color: #942222;
     border-color: #942222;
+    color: white;
 }
 
 button.admin-btn[type="reset"] i {
@@ -112,6 +113,8 @@ div.card > div.ratio img,
         height: 160px;
     }
 }
+
+
 
 .admin-page .form-text,
 .admin-page .text-muted {
@@ -213,3 +216,24 @@ input[type="radio"]:focus-visible,
     outline: none;
     box-shadow: none;
 }
+
+.dashboard {
+  background-color: #942222;
+  color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+.dashboard i{
+  color: white;
+}
+
+.card{
+    width: 3rem;
+    height: 4rem;
+    border: 0px;
+    display: flex;     
+    align-items: center;  
+    justify-content: center;
+}
+
+
