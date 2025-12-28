@@ -1,4 +1,4 @@
-<main class="container-fluid my-5">
+<main class="container-fluid my-3">
     <!-- INTRO -->
     <section class="mb-2">
         <div class="row align-items-center">
@@ -20,22 +20,20 @@
     </section>
 
     <!-- FILTERS -->
-    <section>
-        <form class="row g-2">
-            <div class="col-12 col-md-3">
-                <label for="cathegory" class="form-label">Categoria</label>
-                <select id="cathegory" class="form-select"></select>
-            </div>
-            <div class="col-12 col-md-3">
-                <label for="state" class="form-label">Stato</label>
-                <select id="state" class="form-select"></select>
-            </div>
-            <div class="col-12 col-md-6">
-                <label for="search" class="form-label">Cerca</label>
-                <input type="text" class="form-control" placeholder="Cerca piatto per nome..." id="search">
-            </div>
-        </form>
-    </section>
+    <form class="row g-2">
+        <div class="col-12 col-md-3">
+            <label for="cathegory" class="form-label">Categoria</label>
+            <select id="cathegory" class="form-select"></select>
+        </div>
+        <div class="col-12 col-md-3">
+            <label for="state" class="form-label">Stato</label>
+            <select id="state" class="form-select"></select>
+        </div>
+        <div class="col-12 col-md-6">
+            <label for="search" class="form-label">Cerca</label>
+            <input type="text" class="form-control" placeholder="Cerca piatto per nome..." id="search">
+        </div>
+    </form>
 
     <!-- DISH LIST -->
     <section>

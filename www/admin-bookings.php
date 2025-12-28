@@ -22,8 +22,8 @@
         getNewNavItem("Esci", "logout.php", "bi bi-box-arrow-right me-1")
     );
 
-    $templateParams["titolo"] = "Mensa Campus - Dashboard";
-    $templateParams["content"] = "template/content-admin-dashboard.php";
+    $templateParams["titolo"] = "Mensa Campus - Prenotazioni";
+    $templateParams["content"] = "template/content-admin-bookings.php";
 
     require "template/base-admin.php"
 ?>
