@@ -1,177 +1,283 @@
-// Date change handler - load time slots dynamically
-document.addEventListener('DOMContentLoaded', function() {
-    const dateInput = document.getElementById('booking-date');
-    const timeSelect = document.getElementById('booking-time');
-    
-    if (dateInput && timeSelect) {
-        // Disable time select initially
-        timeSelect.disabled = true;
-        
-        dateInput.addEventListener('change', function() {
-            const selectedDate = this.value;
-            
-            if (!selectedDate) {
-                timeSelect.disabled = true;
-                timeSelect.innerHTML = '<option value="" disabled selected>Seleziona prima la data</option>';
-                return;
-            }
-            
-            // Load time slots for selected date
-            fetch(`utils/get-time-slots.php?date=${encodeURIComponent(selectedDate)}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to load time slots');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    // Clear existing options
-                    timeSelect.innerHTML = '<option value="" disabled selected>Seleziona orario</option>';
-                    
-                    if (data.slots && data.slots.length > 0) {
-                        data.slots.forEach(slot => {
-                            const option = document.createElement('option');
-                            option.value = slot.value;
-                            option.textContent = slot.label;
-                            timeSelect.appendChild(option);
-                        });
-                        timeSelect.disabled = false;
-                    } else {
-                        timeSelect.innerHTML = '<option value="" disabled selected>Nessun orario disponibile</option>';
-                        timeSelect.disabled = true;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading time slots:', error);
-                    timeSelect.innerHTML = '<option value="" disabled selected>Errore nel caricamento</option>';
-                    timeSelect.disabled = true;
-                });
+/**
+ * CartView to manage cart UI state (frontend only).
+ */
+class CartView {
+    constructor() {
+        /** @type {Map<number, {name: string, price: number, quantity: number}>} */
+        this.items = new Map();
+    }
+
+    /**
+     * Set item in cart.
+     * 
+     * @param {number} dishId The ID of the dish
+     * @param {string} dishName The name of the dish
+     * @param {number} price The price of the dish
+     * @param {number} quantity The quantity of the dish
+     * @returns {void}
+     */
+    setItem(dishId, dishName, price, quantity) {
+        if (
+            typeof dishId !== 'number' ||
+            typeof dishName !== 'string' ||
+            typeof price !== 'number' ||
+            typeof quantity !== 'number'
+        ) {
+            return;
+        }
+
+        if (quantity <= 0) {
+            this.items.delete(dishId);
+            return;
+        }
+
+        this.items.set(dishId, {
+            name: dishName,
+            price,
+            quantity
         });
     }
-});
 
-function updateSummary(dishName, dishId, quantity) {
-    // Accept both signatures:
-    // - updateSummary(dishName, dishId, quantity)
-    // - legacy: updateSummary(dishId, quantity)
-    if (quantity === undefined && dishId !== undefined) {
-        // called with (dishId, quantity)
-        quantity = dishId;
-        dishId = dishName;
-        dishName = null;
+    /**
+     * Get item from cart.
+     * 
+     * @param {number} dishId The ID of the dish
+     * @returns {{name: string, price: number, quantity: number}|undefined} The item data or undefined if not found
+     */
+    getItem(dishId) {
+        return this.items.get(dishId);
     }
 
-    const itemsWrapper = document.getElementById('riepilogo-table-wrapper');
-    const tbody = document.getElementById('riepilogo-table-body');
-    const placeholder = document.getElementById('riepilogo-placeholder');
-    const hr = document.getElementById('riepilogo-hr');
-    if (!tbody || !itemsWrapper) {
-        console.warn('Riepilogo: elementi tabella non trovati');
-        return;
+    /**
+     * Get all items in cart.
+     * 
+     * @returns {Array<{dishId: number, name: string, price: number, quantity: number}>} The list of all items
+     */
+    getAllItems() {
+        return Array.from(this.items.entries()).map(([dishId, data]) => ({
+            dishId,
+            ...data
+        }));
     }
-    const inputEl = dishId ? document.getElementById(String(dishId)) : null;
-    const price = inputEl ? parseFloat(inputEl.dataset.price || inputEl.getAttribute('data-price') || 0) : 0;
 
-    if (!dishName && inputEl) {
-        // Try dataset/attributes first
-        dishName = inputEl.dataset.name || inputEl.dataset.dishname || inputEl.getAttribute('data-name') || '';
-        // If still empty, try to find a nearby element that holds the visible name (e.g. a <strong> in the same list item)
-        if (!dishName) {
-            const li = inputEl.closest('li') || inputEl.parentElement;
-            try {
-                const strong = li ? li.querySelector('strong') : null;
-                if (strong && strong.textContent.trim()) dishName = strong.textContent.trim();
-            } catch (e) {
-                // ignore and keep dishName empty
-            }
+    /**
+     * Calculate total price of items in cart.
+     * 
+     * @returns {number} The total price
+     */
+    calculateTotal() {
+        let total = 0;
+        for (const item of this.items.values()) {
+            total += item.price * item.quantity;
         }
-    }
-    const rowId = `riepilogo-item-${dishId}`;
-    const existingRow = document.getElementById(rowId);
-
-    if (Number(quantity) > 0) {
-        // mostra la tabella e nascondi placeholder (non rimuoverlo dal DOM)
-        itemsWrapper.classList.remove('d-none');
-        if (placeholder) placeholder.classList.add('d-none');
-        if (hr) hr.classList.remove('d-none');
-        const qty = Number(quantity);
-        const subtotal = qty * price;
-
-        if (existingRow) {
-            const qEl = existingRow.querySelector('.item-quantity');
-            const sEl = existingRow.querySelector('.item-subtotal');
-            if (qEl) qEl.textContent = qty;
-            if (sEl) sEl.textContent = formatEuro(subtotal);
-            existingRow.dataset.price = price;
-            // ensure name cell updated if available
-            const nameCell = existingRow.querySelector('td');
-            if (nameCell && dishName) nameCell.innerHTML = escapeHtml(dishName);
-        } else {
-            const tr = document.createElement('tr');
-            tr.id = rowId;
-            tr.dataset.price = price;
-            tr.innerHTML = `
-                <td class="align-middle">${escapeHtml(dishName || '')}</td>
-                <td class="text-end align-middle item-quantity">${qty}</td>
-                <td class="text-end align-middle">${formatEuro(price)}</td>
-                <td class="text-end align-middle item-subtotal">${formatEuro(subtotal)}</td>
-            `;
-            tbody.appendChild(tr);
-        }
-    } else {
-        // rimuovi riga se quantity == 0
-        if (existingRow && existingRow.parentNode) existingRow.parentNode.removeChild(existingRow);
+        return total;
     }
 
-    // aggiorna totale e visibilità
-    updateTotal();
+    /**
+     * Check if cart is empty.
+     * 
+     * @returns {boolean} True if cart is empty, false otherwise
+     */
+    isEmpty() {
+        return this.items.size === 0;
+    }
 }
 
-function updateTotal() {
-    const tbody = document.getElementById('riepilogo-table-body');
-    const hr = document.getElementById('riepilogo-hr');
-    const placeholder = document.getElementById('riepilogo-placeholder');
-    const wrapper = document.getElementById('riepilogo-table-wrapper');
-    if (!tbody) return;
+const cart = new CartView();
 
-    const rows = Array.from(tbody.querySelectorAll('tr'));
-    if (!rows.length) {
-        // mostra placeholder e nascondi tabella
-        if (placeholder) placeholder.classList.remove('d-none');
-        if (wrapper) wrapper.classList.add('d-none');
-        if (hr) hr.classList.add('d-none');
-        const totalValue = document.getElementById('riepilogo-total-value');
-        if (totalValue) {
-            totalValue.classList.add('d-none');
-            const parts = totalValue.querySelectorAll('span');
-            if (parts && parts.length >= 2) parts[1].textContent = '€0,00';
+/**
+ * Setup date input change handler.
+ * 
+ * @returns {void}
+ */
+function setupDateTimeHandler() {
+    const dateInput = document.getElementById('booking-date');
+    const timeSelect = document.getElementById('booking-time');
+
+    if (!dateInput || !timeSelect) return;
+
+    timeSelect.disabled = true;
+
+    dateInput.addEventListener('change', () => {
+        const selectedDate = dateInput.value;
+
+        if (!selectedDate) {
+            resetTimeSelect(timeSelect, 'Seleziona prima la data');
+            return;
         }
+
+        fetch(`utils/get-time-slots.php?date=${encodeURIComponent(selectedDate)}`)
+            .then(r => {
+                if (!r.ok) throw new Error('Server error');
+                return r.json();
+            })
+            .then(data => populateTimeSlots(timeSelect, data.slots))
+            .catch(() => {
+                resetTimeSelect(timeSelect, 'Errore nel caricamento');
+            });
+    });
+}
+
+/**
+ * Populate time slots in select element.
+ * 
+ * @param {HTMLSelectElement} select The select element to populate
+ * @param {Array<{value: string, label: string}>} slots The time slots to populate
+ * @returns {void}
+ */
+function populateTimeSlots(select, slots = []) {
+    select.innerHTML = '<option value="" disabled selected>Seleziona orario</option>';
+
+    if (!Array.isArray(slots) || slots.length === 0) {
+        resetTimeSelect(select, 'Nessun orario disponibile');
         return;
     }
 
-    let total = 0;
-    rows.forEach(r => {
-        const qtyEl = r.querySelector('.item-quantity');
-        const qty = qtyEl ? parseInt(qtyEl.textContent, 10) : 0;
-        const pr = parseFloat(r.dataset.price || 0);
-        total += qty * pr;
+    slots.forEach(slot => {
+        const option = document.createElement('option');
+        option.value = slot.value;
+        option.textContent = slot.label;
+        select.appendChild(option);
     });
 
-    const totalValue = document.getElementById('riepilogo-total-value');
-    if (totalValue) {
-        // mostra il blocco totale sotto la hr
-        totalValue.classList.remove('d-none');
-        const parts = totalValue.querySelectorAll('span');
-        if (parts && parts.length >= 2) parts[1].textContent = formatEuro(total);
-    }
-    if (hr) hr.classList.remove('d-none');
-    if (wrapper) wrapper.classList.remove('d-none');
+    select.disabled = false;
 }
 
+/**
+ * Reset time select element.
+ * 
+ * @param {HTMLSelectElement} select The select element to reset
+ * @param {string} message The message to display
+ */
+function resetTimeSelect(select, message) {
+    select.innerHTML = `<option value="" disabled selected>${message}</option>`;
+    select.disabled = true;
+}
+
+/**
+ * Setup quantity input handler.
+ * 
+ * @returns {void}
+ */
+function setupQuantityHandler() {
+    const form = document.querySelector('form[action="user-bookings.php"]');
+    if (!form) return;
+
+    form.addEventListener('input', e => {
+        if (e.target.classList.contains('dish-quantity-input')) {
+            updateSummary(e.target);
+        }
+    });
+}
+
+/**
+ * Update summary when quantity input changes.
+ * 
+ * @param {HTMLInputElement} input 
+ * @returns {void}
+ */
+function updateSummary(input) {
+    const dishId = parseInt(input.dataset.dishId, 10);
+    const dishName = input.dataset.dishName;
+    const price = parseFloat(input.dataset.price);
+    const quantity = parseInt(input.value, 10) || 0;
+
+    if (Number.isNaN(dishId) || Number.isNaN(price)) return;
+
+    cart.setItem(dishId, dishName, price, quantity);
+    renderSummary();
+}
+
+/**
+ * Render the summary table.
+ * 
+ * @returns {void}
+ */
+function renderSummary() {
+    const tbody = document.getElementById('riepilogo-table-body');
+    const wrapper = document.getElementById('riepilogo-table-wrapper');
+    const placeholder = document.getElementById('riepilogo-placeholder');
+    const totalElement = document.getElementById('riepilogo-total-value');
+
+    if (!tbody) {
+        return;
+    }
+
+    tbody.innerHTML = '';
+
+    if (cart.isEmpty()) {
+        wrapper?.classList.add('d-none');
+        placeholder?.classList.remove('d-none');
+        totalElement?.classList.add('d-none');
+        return;
+    }
+
+    wrapper?.classList.remove('d-none');
+    placeholder?.classList.add('d-none');
+
+    cart.getAllItems().forEach(item => {
+        tbody.appendChild(createSummaryRow(item));
+    });
+
+    renderTotal();
+}
+
+/**
+ * Create a summary table row for an item.
+ * 
+ * @param {*} item The cart item
+ * @returns {HTMLTableRowElement} The table row element
+ */
+function createSummaryRow(item) {
+    const tr = document.createElement('tr');
+    const subtotal = item.price * item.quantity;
+
+    tr.innerHTML = `
+        <td class="align-middle">${escapeHtml(item.name)}</td>
+        <td class="text-end align-middle">${item.quantity}</td>
+        <td class="text-end align-middle">${formatEuro(item.price)}</td>
+        <td class="text-end align-middle">${formatEuro(subtotal)}</td>
+    `;
+
+    return tr;
+}
+
+/**
+ * Render total price in summary.
+ * 
+ * @returns {void}
+ */
+function renderTotal() {
+    const totalElement = document.getElementById('riepilogo-total-value');
+    if (!totalElement) return;
+
+    const total = cart.calculateTotal();
+    totalElement.classList.remove('d-none');
+
+    const valueSpan = totalElement.querySelector('span:last-child');
+    if (valueSpan) {
+        valueSpan.textContent = formatEuro(total);
+    }
+}
+
+// ------ Utility functions ------
+
+/**
+ * Format a number as Euro currency.
+ * 
+ * @param {number} n The number to format
+ * @returns {string} The formatted string
+ */
 function formatEuro(n) {
     return '€' + n.toFixed(2).replace('.', ',');
 }
 
+/**
+ * Escape HTML special characters in a string.
+ * 
+ * @param {string} str The string to escape
+ * @returns {string} The escaped string
+ */
 function escapeHtml(str) {
     return String(str)
         .replace(/&/g, '&amp;')
@@ -180,3 +286,8 @@ function escapeHtml(str) {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    setupDateTimeHandler();
+    setupQuantityHandler();
+});

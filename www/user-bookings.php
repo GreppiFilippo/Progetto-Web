@@ -17,46 +17,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Combine date and time
     $dateTime = $date . ' ' . $time . ':00';
     
-    // Collect items from form (all inputs with dish IDs)
+    // Collect items from form - now clean array with dish IDs
     $items = [];
-    foreach ($_POST as $key => $value) {
-        // Skip non-dish fields
-        if (in_array($key, ['booking-date', 'booking-time', 'booking-notes'])) {
-            continue;
-        }
-        
-        $quantity = (int)$value;
-        if ($quantity > 0) {
-            // Find dish by ID (key is sanitized name, need to map back)
-            // Get dish_id from the input name via a database lookup
-            $dishName = str_replace('-', ' ', $key);
-            $items[] = [
-                'name' => $key,
-                'quantity' => $quantity
-            ];
-        }
-    }
-    
-    // Convert dish names to IDs and create proper items array
-    $properItems = [];
-    $categories = $dbh->getAllCategories();
-    foreach ($categories as $category) {
-        $dishes = $dbh->getAllDishes($category['category_id']);
-        foreach ($dishes as $dish) {
-            $dishKey = getIdFromName($dish['name']);
-            foreach ($items as $item) {
-                if ($item['name'] === $dishKey) {
-                    $properItems[] = [
-                        'dish_id' => $dish['dish_id'],
-                        'quantity' => $item['quantity']
-                    ];
-                }
+    if (isset($_POST['dishes']) && is_array($_POST['dishes'])) {
+        foreach ($_POST['dishes'] as $dish_id => $quantity) {
+            $quantity = (int)$quantity;
+            if ($quantity > 0) {
+                $items[] = [
+                    'dish_id' => (int)$dish_id,
+                    'quantity' => $quantity
+                ];
             }
         }
     }
     
-    if (!empty($properItems)) {
-        $result = $dbh->setNewReservation($userId, $dateTime, $properItems, $notes);
+    if (!empty($items)) {
+        $result = $dbh->setNewReservation($userId, $dateTime, $items, $notes);
         
         if ($result['success']) {
             $_SESSION['success_message'] = "Prenotazione creata con successo!";

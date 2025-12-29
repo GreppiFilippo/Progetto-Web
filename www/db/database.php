@@ -111,7 +111,7 @@ class DatabaseHelper {
      * @param string $password The user's password
      * @return array<int, array<string, mixed>> Returns an array with user details if credentials are valid, empty array otherwise
      */
-    public function checkLogin($email, $password) {
+    public function checkLogin(string $email, string $password) {
         $query = "SELECT user_id, email, first_name, last_name, admin
                   FROM users
                   WHERE email = ? AND password = ?";
