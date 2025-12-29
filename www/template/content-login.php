@@ -41,9 +41,12 @@ if (!defined('IN_APP')) {
                                 </div>
                             </div>
 
-                            <?php if (isset($templateParams["login_error"])): ?>
-                                <p class="text-danger"><?php echo $templateParams["login_error"]; ?></p>
+                            <?php if (is_array($templateParams) && isset($templateParams["login_error"])): ?>
+                                <p class="text-danger">
+                                    <?php echo htmlspecialchars((string)$templateParams["login_error"]); ?>
+                                </p>
                             <?php endif; ?>
+
 
                             <!-- button submit -->
                             <div class="d-grid mb-3">
