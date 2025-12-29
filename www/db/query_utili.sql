@@ -152,16 +152,23 @@ UPDATE dishes SET stock = stock - 1 WHERE dish_id = 8;
 -- =====================================================
 
 -- Lista tutte le prenotazioni con stato e informazioni utente
-SELECT r.reservation_id, r.date_time, r.total_amount, r.ready, r.picked_up,
-       u.user_id, u.first_name, u.last_name, u.email, u.phone_number,
-       CASE 
-         WHEN r.picked_up = TRUE THEN 'Completata'
-         WHEN r.ready = TRUE THEN 'Pronta per il ritiro'
-         ELSE 'In preparazione'
-       END AS status
+SELECT
+    r.reservation_id,
+    r.date_time,
+    r.total_amount,
+    u.user_id,
+    u.first_name,
+    u.last_name,
+    u.email,
+    CASE
+        WHEN r.status = 'Completato' THEN 'Completato'
+        WHEN r.status = 'Pronto al ritiro' THEN 'Pronto al ritiro'
+        ELSE 'In preparazione'
+    END AS status
 FROM reservations r
 JOIN users u ON r.user_id = u.user_id
 ORDER BY r.date_time DESC;
+
 
 -- Prenotazioni in preparazione (per la dashboard admin)
 SELECT r.reservation_id, r.date_time, r.total_amount,

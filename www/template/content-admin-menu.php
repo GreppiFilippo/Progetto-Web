@@ -23,7 +23,16 @@
     <form class="row g-2">
         <div class="col-12 col-md-3">
             <label for="cathegory" class="form-label">Categoria</label>
-            <select id="cathegory" class="form-select"></select>
+            <select id="cathegory" class="form-select">
+                <?php foreach($templateParams['categorie'] as $categoria): ?>
+                <option 
+                    value="<?php echo $categoria['category_id']; ?>" 
+                    <?php if ($categoriaSelezionata == $categoria['category_id']) echo 'selected'; ?>
+                >
+                    <?php echo ucfirst($categoria['category_name']); ?>
+                </option>
+                <?php endforeach; ?>
+            </select>
         </div>
         <div class="col-12 col-md-3">
             <label for="state" class="form-label">Stato</label>

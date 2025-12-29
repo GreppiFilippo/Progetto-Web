@@ -50,6 +50,8 @@
     </header>
   </section>
 
+  <!-- PRENOTAZIONI -->
+
   <aside>
         <section class="row mx-0 mb-2"> 
             <h1 class="h5 p-0">Azioni rapide</h1>
