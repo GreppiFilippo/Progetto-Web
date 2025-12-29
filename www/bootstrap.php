@@ -12,4 +12,7 @@ define("IN_APP", true);
 require_once("db/database.php");
 require_once("utils/functions.php");
 $dbh = new DatabaseHelper("localhost", "root", "", "cafeteria", 3306);
+
+/** @var array<string, mixed> $templateParams */
+$templateParams = [];
 ?>
