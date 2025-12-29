@@ -1,9 +1,9 @@
 <?php
 require_once 'bootstrap.php';
 
-// Base Template
+/** @var array<string, mixed> $templateParams */
 $templateParams["titolo"] = "Mensa Campus - Home";
-
+$templateParams["link_utili"] = [];
 
 if (isUserLoggedIn()) {
     $templateParams["nav_items"] = array(
@@ -28,7 +28,7 @@ if (isUserLoggedIn()) {
         getNewNavItem("Menu", "menu.php", "bi bi-book"),
         getNewNavItem("Accedi", "login.php", "bi bi-box-arrow-in-right")
     );
-
+    
     $templateParams["link_utili"][] = array(
         "name" => "Menu",
         "link" => "menu.php",
