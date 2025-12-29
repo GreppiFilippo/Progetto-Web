@@ -60,17 +60,24 @@ if (!defined('IN_APP')) {
 
                 <div class="card-body py-4">
 
-                    <!-- Esempio di piatti selezionabili -->
-                    <?php foreach($templateParams["categories"] as $category): ?>
+                    <?php 
+                    $hasAvailableDishes = false;
+                    foreach($templateParams["categories"] as $category):
+                        $dishes = $dbh->getAllDishes($category["category_id"]);
+                        $availableDishes = array_filter($dishes, function($dish) {
+                            return $dish["stock"] > 0;
+                        });
+                        
+                        if (empty($availableDishes)) {
+                            continue;
+                        }
+                        $hasAvailableDishes = true;
+                    ?>
                     <section>
                         <h2 class="h6 text-muted mb-3"><?php echo htmlspecialchars($category["category_name"]); ?></h2>
 
                         <ul class="w-100 list-unstyled">
-                            <?php foreach($dbh->getAllDishes($category["category_id"]) as $dish): 
-                                if ($dish["stock"] <= 0) {
-                                    continue;
-                                }
-                            ?>
+                            <?php foreach($availableDishes as $dish): ?>
                                 <li class="mb-3 p-3 border rounded bg-light">
                                     <div class="d-flex justify-content-between align-items-start">
                                         <div class="flex-grow-1">
@@ -98,6 +105,13 @@ if (!defined('IN_APP')) {
                         </ul>
                     </section>
                     <?php endforeach; ?>
+                    
+                    <?php if (!$hasAvailableDishes): ?>
+                        <div class="text-center text-muted py-5">
+                            <i class="bi bi-exclamation-circle fs-1" aria-hidden="true"></i>
+                            <p class="mt-3 mb-0">Al momento non ci sono piatti disponibili per la prenotazione.</p>
+                        </div>
+                    <?php endif; ?>
 
                 </div>
             </fieldset>
