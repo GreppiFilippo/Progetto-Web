@@ -80,12 +80,15 @@ if (!defined('IN_APP')) {
                                         </div>
                                         <div class="ms-4 text-end">
                                             <strong class="d-block fs-5 mb-2">€<?php echo htmlspecialchars($dish["price"]); ?></strong>
-                                            <label for="<?php echo getIdFromName($dish["name"]) ?>" class="form-label small mb-1">Quantità</label>
-                                                <input type="number" class="form-control" 
-                                                    id="<?php echo getIdFromName($dish["name"]) ?>" name="<?php echo getIdFromName($dish["name"]) ?>" 
-                                                    min="0" max="<?php echo htmlspecialchars($dish["stock"]); ?>" value="0" placeholder="0" 
+                                            <label for="dish-<?php echo $dish['dish_id']; ?>" class="form-label small mb-1">Quantità</label>
+                                                <input type="number" class="form-control dish-quantity-input" 
+                                                    id="dish-<?php echo $dish['dish_id']; ?>" 
+                                                    name="dishes[<?php echo $dish['dish_id']; ?>]" 
+                                                    min="0" max="<?php echo htmlspecialchars($dish["stock"]); ?>" 
+                                                    value="0" placeholder="0" 
+                                                    data-dish-id="<?php echo $dish['dish_id']; ?>"
+                                                    data-dish-name="<?php echo htmlspecialchars($dish['name']); ?>"
                                                     data-price="<?php echo htmlspecialchars($dish["price"]); ?>"
-                                                    onchange="updateSummary('<?php echo $dish["name"] ?>', this.id, this.value)"
                                                 />
                                         </div>
                                     </div>
