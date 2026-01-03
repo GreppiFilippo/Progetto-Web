@@ -24,12 +24,10 @@
         <div class="col-12 col-md-3">
             <label for="category" class="form-label">Categoria</label>
             <select id="category" class="form-select">
-                <option value="all" <?php if ($categoriaSelezionata == 'all') echo 'selected'; ?>>Tutte</option>
+                <option value="all" >Tutte</option>
                 <?php foreach($templateParams['categories'] as $categoria): ?>
                     <option 
-                        value="<?php echo $categoria['category_id']; ?>" 
-                        <?php if ($categoriaSelezionata == $categoria['category_id']) echo 'selected'; ?>
-                    >
+                        value="<?php echo $categoria['category_id']; ?>">
                         <?php echo ucfirst($categoria['category_name']); ?>
                     </option>
                 <?php endforeach; ?>
@@ -38,9 +36,9 @@
         <div class="col-12 col-md-3">
             <label for="state" class="form-label">Stato</label>
             <select id="state" class="form-select">
-                <option value="all" <?php if ($statoSelezionato == 'all') echo 'selected'; ?>>Tutti</option>
-                <option value="available" <?php if ($statoSelezionato == 'available') echo 'selected'; ?>>Disponibile</option>
-                <option value="unavailable" <?php if ($statoSelezionato == 'unavailable') echo 'selected'; ?>>Non disponibile</option>
+                <option value="all">Tutti</option>
+                <option value="available">Disponibile</option>
+                <option value="unavailable">Non disponibile</option>
             </select>
         </div>
         <div class="col-12 col-md-6">
@@ -53,11 +51,14 @@
     <section id="dish_list">
     </section>
 
+    <div class="d-flex justify-content-center mt-3" id="pagination">
+    </div>
+
     <?php
     if(isset($templateParams["js"])):
         foreach($templateParams["js"] as $script):
     ?>
-        <script src="<?php echo $script; ?>"></script>
+        <script src="<?php echo $script; ?>" type="module"></script>
     <?php
         endforeach;
     endif;

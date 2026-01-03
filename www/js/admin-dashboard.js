@@ -1,3 +1,5 @@
+import { isToday, isTomorrow } from './common-functions.js';
+
 function renderBooking(bookings) {
     if (!Array.isArray(bookings)) return '';
     let html = '';
@@ -37,12 +39,13 @@ function renderBookingItem(booking) {
 
                 <!-- Data/Ora sotto -->
                 <div class="small text-muted">
-                    ${displayDate} ${time}
+                    <span>Data</span>
+                    <span>${displayDate} ${time}</span>
                 </div>
 
                 <div class="d-flex justify-content-between align-items-center">
-                    Numero piatti
-                    <span>${booking.num_dishes}</span>
+                    <span>Numero piatti</span>
+                    <span class="badge bg-secondary">${booking.num_dishes} piatti</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                     <span>Totale</span>
@@ -99,29 +102,6 @@ async function getData() {
         console.error("Error fetching booking data:", error);
     }
 }
-
-
-function isToday(dateTime) {
-    const today = new Date();          // data odierna
-    const date = new Date(dateTime);   // data da controllare
-
-    return date.getDate() === today.getDate() &&
-           date.getMonth() === today.getMonth() &&
-           date.getFullYear() === today.getFullYear();
-}
-
-function isTomorrow(dateTime) {
-    const today = new Date();          // data odierna
-    const date = new Date(dateTime);   // data da controllare
-
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    return date.getDate() === tomorrow.getDate() &&
-           date.getMonth() === tomorrow.getMonth() &&
-           date.getFullYear() === tomorrow.getFullYear();
-}
-
 
 document.addEventListener('DOMContentLoaded', getData);
 

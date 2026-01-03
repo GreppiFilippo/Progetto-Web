@@ -24,6 +24,7 @@
 
     $templateParams["titolo"] = "Mensa Campus - Prenotazioni";
     $templateParams["content"] = "template/content-admin-bookings.php";
+    $templateParams["js"] = array("js/admin-bookings.js");
 
     require "template/base-admin.php"
 ?>

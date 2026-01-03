@@ -787,7 +787,7 @@ class DatabaseHelper {
         }
     }
 
-    public function getReservations($limit) {
+    public function getFilteredReservations($date, $hour, $state, $name, $offset, $perPage) {
         $sql = "SELECT
                 r.reservation_id,
                 r.date_time,
@@ -805,22 +805,53 @@ class DatabaseHelper {
             FROM reservations r
             JOIN reservation_dishes rd ON rd.reservation_id = r.reservation_id
             JOIN users u ON r.user_id = u.user_id
-            GROUP BY u.user_id, r.date_time
-            ORDER BY r.date_time DESC
-            LIMIT ?;
-            ";
+            WHERE 1=1";
+        $params = [];
+        $types = "";
 
+        if ($date !== "") {
+            $sql .= " AND DATE(r.date_time) = ?";
+            $params[] = $date;
+            $types .= "s";
+        }
+
+        if ($hour !== "") {
+            $sql .= " AND HOUR(r.date_time) = ?";
+            $params[] = $hour;
+            $types .= "s";
+        }
+
+        if ($state !== "all") {
+            $sql .= " AND r.status = ?";
+            $params[] = $state;
+            $types .= "s";
+        }
+
+        if ($name !== "") {
+            $sql .= " AND (u.first_name LIKE ? OR u.last_name LIKE ?)";
+            $params[] = "%$name%";
+            $params[] = "%$name%";
+            $types .= "ss";
+        }
+
+        // Add pagination
+        $sql .= " GROUP BY r.reservation_id ORDER BY r.date_time DESC";
+
+        // Prepare and execute the statement
         $stmt = $this->db->prepare($sql);
         if (!$stmt) return [];
-        $stmt->bind_param("i", $limit);
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
         if (!$stmt->execute()) {
             $stmt->close();
             return [];
         }
         $res = $stmt->get_result();
         $rows = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
+        $paginatedRows = array_slice($rows, $offset, $perPage);
         $stmt->close();
-        return $rows;
+        return [$paginatedRows, $rows ? count($rows) : 0];
     }
 
     public function todayBookingsCount() {
@@ -895,41 +926,59 @@ class DatabaseHelper {
         return $rows;
     }
 
-    public function getFilteredDishes($category="all", $state="all", $name="") {
-    $sql = "SELECT * FROM dishes WHERE 1=1";
-    $params = [];
-    $types = "";
+    public function getFilteredDishes($category, $state, $name, $offset = 0, $limit = 6) {
+        $sql = "SELECT * FROM dishes WHERE 1=1";
+        $params = [];
+        $types = "";
 
-    if ($category !== "all") {
-        $sql .= " AND category_id = ?";
-        $params[] = $category;
-        $types .= "s";
-    }
-
-    if ($state !== "all") {
-        if ($state === "available") {
-            $sql .= " AND stock > 0";
-        } elseif ($state === "unavailable") {
-            $sql .= " AND stock = 0";
+        if ($category !== "all") {
+            $sql .= " AND category_id = ?";
+            $params[] = $category;
+            $types .= "s";
         }
+
+        if ($state !== "all") {
+            if ($state === "available") $sql .= " AND stock > 0";
+            elseif ($state === "unavailable") $sql .= " AND stock = 0";
+        }
+
+        if ($name !== "") {
+            $sql .= " AND name LIKE ?";
+            $params[] = "%" . $name . "%";
+            $types .= "s";
+        }
+
+        $stmt = $this->db->prepare($sql);
+        if (!empty($params)) $stmt->bind_param($types, ...$params);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $data = $res->fetch_all(MYSQLI_ASSOC);
+        $paginatedRes = array_slice($data, $offset, $limit);
+        return [$paginatedRes, $data ? count($data) : 0];
     }
 
-    if ($name !== "") {
-        $sql .= " AND name LIKE ?";
-        $params[] = "%" . $name . "%";
-        $types .= "s";
+    public function getReservationStats() {
+        $sql = "SELECT
+            COUNT(CASE WHEN r.status = 'Completato' THEN 1 END) AS Completato,
+            COUNT(CASE WHEN r.status = 'In Preparazione' THEN 1 END) AS InPreparazione,
+            COUNT(CASE WHEN r.status = 'Pronto al ritiro' THEN 1 END) AS ProntoAlRitiro
+        FROM reservations r
+        JOIN reservation_dishes rd ON rd.reservation_id = r.reservation_id
+        WHERE DATE(r.date_time) = CURRENT_DATE
+        ";  
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return [];
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return [];      
+        }
+        $res = $stmt->get_result();
+        $row = $res ? $res->fetch_assoc() : null;
+        $stmt->close();
+        return $row ? [
+            "completed" => (int)$row['Completato'],
+            "preparing" => (int)$row['InPreparazione'],
+            "ready" => (int)$row['ProntoAlRitiro']
+        ] : [];
     }
-
-    $stmt = $this->db->prepare($sql);
-    if (!$stmt) return [];
-
-    if (!empty($params)) {
-        $stmt->bind_param($types, ...$params);
-    }
-
-    $stmt->execute();
-    $res = $stmt->get_result();
-
-    return $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
-}
 }

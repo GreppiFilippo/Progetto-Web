@@ -28,7 +28,6 @@
 
     $templateParams["titolo"] = "Mensa Campus - Dashboard";
     $templateParams["content"] = "template/content-admin-dashboard.php";
-    $templateParams["reservations"] = $dbh->getReservations(5);
     $templateParams["js"] = array("js/admin-dashboard.js");
 
     require "template/base-admin.php"

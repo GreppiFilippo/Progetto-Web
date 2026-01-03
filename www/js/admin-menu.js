@@ -1,28 +1,36 @@
-const debouncedData = debounce(loadData, 300);
+import { availableBadge, categoryBadge, debounce } from './common-functions.js';
 
-document.getElementById("category").addEventListener("change", loadData);
-document.getElementById("state").addEventListener("change", loadData);
-document.getElementById("name").addEventListener("keyup", debouncedData);
+let currentPage = 1;
+const resultsPerPage = 4;
 
-async function loadData() {
+const debouncedData = debounce(loadData, 150);
+
+document.getElementById("category").addEventListener("change", () => loadData(1));
+document.getElementById("state").addEventListener("change", () => loadData(1));
+document.getElementById("name").addEventListener("keyup", debounce(() => loadData(1), 150));
+
+
+async function loadData(page = 1) {
     try {
-        const cat = document.getElementById("category");
-        const state = document.getElementById("state");
+        currentPage = page;
+
+        const cat = document.getElementById("category").value;
+        const state = document.getElementById("state").value;
         const name = document.getElementById("name").value.trim();
 
         const params = new URLSearchParams({
-            category: cat.value,
-            state: state.value,
-            name
+            category: cat,
+            state: state,
+            name,
+            page: currentPage,
+            per_page: resultsPerPage
         });
 
-
         const res = await fetch(`utils/api-admin-menu.php?${params.toString()}`);
-        if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-        }
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
-        renderDishes(data);
+        renderDishes(data.dishes);
+        renderPagination(data.totalPages, currentPage);
     } catch (error) {
         console.error("Error fetching booking data:", error);
     }
@@ -50,7 +58,7 @@ function renderDish(dish) {
                         ${availableBadge(dish.stock)}
                     </div>
 
-                    <hr class="my-2">
+                    <hr class="my-2"/>
 
                     <div class="d-flex justify-content-between">
                         <span>Categoria</span>
@@ -72,74 +80,50 @@ function renderDish(dish) {
                         <small class="text-muted">${dish.description}</small>
                     </div>
 
+                    <hr class="my-2">
+
+                    <div class="btn-group g-1 d-flex">
+                        <button type="button" class="btn btn-outline-primary">
+                            <i class="bi bi-pencil text-primary"></i>
+                            Modifica
+                        </button>
+                        <button type="button" class="btn btn-outline-danger ms-1">
+                            <i class="bi bi-trash text-danger"></i>
+                            Elimina
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     `;
 }
 
+function renderPagination(totalPages, currentPage) {
+    const container = document.getElementById("pagination");
+    container.innerHTML = "";
 
-function debounce(func, wait) {
-    let timeout;
-    return function(...args) {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
-    };
-}
+    const prev = document.createElement("button");
+    prev.className = "btn btn-outline-secondary mx-1";
+    prev.textContent = "<";
+    prev.disabled = currentPage === 1;
+    prev.addEventListener("click", () => loadData(currentPage - 1));
+    container.appendChild(prev);
 
-function availableBadge(stock) {
-    stock = parseInt(stock, 10);
-    if (stock > 10) {
-        return `
-            <span class="badge bg-success text-white p-2">
-                <i class="bi bi-check-circle me-1"></i>
-                Disponibile
-            </span>
-        `;
-    } else if (stock > 0) {
-        return `
-            <span class="badge bg-warning text-dark p-2">
-                <i class="bi bi-exclamation-triangle me-1"></i>
-                Disponibilità limitata
-            </span>
-        `;
-    } else {
-        return `
-            <span class="badge bg-danger text-white p-2">
-                <i class="bi bi-x-circle me-1"></i>
-                Non disponibile
-            </span>
-        `;
+    for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement("button");
+        btn.className = `btn btn-outline-primary mx-1 ${i === currentPage ? "active" : ""}`;
+        btn.textContent = i;
+        btn.addEventListener("click", () => loadData(i));
+        container.appendChild(btn);
     }
+
+    const next = document.createElement("button");
+    next.className = "btn btn-outline-secondary mx-1";
+    next.textContent = ">";
+    next.disabled = currentPage === totalPages;
+    next.addEventListener("click", () => loadData(currentPage + 1));
+    container.appendChild(next);
 }
 
-function categoryBadge(category) {
-    if (category == 1) {
-        return `
-            <span class="badge bg-warning text-dark p-2">
-                Primi
-            </span>
-        `;
-    } else if (category == 2) {
-        return `
-            <span class="badge bg-info text-white p-2">
-                Secondi
-            </span>
-        `;
-    } else if (category == 3) {
-        return `
-            <span class="badge bg-success text-white p-2">
-                Contorni
-            </span>
-        `;
-    } else if (category == 4) {
-        return `
-            <span class="badge bg-danger text-white p-2">
-                Dolci
-            </span>
-        `;
-    }
-}
-
-
+renderPagination();
 loadData();
