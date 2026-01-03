@@ -23,7 +23,8 @@
 
     $templateParams["titolo"] = "Mensa Campus - Gestione menù";
     $templateParams["content"] = "template/content-admin-menu.php";
-    $templateParams["categorie"] = $dbh->getAllCategories();
+    $templateParams["categories"] = $dbh->getAllCategories();
+    $templateParams["js"] = array("js/admin-menu.js");
 
     require "template/base-admin.php"
 ?>

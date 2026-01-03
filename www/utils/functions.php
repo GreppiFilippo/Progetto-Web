@@ -127,8 +127,11 @@ if (!defined('IN_APP')) {
                 <i class="bi bi-x-circle me-1" aria-hidden="true"></i>
                 Non disponibile
             </span>';
-
         }
+    }
+
+    function bookingStatusBadge(string $status): string {
+        return '<span class="badge ' . reservationBadgeClass($status) . ' p-2">' . htmlspecialchars($status) . '</span>';
     }
 
     function reservationBadgeClass(string $status): string {
@@ -136,8 +139,8 @@ if (!defined('IN_APP')) {
             'Completato'        => 'text-bg-success',
             'Annullato'         => 'text-bg-danger',
             'Pronto al ritiro'  => 'text-bg-info',
-            'In Preparazione'   => 'text-bg-warning',
-            'Da Visualizzare'   => 'text-bg-secondary',
+            'In preparazione'   => 'text-bg-warning',
+            'Da visualizzare'   => 'text-bg-secondary',
             default             => 'text-bg-dark',
         };
     }
@@ -147,8 +150,8 @@ if (!defined('IN_APP')) {
             'Completato'        => 'bg-success-subtle border-success',
             'Annullato'         => 'bg-danger-subtle border-danger',
             'Pronto al ritiro'  => 'bg-info-subtle border-info',
-            'In Preparazione'   => 'bg-warning-subtle border-warning',
-            'Da Visualizzare'   => 'bg-body-tertiary border-secondary',
+            'In preparazione'   => 'bg-warning-subtle border-warning',
+            'Da visualizzare'   => 'bg-body-tertiary border-secondary',
             default             => 'bg-light border-dark',
         };
     }

@@ -164,10 +164,14 @@ SELECT
         WHEN r.status = 'Completato' THEN 'Completato'
         WHEN r.status = 'Pronto al ritiro' THEN 'Pronto al ritiro'
         ELSE 'In preparazione'
-    END AS status
+    END AS status,
+    COUNT(DISTINCT rd.dish_id) AS num_dishes
 FROM reservations r
+JOIN reservation_dishes rd ON rd.reservation_id = r.reservation_id
 JOIN users u ON r.user_id = u.user_id
+GROUP BY u.user_id, r.date_time
 ORDER BY r.date_time DESC;
+
 
 
 -- Prenotazioni in preparazione (per la dashboard admin)
@@ -361,7 +365,7 @@ SELECT
     (SELECT SUM(total_amount) FROM reservations WHERE DATE(date_time) = CURDATE()) AS today_revenue,
     (SELECT COUNT(*) FROM dishes WHERE stock < 10) AS low_stock_items;
 
--- Piatti più venduti (Top 10)
+-- Piatti più venduti (Top 3)
 SELECT d.name, d.price, SUM(rd.quantity) AS total_sold, 
        SUM(rd.quantity * d.price) AS revenue,
        c.category_name
@@ -370,7 +374,7 @@ JOIN reservation_dishes rd ON d.dish_id = rd.dish_id
 JOIN categories c ON d.category_id = c.category_id
 GROUP BY d.dish_id, d.name, d.price, c.category_name
 ORDER BY total_sold DESC
-LIMIT 10;
+LIMIT 3;
 
 -- Fatturato per categoria
 SELECT c.category_name, 

@@ -1,4 +1,9 @@
 <?php
+    ini_set('display_errors', 1); // Mostra gli errori a schermo
+    ini_set('display_startup_errors', 1); // Mostra errori di inizializzazione
+    error_reporting(E_ALL); // Segnala tutti i tipi di errore
+
+
     require_once "bootstrap.php";
     
     // Admin template access control
@@ -23,6 +28,8 @@
 
     $templateParams["titolo"] = "Mensa Campus - Dashboard";
     $templateParams["content"] = "template/content-admin-dashboard.php";
+    $templateParams["reservations"] = $dbh->getReservations(5);
+    $templateParams["js"] = array("js/admin-dashboard.js");
 
     require "template/base-admin.php"
 ?>

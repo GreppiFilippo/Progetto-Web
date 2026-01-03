@@ -786,5 +786,150 @@ class DatabaseHelper {
             return ['success' => false, 'error' => $e->getMessage()];
         }
     }
+
+    public function getReservations($limit) {
+        $sql = "SELECT
+                r.reservation_id,
+                r.date_time,
+                r.total_amount,
+                u.user_id,
+                u.first_name,
+                u.last_name,
+                u.email,
+                CASE
+                    WHEN r.status = 'Completato' THEN 'Completato'
+                    WHEN r.status = 'Pronto al ritiro' THEN 'Pronto al ritiro'
+                    ELSE 'In preparazione'
+                END AS status,
+                COUNT(DISTINCT rd.dish_id) AS num_dishes
+            FROM reservations r
+            JOIN reservation_dishes rd ON rd.reservation_id = r.reservation_id
+            JOIN users u ON r.user_id = u.user_id
+            GROUP BY u.user_id, r.date_time
+            ORDER BY r.date_time DESC
+            LIMIT ?;
+            ";
+
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return [];
+        $stmt->bind_param("i", $limit);
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return [];
+        }
+        $res = $stmt->get_result();
+        $rows = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
+        $stmt->close();
+        return $rows;
+    }
+
+    public function todayBookingsCount() {
+        $sql = "SELECT COUNT(*) AS count
+                FROM reservations r
+                WHERE DATE(r.date_time) = CURRENT_DATE;";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return 0;
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return 0;
+        }
+        $res = $stmt->get_result();
+        $row = $res ? $res->fetch_assoc() : null;
+        $stmt->close();
+        return $row ? (int)$row['count'] : 0;
+    }
+
+    public function countUsers() {
+        $sql = "SELECT COUNT(*) 
+                AS user_count
+                FROM users
+                WHERE admin=0;";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return 0;
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return 0;
+        }
+        $res = $stmt->get_result();
+        $row = $res ? $res->fetch_assoc() : null;
+        $stmt->close();
+        return $row ? (int)$row['user_count'] : 0;
+    }
+
+    public function todayEarnings(){
+        $sql = "SELECT COALESCE(SUM(total_amount), 0)
+                AS today_revenue
+                FROM reservations
+                WHERE DATE(date_time) = CURDATE();";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return 0;
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return 0;
+        }
+        $res = $stmt->get_result();
+        $row = $res ? $res->fetch_assoc() : null;
+        $stmt->close();
+        return $row ? (float)$row['today_revenue'] : 0.0;
+    }
+
+    public function getTopDishes($limit) {
+        $sql = "SELECT d.name, SUM(rd.quantity) AS total_sold, 
+                    c.category_name
+                FROM dishes d
+                JOIN reservation_dishes rd ON d.dish_id = rd.dish_id
+                JOIN categories c ON d.category_id = c.category_id
+                GROUP BY d.dish_id, d.name, c.category_name
+                ORDER BY total_sold DESC
+                LIMIT ?;";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) return [];
+        $stmt->bind_param("i", $limit);
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return [];
+        }
+        $res = $stmt->get_result();
+        $rows = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
+        $stmt->close();
+        return $rows;
+    }
+
+    public function getFilteredDishes($category="all", $state="all", $name="") {
+    $sql = "SELECT * FROM dishes WHERE 1=1";
+    $params = [];
+    $types = "";
+
+    if ($category !== "all") {
+        $sql .= " AND category_id = ?";
+        $params[] = $category;
+        $types .= "s";
+    }
+
+    if ($state !== "all") {
+        if ($state === "available") {
+            $sql .= " AND stock > 0";
+        } elseif ($state === "unavailable") {
+            $sql .= " AND stock = 0";
+        }
+    }
+
+    if ($name !== "") {
+        $sql .= " AND name LIKE ?";
+        $params[] = "%" . $name . "%";
+        $types .= "s";
+    }
+
+    $stmt = $this->db->prepare($sql);
+    if (!$stmt) return [];
+
+    if (!empty($params)) {
+        $stmt->bind_param($types, ...$params);
+    }
+
+    $stmt->execute();
+    $res = $stmt->get_result();
+
+    return $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
 }
-?>
+}

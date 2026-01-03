@@ -20,34 +20,46 @@
     </section>
 
     <!-- FILTERS -->
-    <form class="row g-2">
+    <form class="row g-2 mb-3">
         <div class="col-12 col-md-3">
-            <label for="cathegory" class="form-label">Categoria</label>
-            <select id="cathegory" class="form-select">
-                <?php foreach($templateParams['categorie'] as $categoria): ?>
-                <option 
-                    value="<?php echo $categoria['category_id']; ?>" 
-                    <?php if ($categoriaSelezionata == $categoria['category_id']) echo 'selected'; ?>
-                >
-                    <?php echo ucfirst($categoria['category_name']); ?>
-                </option>
+            <label for="category" class="form-label">Categoria</label>
+            <select id="category" class="form-select">
+                <option value="all" <?php if ($categoriaSelezionata == 'all') echo 'selected'; ?>>Tutte</option>
+                <?php foreach($templateParams['categories'] as $categoria): ?>
+                    <option 
+                        value="<?php echo $categoria['category_id']; ?>" 
+                        <?php if ($categoriaSelezionata == $categoria['category_id']) echo 'selected'; ?>
+                    >
+                        <?php echo ucfirst($categoria['category_name']); ?>
+                    </option>
                 <?php endforeach; ?>
             </select>
         </div>
         <div class="col-12 col-md-3">
             <label for="state" class="form-label">Stato</label>
-            <select id="state" class="form-select"></select>
+            <select id="state" class="form-select">
+                <option value="all" <?php if ($statoSelezionato == 'all') echo 'selected'; ?>>Tutti</option>
+                <option value="available" <?php if ($statoSelezionato == 'available') echo 'selected'; ?>>Disponibile</option>
+                <option value="unavailable" <?php if ($statoSelezionato == 'unavailable') echo 'selected'; ?>>Non disponibile</option>
+            </select>
         </div>
         <div class="col-12 col-md-6">
-            <label for="search" class="form-label">Cerca</label>
-            <input type="text" class="form-control" placeholder="Cerca piatto per nome..." id="search">
+            <label for="name" class="form-label">Cerca</label>
+            <input type="text" class="form-control" placeholder="Cerca piatto per nome..." id="name">
         </div>
     </form>
 
     <!-- DISH LIST -->
-    <section>
-        <table id="dishes">
-            
-        </table>
+    <section id="dish_list">
     </section>
+
+    <?php
+    if(isset($templateParams["js"])):
+        foreach($templateParams["js"] as $script):
+    ?>
+        <script src="<?php echo $script; ?>"></script>
+    <?php
+        endforeach;
+    endif;
+    ?>
 </main>
