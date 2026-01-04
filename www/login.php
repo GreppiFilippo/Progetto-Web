@@ -6,7 +6,7 @@ require_once 'bootstrap.php';
 
 if (isUserLoggedIn()) {
     if (isAdmin()) {
-        header("Location: admin-add-dish.php");
+        header("Location: admin-dashboard.php");
         exit();
     }
     header("Location: index.php");
@@ -24,7 +24,7 @@ if (isset($_POST["email"]) && isset($_POST["password"])) {
     } else {
         registerLoggedUser($login_result[0]);
         if (isAdmin()) {
-            header("Location: admin-add-dish.php");
+            header("Location: admin-dashboard.php");
             exit();
         }
         header("Location: index.php");
