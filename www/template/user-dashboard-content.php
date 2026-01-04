@@ -56,8 +56,9 @@ if (!defined('IN_APP')) {
                 <h2 id="my-bookings-heading" class="h5">Le Mie Prenotazioni</h2>
 
                 <?php if (empty($templateParams["reservations"])): ?>
-                    <div class="alert alert-info mb-0" role="alert">
-                        Nessuna prenotazione trovata.
+                    <div class="alert d-flex align-items-center p-3 rounded-3 mb-0" role="alert">
+                        <i class="bi bi-info-circle-fill fs-4 me-3" aria-hidden="true"></i>
+                        <span>Nessuna prenotazione trovata.</span>
                     </div>
                 <?php else: ?>
 
