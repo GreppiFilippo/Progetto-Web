@@ -4,7 +4,7 @@ if (!defined('IN_APP')) {
   exit;
 }
 ?>
-<main class="container my-5 col-lg-6 mx-auto">
+<main class="container my-5">
 
     <!-- Page Header -->
     <header class="text-center">
@@ -27,7 +27,7 @@ if (!defined('IN_APP')) {
     </header>
 
     <!-- Filter -->
-    <form action="#" method="GET" class="card my-4 shadow-sm rounded-4">
+    <form action="menu.php" method="GET" id="filterForm" class="card my-4 shadow-sm rounded-4">
         <div class="card-body">
             <div class="row g-3">
 
@@ -37,7 +37,7 @@ if (!defined('IN_APP')) {
                         $categoriaSelezionata = isset($_GET['categoria']) ? intval($_GET['categoria']) : 0;
                         $ricerca = $_GET['cerca'] ?? "";
                     ?>
-                    <select name="categoria" id="categoria" class="form-select" onchange="this.form.submit()">
+                    <select name="categoria" id="categoria" class="form-select" aria-describedby="resultsAnnounce">
                         
                         <!-- Opzione "Tutte le categorie" -->
                         <option value="0" <?php if ($categoriaSelezionata == 0) echo 'selected'; ?>>
@@ -66,14 +66,18 @@ if (!defined('IN_APP')) {
                         class="form-control" 
                         placeholder="Cerca per nome..." 
                         value="<?php echo htmlspecialchars($ricerca); ?>"
-                        oninput="debouncedSubmit(this.form)"
+                        aria-describedby="resultsAnnounce"
                     />                
                 </div>
             </div>
         </div>
     </form>
 
+    <!-- Live region for screen readers -->
+    <div id="resultsAnnounce" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+
     <?php 
+    $totalePiatti = 0;
     foreach($templateParams["categorie"] as $categoria):
         if ($categoriaSelezionata != 0 && $categoriaSelezionata != $categoria['category_id']) {
             continue;
@@ -89,14 +93,16 @@ if (!defined('IN_APP')) {
         if (empty($piattiFiltrati)) {
             continue;
         }
+        
+        $totalePiatti += count($piattiFiltrati);
     ?>
 
         <!-- Menu Items -->
-        <section class="my-5">
+        <section class="my-5" data-category-id="<?php echo $categoria['category_id']; ?>">
             <h2 class="h4 mb-3"><?php echo ucfirst($categoria['category_name']); ?></h2>
             <hr>
 
-            <ul class="row row-cols-1 row-cols-md-2 g-4 list-unstyled">
+            <ul class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 list-unstyled" id="menuList-<?php echo $categoria['category_id']; ?>">
 
             <?php
                 foreach($piattiFiltrati as $piatto):
@@ -126,7 +132,7 @@ if (!defined('IN_APP')) {
                         <?php echo htmlspecialchars($piatto['description']); ?>
                     </p>
 
-                    <div class="d-flex align-items-center gap-2 mb-2">
+                    <div class="d-flex align-items-center flex-wrap gap-2 mb-2">
                         <!-- Tipologia -->
                         <?php getTags($dbh->getDietaryTagsForDish($piatto["dish_id"])); ?>
                         <!-- Calorie -->
@@ -150,6 +156,8 @@ if (!defined('IN_APP')) {
         </section>
     <?php endforeach; ?>
 
+    <div id="menuContainer" data-total-results="<?php echo $totalePiatti; ?>"></div>
+
     <!-- Login Alert -->
     <?php if (!isUserLoggedIn()): ?>
         <div class="alert d-flex align-items-center p-3 rounded-3">
@@ -157,8 +165,8 @@ if (!defined('IN_APP')) {
         <span>
             <strong>Accedi per prenotare</strong>
             - Per prenotare i tuoi piatti preferiti devi prima
-            <a href="login.php" class="alert-link">accedere</a> o 
-            <a href="register.php" class="alert-link">registrarti</a>.
+            <a href="login.php" class="alert-link text-decoration-none">accedere</a> o 
+            <a href="register.php" class="alert-link text-decoration-none">registrarti</a>.
         </span>
         </div>
     <?php endif; ?>

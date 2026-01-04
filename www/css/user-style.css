@@ -173,6 +173,19 @@ div.card>div.ratio img,
     object-position: center;
 }
 
+/* Limit card width on larger screens to prevent image stretching */
+@media (min-width: 768px) and (max-width: 1199px) {
+    /* 2 columns: limit individual card max-width and align left */
+    .row-cols-md-2 > .col {
+        max-width: 450px;
+    }
+    
+    /* Ensure cards align left instead of centering */
+    .row-cols-md-2 {
+        justify-content: flex-start;
+    }
+}
+
 /* adattamento per schermi piccoli */
 @media (max-width: 576px) {
 
