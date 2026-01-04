@@ -22,6 +22,21 @@ nav.navbar ul li:hover {
     font-weight: bold;
 }
 
+a.btn {
+    color: #2C5F4E;
+    border-color: #2C5F4E;
+}
+
+a.btn:hover {
+    color: white;
+    background-color: #2C5F4E !important;
+    border-color: #2C5F4E !important;
+}
+
+a.btn:hover i {
+    color: white;
+}
+
 /* Buttons */
 form input[type="submit"],
 form button[type="submit"],
@@ -44,23 +59,8 @@ form button[type="submit"]:hover,
 a.btn:first-child:hover,
 aside section a.btn:first-of-type:hover,
 main .col-md-8 ul li .d-flex a.btn-outline-primary:hover {
-    background-color: #24492B;
-    border-color: #24492B;
-}
-
-a.btn {
-    color: #2C5F4E;
-    border-color: #2C5F4E;
-}
-
-a.btn:hover {
-    color: white;
-    background-color: #2C5F4E;
-    border-color: #2C5F4E;
-}
-
-a.btn:hover i {
-    color: white;
+    background-color: #24492B !important;
+    border-color: #24492B !important;
 }
 
 /* Icons */
