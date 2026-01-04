@@ -79,24 +79,34 @@ if (!defined('IN_APP')) {
                         <ul class="w-100 list-unstyled">
                             <?php foreach($availableDishes as $dish): ?>
                                 <li class="mb-3 p-3 border rounded bg-light">
-                                    <div class="d-flex justify-content-between align-items-start">
+                                    <div class="d-flex flex-column flex-sm-row justify-content-between gap-3">
                                         <div class="flex-grow-1">
                                             <strong class="d-block"><?php echo htmlspecialchars($dish["name"]); ?></strong>
                                             <span class="small text-muted d-block mb-2"><?php echo htmlspecialchars($dish["description"]); ?></span>
                                             <?php getTags($dbh->getDietaryTagsForDish($dish["dish_id"])); ?>
                                         </div>
-                                        <div class="ms-4 text-end">
-                                            <strong class="d-block fs-5 mb-2">€<?php echo htmlspecialchars($dish["price"]); ?></strong>
-                                            <label for="dish-<?php echo $dish['dish_id']; ?>" class="form-label small mb-1">Quantità</label>
-                                                <input type="number" class="form-control dish-quantity-input" 
-                                                    id="dish-<?php echo $dish['dish_id']; ?>" 
-                                                    name="dishes[<?php echo $dish['dish_id']; ?>]" 
-                                                    min="0" max="<?php echo htmlspecialchars($dish["stock"]); ?>" 
-                                                    value="0" placeholder="0" 
-                                                    data-dish-id="<?php echo $dish['dish_id']; ?>"
-                                                    data-dish-name="<?php echo htmlspecialchars($dish['name']); ?>"
-                                                    data-price="<?php echo htmlspecialchars($dish["price"]); ?>"
-                                                />
+                                        <div class="d-flex flex-sm-column align-items-end justify-content-end gap-2">
+                                            <strong class="fs-5">€<?php echo htmlspecialchars($dish["price"]); ?></strong>
+                                            <div class="d-flex flex-column align-items-end">
+                                                <label for="dish-<?php echo $dish['dish_id']; ?>" class="form-label small mb-1">Quantità</label>
+                                                <div class="input-group" style="width: 130px;">
+                                                    <button class="btn btn-outline-secondary quantity-btn px-2" type="button" data-action="decrease" data-target="dish-<?php echo $dish['dish_id']; ?>" aria-label="Diminuisci quantità">
+                                                        <i class="bi bi-dash" aria-hidden="true"></i>
+                                                    </button>
+                                                    <input type="number" class="form-control text-center dish-quantity-input px-1" style="min-width: 50px;" 
+                                                        id="dish-<?php echo $dish['dish_id']; ?>" 
+                                                        name="dishes[<?php echo $dish['dish_id']; ?>]" 
+                                                        min="0" max="<?php echo htmlspecialchars($dish["stock"]); ?>" 
+                                                        value="0" placeholder="0" 
+                                                        data-dish-id="<?php echo $dish['dish_id']; ?>"
+                                                        data-dish-name="<?php echo htmlspecialchars($dish['name']); ?>"
+                                                        data-price="<?php echo htmlspecialchars($dish["price"]); ?>"
+                                                    />
+                                                    <button class="btn btn-outline-secondary quantity-btn px-2" type="button" data-action="increase" data-target="dish-<?php echo $dish['dish_id']; ?>" aria-label="Aumenta quantità">
+                                                        <i class="bi bi-plus" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </li>
