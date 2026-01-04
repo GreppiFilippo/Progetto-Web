@@ -84,7 +84,7 @@
     </form>
 
     <!-- DATA -->
-    <section id="booking_list" class="row m-0"> 
+    <section id="booking_list" class="row m-0 g-2"> 
     </section>
 
     <div class="d-flex justify-content-center mt-3" id="pagination">
@@ -99,7 +99,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModalBtn">
                     Chiudi
                     </button>
                 </div>

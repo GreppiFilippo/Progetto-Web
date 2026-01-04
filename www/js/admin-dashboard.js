@@ -1,5 +1,14 @@
 import { isToday, isTomorrow } from './common-functions.js';
 
+document.getElementById("add-dish").addEventListener("click", () => {
+    window.location.href = "admin-add-dish.php";
+});
+
+document.getElementById("manage-bookings").addEventListener("click", () => {
+    window.location.href = "admin-bookings.php";
+});
+
+
 function renderBooking(bookings) {
     if (!Array.isArray(bookings)) return '';
     let html = '';
@@ -25,31 +34,33 @@ function renderBookingItem(booking) {
     const time = String(dt.getHours()).padStart(2, '0') + ":" + String(dt.getMinutes()).padStart(2, '0');
 
     return `
-        <div class="card shadow-sm mb-2 col-md-6 g-md-2">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h3 class="h6 mb-0 text-truncate">
-                        #${booking.reservation_id} ${booking.first_name} ${booking.last_name}
-                    </h3>
-                    ${booking.badge || ''}
-                </div>
+        <div class="col-12 col-md-6 g-md-2">
+            <div class="card shadow-sm mb-2 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h3 class="h6 mb-0 text-truncate">
+                            #${booking.reservation_id} ${booking.first_name} ${booking.last_name}
+                        </h3>
+                        ${booking.badge || ''}
+                    </div>
 
-                <!-- Separatore -->
-                <hr class="my-2">
+                    <!-- Separatore -->
+                    <hr class="my-2">
 
-                <!-- Data/Ora sotto -->
-                <div class="small text-muted">
-                    <span>Data</span>
-                    <span>${displayDate} ${time}</span>
-                </div>
+                    <!-- Data/Ora sotto -->
+                    <div class="small text-muted">
+                        <span>Data</span>
+                        <span>${displayDate} ${time}</span>
+                    </div>
 
-                <div class="d-flex justify-content-between align-items-center">
-                    <span>Numero piatti</span>
-                    <span class="badge bg-secondary">${booking.num_dishes} piatti</span>
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-                    <span>Totale</span>
-                    <span>€ ${booking.total_amount}</span>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Numero piatti</span>
+                        <span class="badge bg-secondary">${booking.num_dishes} piatti</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Totale</span>
+                        <span>€ ${booking.total_amount}</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -92,7 +103,7 @@ async function getData() {
         document.getElementById("bookings").innerHTML = data.bookings_count;
         document.getElementById("users").innerHTML = data.users_count;
         document.getElementById("earnings").innerHTML = data.earnings_today;
-        //document.getElementById("active-dishes").textContent = data.active_dishes;
+        document.getElementById("dishes").innerHTML = data.active_dishes;
         document.getElementById("top_dishes").innerHTML = renderTopDishes(data.top_dishes);
     } catch (error) {
         console.error("Error fetching booking data:", error);

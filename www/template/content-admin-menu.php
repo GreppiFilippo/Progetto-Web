@@ -11,7 +11,7 @@
             </div>
             
             <div class="col-12 col-md-auto text-md-end">
-                <button type="reset" class="btn admin-btn btn-primary w-100 w-md-auto">
+                <button type="reset" class="btn admin-btn btn-primary w-100 w-md-auto" id="add-dish">
                     <i class="bi admin-icon bi-plus-circle me-1"></i>
                     Aggiungi piatto
                 </button>
@@ -48,7 +48,7 @@
     </form>
 
     <!-- DISH LIST -->
-    <section id="dish_list" class="row m-0">
+    <section id="dish_list" class="row m-0 g-2">
     </section>
 
     <div class="d-flex justify-content-center mt-3" id="pagination">

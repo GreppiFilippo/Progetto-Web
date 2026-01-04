@@ -1,4 +1,4 @@
-import { isToday, isTomorrow } from './common-functions.js';
+import {isToday, isTomorrow, debounce} from './common-functions.js';
 
 let bookingsCache = [];
 let currentPage = 1;
@@ -7,7 +7,7 @@ const resultsPerPage = 4;
 document.getElementById('date').addEventListener('change', () => loadData(1));
 document.getElementById('hour').addEventListener('change', () => loadData(1));  
 document.getElementById('state').addEventListener('change', () => loadData(1));
-document.getElementById('name').addEventListener('input', () => loadData(1));
+document.getElementById('name').addEventListener('input', debounce(() => loadData(1), 150));
 
 async function loadData(page = 1) {
     const url = `utils/api-admin-bookings.php`;
@@ -47,7 +47,7 @@ async function loadData(page = 1) {
     }
 }
 
-document.addEventListener('click', (e) => {
+document.addEventListener('click', async (e) => {
     const btn = e.target.closest('.btn-outline-primary');
     if (!btn) return;
 
@@ -55,102 +55,93 @@ document.addEventListener('click', (e) => {
     const data = bookingsCache.find(b => b.reservation_id == bookingId);
     if (!data) return;
 
-    fetch(`utils/api-reservation-details.php?reservation_id=${bookingId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            console.log("Dati ricevuti");
-            return response.json();
-        })
-        .then(dishes => {
-            let detailsHtml = '<h5>Dettagli Prenotazione</h5><ul class="list-group">';
-            dishes.forEach(dish => {
-                detailsHtml += `
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        ${dish.name} (x${dish.quantity})
-                        <span>€ ${dish.price * dish.quantity}</span>
-                    </li>
-                `;
-            });
-            detailsHtml += '</ul>';
-            document.getElementById('modalContent').innerHTML = detailsHtml;
-        })
-        .catch(error => {
-            console.error("Error fetching booking details:", error);
-            document.getElementById('modalContent').innerHTML = '<p class="text-danger">Errore nel caricamento dei dettagli.</p>';
-        });
-
-        const modal = new bootstrap.Modal(
-            document.getElementById('bookingModal')
-    );
-
-    modal.show();
-});
-
-document.addEventListener('click', (e) => {
-    // intercetto click su pulsante rosso
-    const btn = e.target.closest('.btn-outline-danger');
-    if (!btn) return;
-
-    const bookingId = btn.dataset.id;
-    const data = bookingsCache.find(b => b.reservation_id == bookingId);
-    if (!data) return;
-
-    // Aggiorno il contenuto del modal
-    const modalContent = document.getElementById('modalContent');
-    modalContent.innerHTML = `
-        <h5>Conferma Eliminazione</h5>
-        <p>Sei sicuro di voler eliminare la prenotazione di 
-            <strong>${data.first_name} ${data.last_name}</strong> 
-            del <strong>${new Date(data.date_time).toLocaleString()}</strong>?
-        </p>
-        <div class="d-flex justify-content-end">
-            <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Elimina</button>
-        </div>
-    `;
-
-    // Creo il modal Bootstrap
+    // Creo modal Bootstrap
     const modalEl = document.getElementById('bookingModal');
     const modal = new bootstrap.Modal(modalEl);
 
-    // Se il bottone esiste già, rimuovo eventuali listener precedenti
-    const oldBtn = document.getElementById('confirmDeleteBtn');
-    const newBtn = oldBtn.cloneNode(true);
-    oldBtn.replaceWith(newBtn);
+    try {
+        // Prendo i dettagli dal server
+        const res = await fetch(`utils/api-reservation-details.php?reservation_id=${bookingId}`);
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        const dishes = await res.json();
 
-    // Aggiungo listener pulito
-    newBtn.addEventListener('click', async () => {
-        try {
-            // Chiamata fetch POST
-            const res = await fetch('utils/api-admin-delete-reservation.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `reservation_id=${bookingId}&user_id=${data.user_id}`
-            });
 
-            const result = await res.json();
-
-            if (res.ok && result.success) {
-                alert("Prenotazione eliminata correttamente!");
-                modal.hide();
-                loadData(currentPage);
-            } else {
-                alert("Errore durante l'eliminazione della prenotazione.");
-                console.error(result);
-            }
-
-        } catch (error) {
-            alert("Errore nel server.");
-            console.error(error);
+        // Popolo il modal
+        let html = `
+            <h5>Aggiorna Prenotazione</h5>
+            <select id="statusSelect" class="form-select mb-3">
+                <option value="Da Visualizzare" ${data.status === 'Da Visualizzare' ? 'selected' : ''}>Da visualizzare</option>
+                <option value="In Preparazione" ${data.status === 'In Preparazione' ? 'selected' : ''}>In Preparazione</option>
+                <option value="Pronto al ritiro" ${data.status === 'Pronto al ritiro' ? 'selected' : ''}>Pronto al ritiro</option>
+                <option value="Completato" ${data.status === 'Completato' ? 'selected' : ''}>Completato</option>`
+        if (data.status === 'In Preparazione' || data.status === 'Da Visualizzare') {
+            html += `<option value="Annullato" ${data.status === 'Annullato' ? 'selected' : ''}>Annulla Prenotazione</option>`;
         }
-    });
+        html += `</select>
+            <h5>Dettagli Prenotazione</h5>
+            <ul class="list-group mb-2">
+        `;
+        dishes.forEach(dish => {
+            html += `<li class="list-group-item d-flex justify-content-between">
+                        ${dish.name} (x${dish.quantity})
+                        <span>€ ${dish.price * dish.quantity}</span>
+                    </li>`;
+        });
+        html += `</ul>
+                 <div class="d-flex justify-content-end">
+                     <button type="button" class="btn btn-primary" id="saveStatusBtn">Salva</button>
+                 </div>`;
 
-    // Mostro il modal
-    modal.show();
+        document.getElementById('modalContent').innerHTML = html;
+
+        // Listener sul pulsante Salva
+        const saveBtn = document.getElementById('saveStatusBtn');
+        saveBtn.addEventListener('click', async () => {
+            const newStatus = document.getElementById('statusSelect').value;
+            if (newStatus === data.status) return;
+
+            if (newStatus === 'Annullato') {
+                // Cancella prenotazione
+                const resDel = await fetch('utils/api-admin-delete-reservation.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `reservation_id=${bookingId}&user_id=${data.user_id}`
+                });
+                const delResult = await resDel.json();
+                if (resDel.ok && delResult.success) {
+                    alert("Prenotazione eliminata!");
+                    modal.hide();
+                    loadData(currentPage);
+                } else {
+                    alert("Errore nell'eliminazione");
+                }
+            } else {
+                // Aggiorna stato
+                const resUpd = await fetch('utils/api-admin-update-reservation.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `reservation_id=${bookingId}&status=${newStatus}`
+                });
+                const updResult = await resUpd.json();
+                if (resUpd.ok && updResult.success) {
+                    alert("Stato aggiornato!");
+                    modal.hide();
+                    loadData(currentPage);
+                } else {
+                    alert("Errore nell'aggiornamento"+updResult.message);
+                }
+            }
+        });
+
+        modal.show();
+
+    } catch (err) {
+        console.error(err);
+        document.getElementById('modalContent').innerHTML = '<p class="text-danger">Errore nel caricamento dei dettagli.</p>';
+        modal.show();
+    }
 });
+
 
 
 
@@ -179,45 +170,44 @@ function renderBookingItem(booking) {
     const time = String(dt.getHours()).padStart(2, '0') + ":" + String(dt.getMinutes()).padStart(2, '0');
 
     return `
-        <div class="card shadow-sm col-md-6 g-md-1">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h3 class="h6 mb-0 text-truncate">
-                        #${booking.reservation_id} ${booking.first_name} ${booking.last_name}
-                    </h3>
-                    ${booking.badge || ''}
-                </div>
+        <div class="col-12 col-md-6 g-md-2">
+            <div class="card shadow-sm mb-2 h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h3 class="h6 mb-0 text-truncate">
+                            #${booking.reservation_id} ${booking.first_name} ${booking.last_name}
+                        </h3>
+                        ${booking.badge || ''}
+                    </div>
 
-                <!-- Separatore -->
-                <hr class="my-2">
+                    <!-- Separatore -->
+                    <hr class="my-2">
 
-                <!-- Data/Ora sotto -->
-                <div class="d-flex justify-content-between align-items-center">
-                    <span>Data</span>
-                    <span>${displayDate}</span>
-                </div>
+                    <!-- Data/Ora sotto -->
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Data</span>
+                        <span>${displayDate}</span>
+                    </div>
 
-                <div class="d-flex justify-content-between align-items-center">
-                    <span>Ora</span>
-                    <span>${time}</span>
-                </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Ora</span>
+                        <span>${time}</span>
+                    </div>
 
-                <div class="d-flex justify-content-between align-items-center">
-                    Numero piatti
-                    <span class="badge bg-secondary">${booking.num_dishes} piatti</span>
-                </div>
-                <div class="d-flex justify-content-between align-items-center">
-                    <span>Totale</span>
-                    <span>€ ${booking.total_amount}</span>
-                </div>
-                <hr class="my-2">
-                <div class="btn-group g-1 d-flex">
-                    <button type="button" class="btn btn-outline-primary" data-id="${booking.reservation_id}">
-                        <i class="bi bi-eye text-primary"></i>
-                    </button>
-                    <button type="button" class="btn btn-outline-danger ms-1 " data-id="${booking.reservation_id}">
-                        <i class="bi bi-trash text-danger"></i>
-                    </button>
+                    <div class="d-flex justify-content-between align-items-center">
+                        Numero piatti
+                        <span class="badge bg-secondary">${booking.num_dishes} piatti</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span>Totale</span>
+                        <span>€ ${booking.total_amount}</span>
+                    </div>
+                    <hr class="my-2">
+                    <div class="btn-group g-1 d-flex">
+                        <button type="button" class="btn btn-outline-primary" data-id="${booking.reservation_id}">
+                            <i class="bi bi-eye text-primary"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -250,5 +240,4 @@ function renderPagination(totalPages, currentPage) {
     container.appendChild(next);
 }
 
-loadData(1);
-
+loadData();

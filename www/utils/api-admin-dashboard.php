@@ -12,7 +12,7 @@
     $response["bookings_count"] = $dbh->todayBookingsCount();
     $response["users_count"] = $dbh->countUsers();
     $response["earnings_today"] = $dbh->todayEarnings();
-    //$response["active_dishes"] = $dbh->countDishesToday();
+    $response["active_dishes"] = $dbh->countActiveDishes();
     $response["top_dishes"] = $dbh->getTopDishes(3);
     header('Content-Type: application/json');
     echo json_encode($response);

@@ -80,3 +80,29 @@ export function categoryBadge(category) {
         `;
     }
 }
+
+export function renderPagination(totalPages, currentPage, loadData) {
+    const container = document.getElementById("pagination");
+    container.innerHTML = "";
+    const prev = document.createElement("button");
+    prev.className = "btn btn-outline-secondary mx-1";
+    prev.textContent = "<";
+    prev.disabled = currentPage === 1;
+    prev.addEventListener("click", () => loadData(currentPage - 1));
+    container.appendChild(prev);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement("button");
+        btn.className = `btn btn-outline-primary mx-1 ${i === currentPage ? "active" : ""}`;
+        btn.textContent = i;
+        btn.addEventListener("click", () => loadData(i));
+        container.appendChild(btn);
+    }
+
+    const next = document.createElement("button");
+    next.className = "btn btn-outline-secondary mx-1";
+    next.textContent = ">";
+    next.disabled = currentPage === totalPages;
+    next.addEventListener("click", () => loadData(currentPage + 1));
+    container.appendChild(next);
+}

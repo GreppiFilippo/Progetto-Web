@@ -1,5 +1,9 @@
 import { availableBadge, categoryBadge, debounce } from './common-functions.js';
 
+document.getElementById("add-dish").addEventListener("click", () => {
+    window.location.href = "admin-add-dish.php";
+});
+
 let currentPage = 1;
 const resultsPerPage = 4;
 
@@ -204,8 +208,4 @@ document.addEventListener('click', (e) => {
         }
     });
 });
-
-
-
-renderPagination();
 loadData();

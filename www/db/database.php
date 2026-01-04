@@ -989,4 +989,30 @@ public function modifyDish($dishid, $name, $price, $stock, $category_id, $descri
     return $stmt->execute();
 }
 
+public function updateReservationStatus($reservationId, $newStatus) {
+    $sql = "UPDATE reservations SET status = ? WHERE reservation_id = ?";
+    $stmt = $this->db->prepare($sql);
+    if (!$stmt) return false;
+
+    $stmt->bind_param("si", $newStatus, $reservationId);
+
+    return $stmt->execute();
+
+}
+
+public function countActiveDishes() {
+    $sql = "SELECT COUNT(*) AS TOTAL
+            FROM dishes
+            WHERE stock > 0;";
+    $stmt = $this->db->prepare($sql);
+    if (!$stmt) return 0;
+    if (!$stmt->execute()) {
+        $stmt->close();
+        return 0;
+    }
+    $res = $stmt->get_result();
+    $row = $res ? $res->fetch_assoc() : null;
+    $stmt->close();
+    return $row ? (int)$row["TOTAL"] : 0;
+}
 }

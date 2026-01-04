@@ -51,10 +51,9 @@
         </div>
     </section>
 
-    <section class="mb-3">
+    <section class="mb-3 ms-3">
         <header class="d-flex align-items-center">
             <h2 class="h5 m-0">Ultime prenotazioni</h2>
-            <button class="btn admin-btn ms-auto" type="submit">Vedi tutte</button>
         </header>
     </section>
 
@@ -68,11 +67,11 @@
         <aside class="col-12 col-md-4">
             <section class="row mx-0 mb-3">
                 <h1 class="h5 p-0">Azioni rapide</h1>
-                <button type="reset" class="btn admin-btn mb-1">
+                <button type="reset" class="btn admin-btn mb-1" id="add-dish">
                     <i class="bi bi-plus-circle"></i>
                     Aggiungi piatto
                 </button>
-                <button type="submit" class="btn admin-btn">
+                <button type="submit" class="btn admin-btn" id="manage-bookings">
                     <i class="bi bi-calendar-check"></i>
                     Gestisci prenotazioni
                 </button>
