@@ -796,11 +796,7 @@ class DatabaseHelper {
                 u.first_name,
                 u.last_name,
                 u.email,
-                CASE
-                    WHEN r.status = 'Completato' THEN 'Completato'
-                    WHEN r.status = 'Pronto al ritiro' THEN 'Pronto al ritiro'
-                    ELSE 'In preparazione'
-                END AS status,
+                r.status,
                 COUNT(DISTINCT rd.dish_id) AS num_dishes
             FROM reservations r
             JOIN reservation_dishes rd ON rd.reservation_id = r.reservation_id
@@ -981,4 +977,16 @@ class DatabaseHelper {
             "ready" => (int)$row['ProntoAlRitiro']
         ] : [];
     }
+
+public function modifyDish($dishid, $name, $price, $stock, $category_id, $description) {
+    $sql = "UPDATE dishes SET name=?, price=?, stock=?, category_id=?, description=? WHERE dish_id=?";
+    $stmt = $this->db->prepare($sql);
+    if (!$stmt) return false;
+
+    // Tipi corretti: s = stringa, d = double/float, i = int
+    $stmt->bind_param("sdiisi", $name, $price, $stock, $category_id, $description, $dishid);
+
+    return $stmt->execute();
+}
+
 }

@@ -61,7 +61,7 @@
     <div class="row m-0">
         <!-- Contenuto principale -->
         <section class="col-12 col-md-8 mb-3">
-            <div id="booking-list" class="row"></div>
+            <div id="booking-list" class="row g-md-1"></div>
         </section>
 
         <!-- Aside -->

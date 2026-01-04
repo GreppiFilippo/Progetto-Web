@@ -25,7 +25,7 @@ function renderBookingItem(booking) {
     const time = String(dt.getHours()).padStart(2, '0') + ":" + String(dt.getMinutes()).padStart(2, '0');
 
     return `
-        <div class="card shadow-sm mb-2 col-md-4 g-md-1">
+        <div class="card shadow-sm mb-2 col-md-6 g-md-2">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <h3 class="h6 mb-0 text-truncate">
@@ -51,8 +51,6 @@ function renderBookingItem(booking) {
                     <span>Totale</span>
                     <span>€ ${booking.total_amount}</span>
                 </div>
-                <hr class="my-2">
-                <button class="btn admin-btn col-12" type="submit">Vedi dettagli</button>
             </div>
         </div>
     `;
@@ -87,10 +85,8 @@ async function getData() {
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-
         const data = await response.json();
         console.log("Fetched booking data:", data);
-
         const bookingsHtml = renderBooking(data.bookings);
         document.getElementById("booking-list").innerHTML = bookingsHtml;
         document.getElementById("bookings").innerHTML = data.bookings_count;

@@ -48,10 +48,26 @@
     </form>
 
     <!-- DISH LIST -->
-    <section id="dish_list">
+    <section id="dish_list" class="row m-0">
     </section>
 
     <div class="d-flex justify-content-center mt-3" id="pagination">
+    </div>
+
+    <!-- POPUP -->
+    <div class="modal fade" id="dishModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-body" id="modalContent">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Chiudi
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <?php

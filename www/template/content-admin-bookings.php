@@ -44,12 +44,12 @@
         </div>
     </section>
 
-    <form class="form-row g-2 mb-3">
-        <div class="col-12 col-md-3">
+    <form class="row g-2 mb-2">
+        <div class="col-12 col-md-2">
             <label for="date" class="form-label">Data</label>
             <input type="date" id="date" class="form-control"></select>
         </div>
-        <div class="col-12 col-md-3">
+        <div class="col-12 col-md-2">
             <label for="hour" class="form-label">Orario</label>
             <select id="hour" class="form-select">
                 <option value="" selected>--</option>
@@ -66,7 +66,7 @@
                 ?>
             </select>
         </div>
-        <div class="col-12 col-md-3">
+        <div class="col-12 col-md-2">
             <label for="state" class="form-label">Stato</label>
             <select id="state" class="form-select">
                 <option value="all" selected>Tutti</option>
@@ -84,7 +84,7 @@
     </form>
 
     <!-- DATA -->
-    <section id="booking_list"> 
+    <section id="booking_list" class="row m-0"> 
     </section>
 
     <div class="d-flex justify-content-center mt-3" id="pagination">

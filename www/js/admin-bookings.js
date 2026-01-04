@@ -55,20 +55,103 @@ document.addEventListener('click', (e) => {
     const data = bookingsCache.find(b => b.reservation_id == bookingId);
     if (!data) return;
 
-    document.getElementById('modalContent').innerHTML = `
-        <p><strong>ID:</strong> ${bookingId}</p>
-        <p><strong>Nome:</strong> ${data.first_name}</p>
-        <p><strong>Cognome:</strong> ${data.last_name}</p>
-        <p><strong>Email:</strong> ${data.email}</p>
-        <p><strong>Data:</strong> ${data.date_time}</p>
-    `;
+    fetch(`utils/api-reservation-details.php?reservation_id=${bookingId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            console.log("Dati ricevuti");
+            return response.json();
+        })
+        .then(dishes => {
+            let detailsHtml = '<h5>Dettagli Prenotazione</h5><ul class="list-group">';
+            dishes.forEach(dish => {
+                detailsHtml += `
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        ${dish.name} (x${dish.quantity})
+                        <span>€ ${dish.price * dish.quantity}</span>
+                    </li>
+                `;
+            });
+            detailsHtml += '</ul>';
+            document.getElementById('modalContent').innerHTML = detailsHtml;
+        })
+        .catch(error => {
+            console.error("Error fetching booking details:", error);
+            document.getElementById('modalContent').innerHTML = '<p class="text-danger">Errore nel caricamento dei dettagli.</p>';
+        });
 
-    const modal = new bootstrap.Modal(
-        document.getElementById('bookingModal')
+        const modal = new bootstrap.Modal(
+            document.getElementById('bookingModal')
     );
 
     modal.show();
 });
+
+document.addEventListener('click', (e) => {
+    // intercetto click su pulsante rosso
+    const btn = e.target.closest('.btn-outline-danger');
+    if (!btn) return;
+
+    const bookingId = btn.dataset.id;
+    const data = bookingsCache.find(b => b.reservation_id == bookingId);
+    if (!data) return;
+
+    // Aggiorno il contenuto del modal
+    const modalContent = document.getElementById('modalContent');
+    modalContent.innerHTML = `
+        <h5>Conferma Eliminazione</h5>
+        <p>Sei sicuro di voler eliminare la prenotazione di 
+            <strong>${data.first_name} ${data.last_name}</strong> 
+            del <strong>${new Date(data.date_time).toLocaleString()}</strong>?
+        </p>
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Elimina</button>
+        </div>
+    `;
+
+    // Creo il modal Bootstrap
+    const modalEl = document.getElementById('bookingModal');
+    const modal = new bootstrap.Modal(modalEl);
+
+    // Se il bottone esiste già, rimuovo eventuali listener precedenti
+    const oldBtn = document.getElementById('confirmDeleteBtn');
+    const newBtn = oldBtn.cloneNode(true);
+    oldBtn.replaceWith(newBtn);
+
+    // Aggiungo listener pulito
+    newBtn.addEventListener('click', async () => {
+        try {
+            // Chiamata fetch POST
+            const res = await fetch('utils/api-admin-delete-reservation.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `reservation_id=${bookingId}&user_id=${data.user_id}`
+            });
+
+            const result = await res.json();
+
+            if (res.ok && result.success) {
+                alert("Prenotazione eliminata correttamente!");
+                modal.hide();
+                loadData(currentPage);
+            } else {
+                alert("Errore durante l'eliminazione della prenotazione.");
+                console.error(result);
+            }
+
+        } catch (error) {
+            alert("Errore nel server.");
+            console.error(error);
+        }
+    });
+
+    // Mostro il modal
+    modal.show();
+});
+
 
 
 function renderBooking(bookings) {
@@ -96,7 +179,7 @@ function renderBookingItem(booking) {
     const time = String(dt.getHours()).padStart(2, '0') + ":" + String(dt.getMinutes()).padStart(2, '0');
 
     return `
-        <div class="card shadow-sm mb-2 col-md-4 g-md-1">
+        <div class="card shadow-sm col-md-6 g-md-1">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                     <h3 class="h6 mb-0 text-truncate">

@@ -131,7 +131,7 @@ if (!defined('IN_APP')) {
     }
 
     function bookingStatusBadge(string $status): string {
-        return '<span class="badge ' . reservationBadgeClass($status) . ' p-2">' . htmlspecialchars($status) . '</span>';
+        return '<span class="badge ' . reservationBadgeClass(ucfirst(strtolower($status))) . ' p-2">' . htmlspecialchars($status) . '</span>';
     }
 
     function reservationBadgeClass(string $status): string {

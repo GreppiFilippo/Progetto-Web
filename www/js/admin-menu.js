@@ -3,7 +3,7 @@ import { availableBadge, categoryBadge, debounce } from './common-functions.js';
 let currentPage = 1;
 const resultsPerPage = 4;
 
-const debouncedData = debounce(loadData, 150);
+let cachedDishes = [];
 
 document.getElementById("category").addEventListener("change", () => loadData(1));
 document.getElementById("state").addEventListener("change", () => loadData(1));
@@ -29,6 +29,7 @@ async function loadData(page = 1) {
         const res = await fetch(`utils/api-admin-menu.php?${params.toString()}`);
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
+        cachedDishes = data.dishes;
         renderDishes(data.dishes);
         renderPagination(data.totalPages, currentPage);
     } catch (error) {
@@ -46,10 +47,9 @@ function renderDishes(dishes) {
 
 function renderDish(dish) {
     return `
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-6 g-md-2">
             <div class="card shadow-sm mb-2 h-100">
                 <div class="card-body">
-
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
                             <strong>${dish.name}</strong><br>
@@ -83,13 +83,9 @@ function renderDish(dish) {
                     <hr class="my-2">
 
                     <div class="btn-group g-1 d-flex">
-                        <button type="button" class="btn btn-outline-primary">
+                        <button type="button" class="btn btn-outline-primary" data-id="${dish.dish_id}">
                             <i class="bi bi-pencil text-primary"></i>
                             Modifica
-                        </button>
-                        <button type="button" class="btn btn-outline-danger ms-1">
-                            <i class="bi bi-trash text-danger"></i>
-                            Elimina
                         </button>
                     </div>
                 </div>
@@ -124,6 +120,92 @@ function renderPagination(totalPages, currentPage) {
     next.addEventListener("click", () => loadData(currentPage + 1));
     container.appendChild(next);
 }
+
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn-outline-primary');
+    if (!btn) return;
+
+    const dishId = btn.dataset.id;
+    const dishData = cachedDishes.find(d => d.dish_id == dishId);
+    if (!dishData) return;
+
+    // Popola il modal
+    document.getElementById('modalContent').innerHTML = `
+        <h5>Modifica Piatto: ${dishData.name}</h5>
+        <form id="editDishForm">
+            <div class="mb-2">
+                <label>Nome</label>
+                <input type="text" class="form-control" name="name" value="${dishData.name}">
+            </div>
+            <div class="mb-2">
+                <label>Prezzo (€)</label>
+                <input type="number" step="0.10" min="0.50" class="form-control" name="price" value="${dishData.price}">
+            </div>
+            <div class="mb-2">
+                <label>Stock</label>
+                <input type="number" class="form-control" name="stock" min="0"value="${dishData.stock}">
+            </div>
+            <div class="mb-2">
+                <label>Categoria</label>
+                <select class="form-select" name="category_id">
+                    <option value="1" ${dishData.category_id == 1 ? "selected" : ""}>Primi</option>
+                    <option value="2" ${dishData.category_id == 2 ? "selected" : ""}>Secondi</option>
+                    <option value="3" ${dishData.category_id == 3 ? "selected" : ""}>Contorni</option>
+                    <option value="4" ${dishData.category_id == 4 ? "selected" : ""}>Dolci</option>
+                </select>
+            </div>
+            <div class="mb-2">
+                <label>Descrizione</label>
+                <textarea class="form-control" name="description">${dishData.description}</textarea>
+            </div>
+        </form>
+        <div class="d-flex justify-content-end mt-2">
+            <button type="button" class="btn btn-primary" id="saveDishBtn">Salva</button>
+        </div>
+    `;
+
+    // Crea l’istanza del modal
+    const modalEl = document.getElementById('dishModal');
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();
+
+    // Rimuove eventuali listener precedenti sul bottone Salva
+    const saveBtnOld = document.getElementById('saveDishBtn');
+    saveBtnOld.replaceWith(saveBtnOld.cloneNode(true));
+
+    // Listener Salva
+    document.getElementById('saveDishBtn').addEventListener('click', async () => {
+        const form = document.getElementById('editDishForm');
+
+        // Qui prendiamo i valori aggiornati dall’utente
+        const formDataObj = new FormData(form);
+        formDataObj.append('dish_id', dishId); // dish_id per primo non serve fare altro, basta appendarlo
+
+        const formData = new URLSearchParams(formDataObj);
+        console.log(formData.toString());
+        try {
+            const res = await fetch('utils/api-edit-dish.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString()
+            });
+
+            const result = await res.json();
+            if (res.ok && result.success) {
+                alert("Piatto aggiornato!");
+                modal.hide();
+                loadData(currentPage);
+            } else {
+                alert("Errore nell'aggiornamento del piatto");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Errore server");
+        }
+    });
+});
+
+
 
 renderPagination();
 loadData();
