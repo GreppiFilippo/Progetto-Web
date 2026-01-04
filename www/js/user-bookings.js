@@ -262,10 +262,10 @@ function createSummaryRow(item) {
     const subtotal = item.price * item.quantity;
 
     tr.innerHTML = `
-        <td class="align-middle">${escapeHtml(item.name)}</td>
-        <td class="text-end align-middle">${item.quantity}</td>
-        <td class="text-end align-middle">${formatEuro(item.price)}</td>
-        <td class="text-end align-middle">${formatEuro(subtotal)}</td>
+        <td class="align-middle" headers="dish-name">${escapeHtml(item.name)}</td>
+        <td class="text-end align-middle" headers="dish-quantity">${item.quantity}</td>
+        <td class="text-end align-middle" headers="dish-price">${formatEuro(item.price)}</td>
+        <td class="text-end align-middle" headers="dish-subtotal">${formatEuro(subtotal)}</td>
     `;
 
     return tr;

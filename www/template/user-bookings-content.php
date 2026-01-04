@@ -165,10 +165,10 @@ if (!defined('IN_APP')) {
                                 <table class="table mb-0">
                                     <thead>
                                         <tr>
-                                            <th>Nome</th>
-                                            <th class="text-end">Quantità</th>
-                                            <th class="text-end">Prezzo</th>
-                                            <th class="text-end">Subtotale</th>
+                                            <th id="dish-name">Nome</th>
+                                            <th id="dish-quantity" class="text-end">Quantità</th>
+                                            <th id="dish-price" class="text-end">Prezzo</th>
+                                            <th id="dish-subtotal" class="text-end">Subtotale</th>
                                         </tr>
                                     </thead>
                                     <tbody id="riepilogo-table-body"></tbody>
