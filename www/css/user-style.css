@@ -10,7 +10,8 @@ main a:hover {
 }
 
 /* Navbar */
-nav.navbar, main > header.welcome {
+nav.navbar,
+main>header.welcome {
     background-color: #2C5F34;
 }
 
@@ -37,6 +38,7 @@ a.btn:first-child i,
 aside section a.btn:first-of-type i {
     color: white;
 }
+
 form input[type="submit"]:hover,
 form button[type="submit"]:hover,
 a.btn:first-child:hover,
@@ -91,14 +93,14 @@ main i.bi {
     color: white;
 }
 
-main > div.alert,
+main>div.alert,
 main .col-md-8 ul li .d-flex a.btn-outline-danger {
     background-color: #F0F6F1 !important;
     color: #1B3B20 !important;
 }
 
 /* Menu Filter */
-main form select, 
+main form select,
 main form input[type="date"] {
     cursor: pointer;
 }
@@ -116,11 +118,11 @@ main form .card-header .badge {
     background-color: white;
 }
 
-main form .card-header > h2 > span {
+main form .card-header>h2>span {
     color: #2C5F4E;
 }
 
-ul li div.card > div.card-body span.badge i.bi {
+ul li div.card>div.card-body span.badge i.bi {
     color: white;
 }
 
@@ -137,30 +139,32 @@ main form aside input[type="submit"]:hover {
 }
 
 /* Page Footer */
-body > footer a {
+body>footer a {
     color: #FFFFFFB3;
 }
 
-body > footer a:hover {
+body>footer a:hover {
     border-bottom: solid #FFFFFFB3 1.5px;
     transition: all 0.1s ease-in-out;
 }
 
-body > header > nav {
+body>header>nav {
     background-color: #2C5F34;
 }
 
-body > main > form > fieldset > div > i, body > main > h1 > i, body > main > div > aside > div > i  {
+body>main>form>fieldset>div>i,
+body>main>h1>i,
+body>main>div>aside>div>i {
     color: #2C5F34;
 }
 
 
-div.card > div.ratio,
+div.card>div.ratio,
 .card-img-top {
     overflow: hidden;
 }
 
-div.card > div.ratio img,
+div.card>div.ratio img,
 .card-img-top {
     display: block;
     width: 100%;
@@ -171,7 +175,8 @@ div.card > div.ratio img,
 
 /* adattamento per schermi piccoli */
 @media (max-width: 576px) {
-    div.card > div.ratio img,
+
+    div.card>div.ratio img,
     .card-img-top {
         height: 160px;
     }
