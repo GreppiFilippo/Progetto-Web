@@ -396,6 +396,28 @@ class DatabaseHelper {
                 throw new Exception("Non puoi annullare una prenotazione in stato: " . $status);
             }
 
+            // ripristina lo stock dei piatti prenotati
+            $getItems = $this->db->prepare(
+                "SELECT dish_id, quantity FROM reservation_dishes WHERE reservation_id = ?"
+            );
+            if (!$getItems) throw new Exception((string)$this->db->error);
+            
+            $getItems->bind_param("i", $reservationId);
+            if (!$getItems->execute()) throw new Exception($getItems->error);
+            
+            $itemsResult = $getItems->get_result();
+            while ($item = $itemsResult->fetch_assoc()) {
+                $updateStock = $this->db->prepare(
+                    "UPDATE dishes SET stock = stock + ? WHERE dish_id = ?"
+                );
+                if (!$updateStock) throw new Exception((string)$this->db->error);
+                
+                $updateStock->bind_param("ii", $item['quantity'], $item['dish_id']);
+                if (!$updateStock->execute()) throw new Exception($updateStock->error);
+                $updateStock->close();
+            }
+            $getItems->close();
+
             // aggiorna solo lo stato, NON cancellare i piatti
             $upd = $this->db->prepare(
                 "UPDATE reservations

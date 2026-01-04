@@ -11,6 +11,7 @@ $templateParams["titolo"] = "Mensa Campus - Singolo Ordine";
 
 $templateParams["nav_items"] = array(
     getNewNavItem("Dashboard", "user-dashboard.php", "bi bi-speedometer2"),
+    getNewNavItem("Menu", "menu.php", "bi bi-book"),
     getNewNavItem("Nuova Prenotazione", "user-bookings.php", "bi bi-calendar-check"),
     getNewNavItem("Profilo", "user-profile.php", "bi bi-person-circle"),
     getNewNavItem("Esci", "logout.php", "bi bi-box-arrow-right")
@@ -25,8 +26,8 @@ $templateParams["link_utili"][] = array(
     "link" => "user-profile.php",
 );
 
-$reservationId = isset($_GET["reservation_id"]) ? (int)$_GET["reservation_id"] : 0;
-$userId = (int)$_SESSION["user_id"];
+$reservationId = isset($_GET["reservation_id"]) ? (int) $_GET["reservation_id"] : 0;
+$userId = (int) $_SESSION["user_id"];
 
 $reservation = $dbh->getReservationById($reservationId, $userId);
 if (!$reservation) {
@@ -35,7 +36,7 @@ if (!$reservation) {
 }
 
 if (isset($_GET["cancel_id"])) {
-    $reservationId = (int)$_GET["cancel_id"];
+    $reservationId = (int) $_GET["cancel_id"];
 
     if ($reservationId > 0) {
         $dbh->deleteReservation($reservationId, $userId);
@@ -52,6 +53,7 @@ $templateParams["items"] = $items;
 $templateParams["tagsMap"] = $tagsMap;
 
 $templateParams["content"] = "template/single-order-content.php";
+$templateParams["js"][] = "js/reservation-status-refresh.js";
 
 require 'template/base-user.php';
 ?>
