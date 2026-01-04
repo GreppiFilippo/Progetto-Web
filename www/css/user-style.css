@@ -94,6 +94,7 @@ main i.bi {
 }
 
 main>div.alert,
+main .col-md-8 section .alert,
 main .col-md-8 ul li .d-flex a.btn-outline-danger {
     background-color: #F0F6F1 !important;
     color: #1B3B20 !important;
