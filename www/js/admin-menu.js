@@ -1,4 +1,4 @@
-import { availableBadge, categoryBadge, debounce } from './common-functions.js';
+import { availableBadge, categoryBadge, debounce, renderPagination } from './common-functions.js';
 
 document.getElementById("add-dish").addEventListener("click", () => {
     window.location.href = "admin-add-dish.php";
@@ -35,7 +35,7 @@ async function loadData(page = 1) {
         const data = await res.json();
         cachedDishes = data.dishes;
         renderDishes(data.dishes);
-        renderPagination(data.totalPages, currentPage);
+        renderPagination(data.totalPages, currentPage, loadData);
     } catch (error) {
         console.error("Error fetching booking data:", error);
     }
@@ -96,33 +96,6 @@ function renderDish(dish) {
             </div>
         </div>
     `;
-}
-
-function renderPagination(totalPages, currentPage) {
-    const container = document.getElementById("pagination");
-    container.innerHTML = "";
-
-    const prev = document.createElement("button");
-    prev.className = "btn btn-outline-secondary mx-1";
-    prev.textContent = "<";
-    prev.disabled = currentPage === 1;
-    prev.addEventListener("click", () => loadData(currentPage - 1));
-    container.appendChild(prev);
-
-    for (let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement("button");
-        btn.className = `btn btn-outline-primary mx-1 ${i === currentPage ? "active" : ""}`;
-        btn.textContent = i;
-        btn.addEventListener("click", () => loadData(i));
-        container.appendChild(btn);
-    }
-
-    const next = document.createElement("button");
-    next.className = "btn btn-outline-secondary mx-1";
-    next.textContent = ">";
-    next.disabled = currentPage === totalPages;
-    next.addEventListener("click", () => loadData(currentPage + 1));
-    container.appendChild(next);
 }
 
 document.addEventListener('click', (e) => {

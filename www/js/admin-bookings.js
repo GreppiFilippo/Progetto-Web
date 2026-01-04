@@ -1,4 +1,4 @@
-import {isToday, isTomorrow, debounce} from './common-functions.js';
+import {isToday, isTomorrow, debounce, renderPagination} from './common-functions.js';
 
 let bookingsCache = [];
 let currentPage = 1;
@@ -41,7 +41,7 @@ async function loadData(page = 1) {
         document.getElementById("ready").innerHTML = data.ready;
         bookingsCache = data.bookings;
         renderBooking(bookingsCache);
-        renderPagination(res.totalPages, currentPage);
+        renderPagination(res.totalPages, currentPage, loadData);
     } catch (error) {
         console.error("Error fetching booking data:", error);
     }
@@ -214,30 +214,6 @@ function renderBookingItem(booking) {
     `;
 }
 
-function renderPagination(totalPages, currentPage) {
-    const container = document.getElementById("pagination");
-    container.innerHTML = "";
-    const prev = document.createElement("button");
-    prev.className = "btn btn-outline-secondary mx-1";
-    prev.textContent = "<";
-    prev.disabled = currentPage === 1;
-    prev.addEventListener("click", () => loadData(currentPage - 1));
-    container.appendChild(prev);
 
-    for (let i = 1; i <= totalPages; i++) {
-        const btn = document.createElement("button");
-        btn.className = `btn btn-outline-primary mx-1 ${i === currentPage ? "active" : ""}`;
-        btn.textContent = i;
-        btn.addEventListener("click", () => loadData(i));
-        container.appendChild(btn);
-    }
-
-    const next = document.createElement("button");
-    next.className = "btn btn-outline-secondary mx-1";
-    next.textContent = ">";
-    next.disabled = currentPage === totalPages;
-    next.addEventListener("click", () => loadData(currentPage + 1));
-    container.appendChild(next);
-}
 
 loadData();

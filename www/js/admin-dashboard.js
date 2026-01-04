@@ -34,7 +34,7 @@ function renderBookingItem(booking) {
     const time = String(dt.getHours()).padStart(2, '0') + ":" + String(dt.getMinutes()).padStart(2, '0');
 
     return `
-        <div class="col-12 col-md-6 g-md-2">
+        <div class="col-12 col-md-6 g-md-2 mb-2">
             <div class="card shadow-sm mb-2 h-100">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-2">
