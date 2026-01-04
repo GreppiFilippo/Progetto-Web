@@ -10,13 +10,13 @@ $categorie = $dbh->getAllCategories();
 $risultati = [];
 $totaleRisultati = 0;
 
-foreach($categorie as $categoria) {
+foreach ($categorie as $categoria) {
     if ($categoriaSelezionata != 0 && $categoriaSelezionata != $categoria['category_id']) {
         continue;
     }
 
     $piatti = $dbh->getAllDishes($categoria['category_id']);
-    $piattiFiltrati = array_filter($piatti, function($piatto) use ($ricerca) {
+    $piattiFiltrati = array_filter($piatti, function ($piatto) use ($ricerca) {
         return empty($ricerca) || mb_stripos($piatto['name'], $ricerca) !== false;
     });
 
@@ -25,7 +25,7 @@ foreach($categorie as $categoria) {
     }
 
     // Add dietary tags for each dish
-    $piattiConTags = array_map(function($piatto) use ($dbh) {
+    $piattiConTags = array_map(function ($piatto) use ($dbh) {
         $piatto['dietary_tags'] = $dbh->getDietaryTagsForDish($piatto['dish_id']);
         return $piatto;
     }, $piattiFiltrati);
@@ -34,7 +34,7 @@ foreach($categorie as $categoria) {
         'categoria' => $categoria,
         'piatti' => array_values($piattiConTags)
     ];
-    
+
     $totaleRisultati += count($piattiFiltrati);
 }
 
@@ -44,3 +44,4 @@ echo json_encode([
     'ricerca' => $ricerca,
     'categoria' => $categoriaSelezionata
 ]);
+?>

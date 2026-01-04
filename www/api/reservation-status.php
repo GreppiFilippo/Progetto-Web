@@ -48,3 +48,4 @@ if (isset($_GET['reservation_id'])) {
         'reservations' => $statusData
     ]);
 }
+?>
