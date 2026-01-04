@@ -50,7 +50,7 @@ if (!is_array($slots)) {
 }
 
 // Format slots for response (guard types)
-$formattedSlots = array_map(function($slot) {
+$formattedSlots = array_map(function ($slot) {
     if (!is_array($slot) || !isset($slot['slot_time']) || !is_string($slot['slot_time'])) {
         return ['value' => '', 'label' => ''];
     }

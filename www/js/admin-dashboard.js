@@ -89,7 +89,7 @@ function renderTopDishes(dishes) {
 
 
 async function getData() {
-    const url = `utils/api-admin-dashboard.php`;
+    const url = `api/admin-dashboard.php`;
 
     try {
         const response = await fetch(url);

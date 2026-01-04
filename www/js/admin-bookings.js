@@ -1,16 +1,16 @@
-import {isToday, isTomorrow, debounce, renderPagination} from './common-functions.js';
+import { isToday, isTomorrow, debounce, renderPagination } from './common-functions.js';
 
 let bookingsCache = [];
 let currentPage = 1;
 const resultsPerPage = 4;
 
 document.getElementById('date').addEventListener('change', () => loadData(1));
-document.getElementById('hour').addEventListener('change', () => loadData(1));  
+document.getElementById('hour').addEventListener('change', () => loadData(1));
 document.getElementById('state').addEventListener('change', () => loadData(1));
 document.getElementById('name').addEventListener('input', debounce(() => loadData(1), 150));
 
 async function loadData(page = 1) {
-    const url = `utils/api-admin-bookings.php`;
+    const url = `api/admin-bookings.php`;
     currentPage = page;
     try {
         const date = document.getElementById('date').value;
@@ -23,8 +23,8 @@ async function loadData(page = 1) {
             hour,
             state,
             name,
-            page: currentPage,   
-            per_page: resultsPerPage 
+            page: currentPage,
+            per_page: resultsPerPage
         });
 
 
@@ -61,7 +61,7 @@ document.addEventListener('click', async (e) => {
 
     try {
         // Prendo i dettagli dal server
-        const res = await fetch(`utils/api-reservation-details.php?reservation_id=${bookingId}`);
+        const res = await fetch(`api/reservation-details.php?reservation_id=${bookingId}`);
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const dishes = await res.json();
 
@@ -102,7 +102,7 @@ document.addEventListener('click', async (e) => {
 
             if (newStatus === 'Annullato') {
                 // Cancella prenotazione
-                const resDel = await fetch('utils/api-admin-delete-reservation.php', {
+                const resDel = await fetch('api/admin-delete-reservation.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: `reservation_id=${bookingId}&user_id=${data.user_id}`
@@ -117,7 +117,7 @@ document.addEventListener('click', async (e) => {
                 }
             } else {
                 // Aggiorna stato
-                const resUpd = await fetch('utils/api-admin-update-reservation.php', {
+                const resUpd = await fetch('api/admin-update-reservation.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: `reservation_id=${bookingId}&status=${newStatus}`
@@ -128,7 +128,7 @@ document.addEventListener('click', async (e) => {
                     modal.hide();
                     loadData(currentPage);
                 } else {
-                    alert("Errore nell'aggiornamento"+updResult.message);
+                    alert("Errore nell'aggiornamento" + updResult.message);
                 }
             }
         });
@@ -141,9 +141,6 @@ document.addEventListener('click', async (e) => {
         modal.show();
     }
 });
-
-
-
 
 function renderBooking(bookings) {
     if (!Array.isArray(bookings)) return '';
@@ -213,7 +210,5 @@ function renderBookingItem(booking) {
         </div>
     `;
 }
-
-
 
 loadData();

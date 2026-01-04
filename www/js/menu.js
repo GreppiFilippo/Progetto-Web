@@ -15,7 +15,7 @@ function performSearch() {
         cerca: cerca
     });
 
-    fetch(`utils/search-menu.php?${params.toString()}`)
+    fetch(`api/search-menu.php?${params.toString()}`)
         .then(response => response.json())
         .then(data => {
             updateMenuResults(data);

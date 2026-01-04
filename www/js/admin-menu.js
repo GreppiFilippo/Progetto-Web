@@ -30,7 +30,7 @@ async function loadData(page = 1) {
             per_page: resultsPerPage
         });
 
-        const res = await fetch(`utils/api-admin-menu.php?${params.toString()}`);
+        const res = await fetch(`api/admin-menu.php?${params.toString()}`);
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
         cachedDishes = data.dishes;
@@ -161,7 +161,7 @@ document.addEventListener('click', (e) => {
         const formData = new URLSearchParams(formDataObj);
         console.log(formData.toString());
         try {
-            const res = await fetch('utils/api-edit-dish.php', {
+            const res = await fetch('api/edit-dish.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData.toString()
