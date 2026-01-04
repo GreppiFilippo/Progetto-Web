@@ -25,7 +25,7 @@ if (!defined('IN_APP')) {
                     </div>
                     <div class="ms-3">
                         <h2 class="h6 mb-1">Prenotazioni attive</h2>
-                        <p class="h3 mb-0">
+                        <p class="h3 mb-0" data-active-count>
                             <?php echo htmlspecialchars((string) $templateParams["active_count"], ENT_QUOTES, 'UTF-8'); ?>
                         </p>
                     </div>
@@ -41,7 +41,7 @@ if (!defined('IN_APP')) {
                     </div>
                     <div class="ms-3">
                         <h2 class="h6 mb-1">Prenotazioni completate</h2>
-                        <p class="h3 mb-0">
+                        <p class="h3 mb-0" data-completed-count>
                             <?php echo htmlspecialchars((string) $templateParams["completed_count"], ENT_QUOTES, 'UTF-8'); ?>
                         </p>
                     </div>
@@ -67,7 +67,6 @@ if (!defined('IN_APP')) {
                         <?php foreach ($templateParams["reservations"] as $reservation): ?>
                             <?php
                             $status = (string) $reservation["status"];
-                            echo $status;
                             $when = formatWhen($reservation["date_time"]);
                             $total = formatEuro($reservation["total_amount"]);
                             $items = $reservation["items"] ?? [];
@@ -75,7 +74,8 @@ if (!defined('IN_APP')) {
                             $badgeClass = reservationBadgeClass($status);
                             $canCancel = canCancelReservation($status);
                             ?>
-                            <li class="mb-3 p-3 border rounded-3">
+                            <li class="mb-3 p-3 border rounded-3"
+                                id="reservation-<?php echo (int) $reservation['reservation_id']; ?>">
                                 <div class="d-flex justify-content-between align-items-start mb-2">
                                     <div>
                                         <h3 class="h6 mb-1">
@@ -85,7 +85,8 @@ if (!defined('IN_APP')) {
                                             </span>
                                         </h3>
                                         <span
-                                            class="badge <?php echo htmlspecialchars((string) $badgeClass, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars((string) $status, ENT_QUOTES, 'UTF-8'); ?></span>
+                                            class="badge <?php echo htmlspecialchars((string) $badgeClass, ENT_QUOTES, 'UTF-8'); ?>"
+                                            data-status-badge><?php echo htmlspecialchars((string) $status, ENT_QUOTES, 'UTF-8'); ?></span>
                                     </div>
                                     <strong>€<?php echo htmlspecialchars((string) $total, ENT_QUOTES, 'UTF-8'); ?></strong>
                                 </div>
@@ -112,7 +113,7 @@ if (!defined('IN_APP')) {
 
                                     <!-- ANNULLA: appare solo se canCancel è true -->
                                     <?php if (canCancelReservation($reservation['status'])) { ?>
-                                        <a class="btn btn-sm" type="button"
+                                        <a class="btn btn-sm" type="button" data-cancel-btn
                                             href="user-dashboard.php?cancel_id=<?php echo (int) $reservation['reservation_id']; ?>">
                                             <i class="bi bi-trash me-1" aria-hidden="true"></i>
                                             <span>Annulla ordine</span>
@@ -120,7 +121,8 @@ if (!defined('IN_APP')) {
                                     <?php } ?>
 
                                 </div>
-                            <?php endforeach; ?>
+                            </li>
+                        <?php endforeach; ?>
                     </ul>
                 <?php endif; ?>
                 <div class="text-center mt-3">

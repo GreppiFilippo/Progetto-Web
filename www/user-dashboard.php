@@ -63,6 +63,7 @@ unset($r);
 
 $templateParams["reservations"] = $reservations;
 $templateParams["content"] = "template/user-dashboard-content.php";
+$templateParams["js"][] = "js/reservation-status-refresh.js";
 
 require 'template/base-user.php';
 ?>
