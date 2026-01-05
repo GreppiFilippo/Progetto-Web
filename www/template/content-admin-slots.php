@@ -1,3 +1,9 @@
+<?php
+if (!defined('IN_APP')) {
+    http_response_code(404);
+    exit;
+}
+?>
 <main class="container-fluid my-3">
     <!-- Intestazione Dashboard -->
     <header class="dashboard border rounded-3 p-4 mb-4 shadow-sm">

@@ -1,3 +1,9 @@
+<?php
+if (!defined('IN_APP')) {
+    http_response_code(404);
+    exit;
+}
+?>
 <main class="container my-5">
     <div class="row">
         <!-- DETTAGLI PRENOTAZIONE -->

@@ -6,6 +6,10 @@ if (!isUserLoggedIn()) {
     require "login.php";
     exit();
 }
+if (isAdmin()) {
+    header("Location: admin-dashboard.php");
+    exit();
+}
 
 $templateParams["titolo"] = "Mensa Campus - Singolo Ordine";
 
