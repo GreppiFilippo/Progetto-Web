@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("confirm").innerHTML = `<i class="bi bi-pencil me-2"></i>Modifica Piatto`;
     document.getElementById("title").innerHTML = `<i class="bi bi-pencil admin-icon fs-2" aria-hidden="true"></i> Modifica Piatto`;
+    document.getElementById("dishImage").required = false;
 
     fetch(`api/get-dish.php?id=${dishId}`)
         .then(response => response.json())
