@@ -85,40 +85,38 @@ function renderBookingItem(booking) {
     const time = String(dt.getHours()).padStart(2, '0') + ":" + String(dt.getMinutes()).padStart(2, '0');
 
     return `
-        <div class="col-12 col-md-6 g-md-2">
-            <div class="card shadow-sm mb-2 h-100">
+        <div class="col-12 col-md-6">
+            <div class="card shadow-sm h-100">
                 <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
                         <h3 class="h6 mb-0 text-truncate">
                             #${booking.reservation_id} ${booking.first_name} ${booking.last_name}
                         </h3>
                         ${booking.badge || ''}
                     </div>
 
-                    <!-- Separatore -->
-                    <hr class="my-2">
+                    <hr class="my-3">
 
-                    <!-- Data/Ora sotto -->
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
                         <span>Data</span>
                         <span>${displayDate}</span>
                     </div>
 
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
                         <span>Ora</span>
                         <span>${time}</span>
                     </div>
 
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
                         Numero piatti
                         <span class="badge bg-secondary">${booking.num_dishes + " "+ booking.num_dishes == 1 ? "Piatto" : "Piatti"}</span>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
                         <span>Totale</span>
                         <span>€ ${booking.total_amount}</span>
                     </div>
-                    <hr class="my-2">
-                    <div class="btn-group g-1 d-flex">
+                    <hr class="my-3">
+                    <div class="d-grid">
                         <button type="button" class="admin-btn btn btn-outline-primary" data-id="${booking.reservation_id}">
                             <i class="bi bi-eye"></i>
                             Dettagli
