@@ -57,17 +57,17 @@ main i.bi.admin-icon {
 }
 
 /* Admin Buttons */
-button.admin-btn[type="reset"] {
+button.admin-btn[type="button"] {
     background-color: #942222;
     border-color: #942222;
     color: white;
 }
 
-button.admin-btn[type="reset"] i {
+button.admin-btn[type="button"] i {
     color: white;
 }
 
-button.admin-btn[type="reset"]:hover {
+button.admin-btn[type="button"]:hover {
     background-color: #7A1A1A;
     border-color: #7A1A1A;
 }

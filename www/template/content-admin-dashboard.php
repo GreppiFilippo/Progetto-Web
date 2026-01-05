@@ -67,13 +67,17 @@
         <aside class="col-12 col-md-4">
             <section class="row mx-0 mb-3">
                 <h1 class="h5 p-0">Azioni rapide</h1>
-                <button type="reset" class="btn admin-btn mb-1" id="add-dish">
+                <button type="button" class="btn admin-btn mb-1" id="add-dish">
                     <i class="bi bi-plus-circle"></i>
                     Aggiungi piatto
                 </button>
-                <button type="submit" class="btn admin-btn" id="manage-bookings">
+                <button type="submit" class="btn admin-btn mb-1" id="manage-bookings">
                     <i class="bi bi-calendar-check"></i>
                     Gestisci prenotazioni
+                </button>
+                <button type="submit" class="btn admin-btn mb-1" id="manage-slots">
+                    <i class="bi bi-clock"></i>
+                    Gestisci slots
                 </button>
             </section>
 

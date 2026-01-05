@@ -1,14 +1,19 @@
-<?php
-if (!defined('IN_APP')) {
-  http_response_code(404);
-  exit;
-}
-?>
-
 <main class="container my-5">
+  <p class="visually-hidden">
+    <span class="text-danger">*</span> Campo obbligatorio
+  </p>
 
   <div class="row justify-content-center">
     <div class="col-12">
+      <?php if (!empty($templateParams["errors"])): ?>
+  <div class="alert alert-danger">
+    <ul>
+      <?php foreach ($templateParams["errors"] as $error): ?>
+        <li><?php echo $error; ?></li>
+      <?php endforeach; ?>
+    </ul>
+  </div>
+<?php endif; ?>
 
       <h1 class="h3 mb-3">
         <i class="bi admin-icon bi-plus-circle me-2" aria-hidden="true"></i>
@@ -16,8 +21,7 @@ if (!defined('IN_APP')) {
       </h1>
 
       <div class="border-0 shadow-sm p-4">
-        <form action="#" method="post" enctype="multipart/form-data">
-
+        <form action="" method="POST" enctype="multipart/form-data" id="dish-form">
           <!-- Caricamento Immagine -->
           <div class="row mb-4">
             <div class="col-12">
@@ -31,7 +35,6 @@ if (!defined('IN_APP')) {
                 <label for="dishImage" class="form-label">
                   Carica Immagine <span class="text-danger">*</span>
                 </label>
-
                 <input
                   type="file"
                   class="form-control"
@@ -40,13 +43,11 @@ if (!defined('IN_APP')) {
                   accept="image/*"
                   required
                 >
-
-                <div class="form-text">Formati supportati: JPG, JPEG, PNG, GIF (come da backend).</div>
+                <div class="form-text">Formati supportati: JPG, JPEG, PNG, GIF.</div>
               </div>
 
               <div class="col-md-6">
                 <label class="form-label">Anteprima</label>
-
                 <div id="imagePreview" class="border rounded p-3 text-center">
                   <i class="bi bi-image text-muted fs-2" id="previewIcon"></i>
                   <p class="text-muted mb-0 mt-2" id="previewText">Nessuna immagine selezionata</p>
@@ -71,14 +72,12 @@ if (!defined('IN_APP')) {
                 <label for="dishName" class="form-label">
                   Nome Piatto <span class="text-danger">*</span>
                 </label>
-
                 <input
                   type="text"
                   class="form-control"
                   id="dishName"
                   name="dishName"
                   placeholder="Es. Pasta al Pomodoro"
-                  value="<?php echo htmlspecialchars((string)($_POST['dishName'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
                   required
                 >
               </div>
@@ -87,20 +86,12 @@ if (!defined('IN_APP')) {
                 <label for="dishCategory" class="form-label">
                   Categoria <span class="text-danger">*</span>
                 </label>
-
                 <select class="form-select" id="dishCategory" name="dishCategory" required>
-                  <option value="" disabled <?php echo empty($_POST['dishCategory']) ? 'selected' : ''; ?>>
-                    Seleziona categoria...
-                  </option>
-
-                  <?php foreach ($templateParams["categories"] as $category): ?>
-                    <option
-                      value="<?php echo (int)$category['category_id']; ?>"
-                      <?php echo ((int)($_POST['dishCategory'] ?? 0) === (int)$category['category_id']) ? 'selected' : ''; ?>
-                    >
-                      <?php echo htmlspecialchars((string)$category['category_name'], ENT_QUOTES, 'UTF-8'); ?>
-                    </option>
-                  <?php endforeach; ?>
+                  <option value="" selected disabled>Seleziona categoria...</option>
+                  <option value="1">Primi</option>
+                  <option value="2">Secondi</option>
+                  <option value="3">Contorni</option>
+                  <option value="4">Dolci</option>
                 </select>
               </div>
             </div>
@@ -110,7 +101,6 @@ if (!defined('IN_APP')) {
                 <label for="dishDescription" class="form-label">
                   Descrizione <span class="text-danger">*</span>
                 </label>
-
                 <textarea
                   class="form-control"
                   id="dishDescription"
@@ -118,13 +108,14 @@ if (!defined('IN_APP')) {
                   rows="3"
                   placeholder="Descrivi gli ingredienti principali e il metodo di preparazione..."
                   required
-                ><?php echo htmlspecialchars((string)($_POST['dishDescription'] ?? ''), ENT_QUOTES, 'UTF-8'); ?></textarea>
+                ></textarea>
               </div>
             </div>
           </div>
 
           <hr class="my-4">
 
+          <!-- Prezzo e Disponibilità -->
           <div class="row mb-4">
             <div class="col-12">
               <h2 class="admin-h2 h5 mb-3">
@@ -137,10 +128,8 @@ if (!defined('IN_APP')) {
                 <label for="dishPrice" class="form-label">
                   Prezzo (€) <span class="text-danger">*</span>
                 </label>
-
                 <div class="input-group flex-nowrap">
                   <span class="input-group-text">€</span>
-
                   <input
                     type="number"
                     class="form-control"
@@ -149,7 +138,6 @@ if (!defined('IN_APP')) {
                     min="0"
                     step="0.50"
                     placeholder="0.00"
-                    value="<?php echo htmlspecialchars((string)($_POST['dishPrice'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
                     required
                   >
                 </div>
@@ -157,9 +145,7 @@ if (!defined('IN_APP')) {
 
               <div class="col-md-4">
                 <label for="dishCalories" class="form-label">Calorie</label>
-
                 <div class="input-group">
-
                   <input
                     type="number"
                     class="form-control"
@@ -167,7 +153,6 @@ if (!defined('IN_APP')) {
                     name="dishCalories"
                     min="0"
                     placeholder="300"
-                    value="<?php echo htmlspecialchars((string)($_POST['dishCalories'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>"
                   >
                   <span class="input-group-text">kcal</span>
                 </div>
@@ -177,14 +162,13 @@ if (!defined('IN_APP')) {
                 <label for="dishAvailability" class="form-label">
                   Quantità Disponibile <span class="text-danger">*</span>
                 </label>
-
                 <input
                   type="number"
                   class="form-control"
                   id="dishAvailability"
                   name="dishAvailability"
                   min="0"
-                  value="<?php echo htmlspecialchars((string)($_POST['dishAvailability'] ?? '20'), ENT_QUOTES, 'UTF-8'); ?>"
+                  value="20"
                   required
                 >
               </div>
@@ -193,6 +177,7 @@ if (!defined('IN_APP')) {
 
           <hr class="my-4">
 
+          <!-- Informazioni Dietetiche -->
           <div class="row mb-4">
             <div class="col-12">
               <h2 class="admin-h2 h5 mb-3">
@@ -202,39 +187,36 @@ if (!defined('IN_APP')) {
 
             <div class="row">
               <div class="col-md-6">
-                <?php foreach ($templateParams["dietary_specs"] as $dietary_spec): ?>
-                  <?php $sid = (int)$dietary_spec["dietary_spec_id"]; ?>
-
-                  <div class="form-check mb-2">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      name="specs[]"
-                      value="<?php echo $sid; ?>"
-                      id="spec_<?php echo $sid; ?>"
-                      <?php echo in_array($sid, $oldSpecs, true) ? 'checked' : ''; ?>
-                    >
-                    <label class="form-check-label fw-medium" for="spec_<?php echo $sid; ?>">
-                      <?php echo htmlspecialchars((string)$dietary_spec["dietary_spec_name"], ENT_QUOTES, 'UTF-8'); ?>
-                    </label>
-                  </div>
-                <?php endforeach; ?>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" name="specs[]" value="1" id="spec_1">
+                  <label class="form-check-label fw-medium" for="spec_1">Vegetariano</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" name="specs[]" value="2" id="spec_2">
+                  <label class="form-check-label fw-medium" for="spec_2">Vegano</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" name="specs[]" value="3" id="spec_3">
+                  <label class="form-check-label fw-medium" for="spec_3">Senza glutine</label>
+                </div>
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" name="specs[]" value="4" id="spec_3">
+                  <label class="form-check-label fw-medium" for="spec_3">Senza lattosio</label>
+                </div>
               </div>
             </div>
           </div>
 
+          <!-- Bottoni -->
           <div class="row">
             <div class="col-md-6 offset-md-6">
               <div class="d-flex gap-2 justify-content-end">
-
-                <button type="button" class="admin-btn btn btn-primary w-100" id="btnReset">
+                <button type="button" class="admin-btn btn btn-secondary w-100" id="cancel">
                   <i class="bi bi-x-lg me-2"></i>Annulla
                 </button>
-
-                <button type="submit" class="admin-btn btn btn-primary w-100">
+                <button type="submit" class="admin-btn btn btn-primary w-100" id="confirm">
                   <i class="bi bi-check-lg me-2"></i>Aggiungi Piatto
                 </button>
-
               </div>
             </div>
           </div>
@@ -242,4 +224,14 @@ if (!defined('IN_APP')) {
       </div>
     </div>
   </div>
+    <?php
+        if(isset($templateParams["js"])):
+            foreach($templateParams["js"] as $script):
+        ?>
+            <script src="<?php echo $script; ?>" type="module"></script>
+        <?php
+            endforeach;
+        endif;
+    ?>
 </main>
+

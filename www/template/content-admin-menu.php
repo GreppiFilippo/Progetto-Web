@@ -11,7 +11,7 @@
             </div>
             
             <div class="col-12 col-md-auto text-md-end">
-                <button type="reset" class="btn admin-btn btn-primary w-100 w-md-auto" id="add-dish">
+                <button type="button" class="btn admin-btn btn-primary w-100 w-md-auto" id="add-dish">
                     <i class="bi admin-icon bi-plus-circle me-1"></i>
                     Aggiungi piatto
                 </button>
@@ -53,23 +53,7 @@
 
     <div class="d-flex justify-content-center mt-3" id="pagination">
     </div>
-
-    <!-- POPUP -->
-    <div class="modal fade" id="dishModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body" id="modalContent">
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    Chiudi
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    
     <?php
     if(isset($templateParams["js"])):
         foreach($templateParams["js"] as $script):
