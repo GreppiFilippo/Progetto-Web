@@ -139,17 +139,18 @@ function availableBadge(int $stock): void
 
 function bookingStatusBadge(string $status): string
 {
-    return '<span class="badge ' . reservationBadgeClass(ucfirst(strtolower($status))) . ' p-2">' . htmlspecialchars($status) . '</span>';
+    return '<span class="badge ' . reservationBadgeClass($status) . ' p-2">' . htmlspecialchars($status) . '</span>';
 }
 
 function reservationBadgeClass(string $status): string
 {
-    return match ($status) {
-        'Completato' => 'bg-success',
-        'Annullato' => 'bg-danger',
-        'Pronto al ritiro' => 'bg-info',
-        'In Preparazione' => 'bg-warning',
-        'Da Visualizzare' => 'bg-secondary',
+    $lower = strtolower($status);
+    return match ($lower) {
+        'completato' => 'bg-success',
+        'annullato' => 'bg-danger',
+        'pronto al ritiro' => 'bg-info',
+        'in preparazione' => 'bg-warning',
+        'da visualizzare' => 'bg-secondary',
         default => 'bg-dark',
     };
 }
