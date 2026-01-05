@@ -1000,16 +1000,37 @@ class DatabaseHelper {
         ] : [];
     }
 
-public function modifyDish($dishid, $name, $price, $stock, $category_id, $description) {
-    $sql = "UPDATE dishes SET name=?, price=?, stock=?, category_id=?, description=? WHERE dish_id=?";
+public function modifyDish($dishId, $name, $price, $stock, $categoryId, $description, $calories, $specIds = []) {
+    // 1️⃣ Aggiorna la tabella dishes
+    $sql = "UPDATE dishes 
+            SET name = ?, price = ?, stock = ?, category_id = ?, description = ?, calories = ? 
+            WHERE dish_id = ?";
     $stmt = $this->db->prepare($sql);
-    if (!$stmt) return false;
+    if (!$stmt) return ["success" => false, "error" => $this->db->error];
 
-    // Tipi corretti: s = stringa, d = double/float, i = int
-    $stmt->bind_param("sdiisi", $name, $price, $stock, $category_id, $description, $dishid);
+    // Tipi: s = stringa, d = double, i = int
+    $stmt->bind_param("sdiisii", $name, $price, $stock, $categoryId, $description, $calories, $dishId);
 
-    return $stmt->execute();
+    if (!$stmt->execute()) {
+        return ["success" => false, "error" => $stmt->error];
+    }
+
+    $sqlDel = "DELETE FROM dish_specifications WHERE dish_id = ?";
+    $stmtDel = $this->db->prepare($sqlDel);
+    $stmtDel->bind_param("i", $dishId);
+    $stmtDel->execute();
+
+    $sqlIns = "INSERT INTO dish_specifications (dish_id, dietary_spec_id) VALUES (?, ?)";
+    $stmtIns = $this->db->prepare($sqlIns);
+
+    foreach ($specIds as $specId) {
+        $stmtIns->bind_param("ii", $dishId, $specId);
+        $stmtIns->execute();
+    }
+
+    return ["success" => true];
 }
+
 
 public function updateReservationStatus($reservationId, $newStatus) {
     $sql = "UPDATE reservations SET status = ? WHERE reservation_id = ?";
@@ -1037,4 +1058,80 @@ public function countActiveDishes() {
     $stmt->close();
     return $row ? (int)$row["TOTAL"] : 0;
 }
+
+function getDishFromId($id) {
+    $sql = "
+        SELECT 
+            d.dish_id,
+            d.name,
+            d.description,
+            d.price,
+            d.stock,
+            d.image,
+            d.calories,
+            d.category_id,
+            GROUP_CONCAT(ds.dietary_spec_id) AS specs
+        FROM dishes d
+        LEFT JOIN dish_specifications ds ON d.dish_id = ds.dish_id
+        WHERE d.dish_id = ?
+        GROUP BY 
+            d.dish_id,
+            d.name,
+            d.description,
+            d.price,
+            d.stock,
+            d.image,
+            d.calories,
+            d.category_id
+    ";
+
+    $stmt = $this->db->prepare($sql);
+    if (!$stmt) {
+        return false; // errore prepare
+    }
+
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+
+    // get_result() come volevi
+    $result = $stmt->get_result();
+    if ($result && $row = $result->fetch_assoc()) {
+        $row['specs'] = !empty($row['specs']) ? explode(',', $row['specs']) : [];
+        return $row;
+    }
+    return null; // piatto non trovato
+}
+
+public function deleteSlotByDateTime(string $slotDate, string $slotTime) {
+    // Validazione minima
+    if (empty($slotDate) || empty($slotTime)) {
+        return ["success" => false, "error" => "Data o orario non valido"];
+    }
+
+    $sql = "DELETE FROM time_slots WHERE slot_date = ? AND slot_time = ?";
+    $stmt = $this->db->prepare($sql);
+    if (!$stmt) {
+        return ["success" => false, "error" => "Errore prepare: " . $this->db->error];
+    }
+
+    $stmt->bind_param("ss", $slotDate, $slotTime);
+    $exec = $stmt->execute();
+
+    if ($exec) {
+        return ["success" => true];
+    } else {
+        return ["success" => false, "error" => $stmt->error];
+    }
+}
+
+public function addSlot(string $date, string $hour): bool {
+    $sql = "INSERT INTO time_slots (slot_date, slot_time) VALUES (?, ?)";
+    $stmt = $this->db->prepare($sql);
+    if (!$stmt) return false;
+
+    $stmt->bind_param("ss", $date, $hour);
+    return $stmt->execute();
+}
+
+
 }

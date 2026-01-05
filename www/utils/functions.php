@@ -268,7 +268,7 @@ function uploadImage(string $path, array $image): array
     $imageName = basename(isset($image['name']) && is_scalar($image['name']) ? (string) $image['name'] : '');
     $fullPath = $path . $imageName;
 
-    $maxKB = 500;
+    $maxKB = 3072;
     $acceptedExtensions = array("jpg", "jpeg", "png", "gif");
     $result = 0;
     $msg = "";

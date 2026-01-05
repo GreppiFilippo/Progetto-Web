@@ -8,6 +8,10 @@ document.getElementById("manage-bookings").addEventListener("click", () => {
     window.location.href = "admin-bookings.php";
 });
 
+document.getElementById("manage-slots").addEventListener("click", () => {
+    window.location.href = "admin-time-slots.php";
+});
+
 
 function renderBooking(bookings) {
     if (!Array.isArray(bookings)) return '';

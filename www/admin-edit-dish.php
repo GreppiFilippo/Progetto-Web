@@ -1,10 +1,7 @@
 <?php
 require_once "bootstrap.php";
-ini_set('display_errors', 1);   // mostra gli errori a video
-ini_set('display_startup_errors', 1); // mostra errori di avvio
-error_reporting(E_ALL);
 
-// Controlli admin
+// Controllo admin
 if (!isUserLoggedIn() || !isAdmin()) {
     http_response_code(403);
     require "login.php";
@@ -12,6 +9,20 @@ if (!isUserLoggedIn() || !isAdmin()) {
 }
 
 $errors = [];
+$dishId = $_GET["id"];
+
+// Parametri per template
+$templateParams["errors"] = $errors;
+$templateParams["content"] = "template/dish-form.php";
+$templateParams["titolo"] = "Modifica Piatto";
+$templateParams["js"] = ["js/image-preview.js", "js/edit-dish.js"]; 
+
+$templateParams["nav_items"] = array(
+        getNewNavItem("Dashboard", "admin-dashboard.php", "bi bi-speedometer2 me-1"),
+        getNewNavItem("Gestione menu", "admin-menu.php", "bi bi-book me-1"),
+        getNewNavItem("Prenotazioni", "admin-bookings.php", "bi bi-calendar-check me-1"),
+        getNewNavItem("Esci", "logout.php", "bi bi-box-arrow-right me-1")
+    );
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
@@ -34,33 +45,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $imageName = $res['filename'] ?? null;
         }
     }
-
     // 3) Inserimento DB
     if (empty($errors)) {
-        $res = $dbh->createDish($name, $description, $price, $stock, $imageName, $calories, $categoryId, $specIds);
+        $res = $dbh->modifyDish($dishId, $name, $price, $stock, $categoryId, $description, $calories, $specIds);
         if (!($res["success"] ?? false)) {
             $errors[] = "Errore DB: " . ($res["error"] ?? "sconosciuto");
         } else {
-            // Redirect alla dashboard
-            $previous = $_SERVER['HTTP_REFERER'] ?? 'admin-dashboard.php';
-            header($previous);
+            header("Location: admin-menu.php");
             exit;
         }
     }
 }
 
-$templateParams["nav_items"] = array(
-        getNewNavItem("Dashboard", "admin-dashboard.php", "bi bi-speedometer2 me-1"),
-        getNewNavItem("Gestione menu", "admin-menu.php", "bi bi-book me-1"),
-        getNewNavItem("Prenotazioni", "admin-bookings.php", "bi bi-calendar-check me-1"),
-        getNewNavItem("Esci", "logout.php", "bi bi-box-arrow-right me-1")
-    );
-
-
-// Se ci sono errori, li mostriamo
-$templateParams["errors"] = $errors;
-$templateParams["content"] = "template/dish-form.php";
-$templateParams["titolo"] = "Aggiungi Piatto";
-$templateParams["js"] = ["js/image-preview.js", "js/add-dish.js"];
 require "template/base-admin.php";
 ?>
