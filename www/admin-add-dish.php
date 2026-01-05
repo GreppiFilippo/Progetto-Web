@@ -57,7 +57,6 @@ $templateParams["nav_items"] = array(
     );
 
 
-// Se ci sono errori, li mostriamo
 $templateParams["errors"] = $errors;
 $templateParams["content"] = "template/dish-form.php";
 $templateParams["titolo"] = "Aggiungi Piatto";

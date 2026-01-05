@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const dishId = params.get("id");
 
     document.getElementById("confirm").innerHTML = `<i class="bi bi-pencil me-2"></i>Modifica Piatto`;
+     document.getElementById("title").innerHTML = `<i class="bi bi-pencil admin-icon fs-2" aria-hidden="true"></i> Aggiungi Piatto`;
 
     fetch(`api/get-dish.php?id=${dishId}`)
         .then(response => response.json())

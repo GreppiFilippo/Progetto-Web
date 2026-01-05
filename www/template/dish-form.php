@@ -6,20 +6,15 @@
   <div class="row justify-content-center">
     <div class="col-12">
       <?php if (!empty($templateParams["errors"])): ?>
-  <div class="alert alert-danger">
-    <ul>
-      <?php foreach ($templateParams["errors"] as $error): ?>
-        <li><?php echo $error; ?></li>
-      <?php endforeach; ?>
-    </ul>
-  </div>
-<?php endif; ?>
-
-      <h1 class="h3 mb-3">
-        <i class="bi admin-icon bi-plus-circle me-2" aria-hidden="true"></i>
-        <?php
-          echo $templateParams["titolo"];
-        ?>
+        <div class="alert alert-danger">
+          <ul>
+            <?php foreach ($templateParams["errors"] as $error): ?>
+              <li><?php echo $error; ?></li>
+            <?php endforeach; ?>
+          </ul>
+        </div>
+      <?php endif; ?>
+      <h1 class="h3 mb-3" id="title">
       </h1>
 
       <div class="border-0 shadow-sm p-4">
