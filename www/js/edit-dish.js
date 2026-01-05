@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const dishId = params.get("id");
 
     document.getElementById("confirm").innerHTML = `<i class="bi bi-pencil me-2"></i>Modifica Piatto`;
-     document.getElementById("title").innerHTML = `<i class="bi bi-pencil admin-icon fs-2" aria-hidden="true"></i> Aggiungi Piatto`;
+    document.getElementById("title").innerHTML = `<i class="bi bi-pencil admin-icon fs-2" aria-hidden="true"></i> Modifica Piatto`;
 
     fetch(`api/get-dish.php?id=${dishId}`)
         .then(response => response.json())
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("dishDescription").value = data.description || "";
             document.getElementById("dishPrice").value = data.price || "";
             document.getElementById("dishCalories").value = data.calories || "";
-            document.getElementById("dishAvailability").value = data.availability || "";
+            document.getElementById("dishAvailability").value = data.stock || "";
 
             if (data.category_id) {
                 document.getElementById("dishCategory").value = data.category_id;
