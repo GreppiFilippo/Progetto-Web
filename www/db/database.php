@@ -649,10 +649,10 @@ class DatabaseHelper {
      * Filters out slots that are in the past or too close to current time.
      *
      * @param string $slot_date Date in YYYY-MM-DD
-     * @param int $minHoursAdvance Minimum hours in advance required (default: 1)
+     * @param int $minMinutesAdvance Minimum minutes in advance required (default: 15)
      * @return array List of available time slots
      */
-    public function getTimeSlotsByDate($slot_date, $minHoursAdvance = 1) {
+    public function getTimeSlotsByDate($slot_date, $minMinutesAdvance = 15) {
         $sql = "SELECT slot_time
                 FROM time_slots
                 WHERE slot_date = ?
@@ -678,10 +678,10 @@ class DatabaseHelper {
             return $rows;
         }
 
-        // For today, filter slots that are at least minHoursAdvance in the future
+        // For today, filter slots that are at least minMinutesAdvance in the future
         $now = new DateTime();
         $minTime = clone $now;
-        $minTime->add(new DateInterval('PT' . $minHoursAdvance . 'H'));
+        $minTime->add(new DateInterval('PT' . $minMinutesAdvance . 'M'));
 
         $filteredRows = [];
         foreach ($rows as $row) {
