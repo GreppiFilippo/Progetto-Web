@@ -106,7 +106,7 @@ function setupDateTimeHandler() {
             return;
         }
 
-        fetch(`utils/get-time-slots.php?date=${encodeURIComponent(selectedDate)}`)
+        fetch(`api/get-time-slots.php?date=${encodeURIComponent(selectedDate)}`)
             .then(r => {
                 if (!r.ok) throw new Error('Server error');
                 return r.json();
@@ -175,22 +175,22 @@ function setupQuantityHandler() {
             const btn = e.target.closest('.quantity-btn');
             const targetId = btn.dataset.target;
             const input = document.getElementById(targetId);
-            
+
             if (!input) return;
-            
+
             const action = btn.dataset.action;
             const currentValue = parseInt(input.value, 10) || 0;
             const min = parseInt(input.min, 10) || 0;
             const max = parseInt(input.max, 10) || Infinity;
-            
+
             let newValue = currentValue;
-            
+
             if (action === 'increase' && currentValue < max) {
                 newValue = currentValue + 1;
             } else if (action === 'decrease' && currentValue > min) {
                 newValue = currentValue - 1;
             }
-            
+
             if (newValue !== currentValue) {
                 input.value = newValue;
                 updateSummary(input);

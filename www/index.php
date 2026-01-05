@@ -6,6 +6,11 @@ $templateParams["titolo"] = "Mensa Campus - Home";
 $templateParams["link_utili"] = [];
 
 if (isUserLoggedIn()) {
+    if (isAdmin()) {
+        header("Location: admin-dashboard.php");
+        exit();
+    }
+
     $templateParams["nav_items"] = array(
         getNewNavItem("Dashboard", "user-dashboard.php", "bi bi-speedometer2"),
         getNewNavItem("Menu", "menu.php", "bi bi-book"),
@@ -28,7 +33,7 @@ if (isUserLoggedIn()) {
         getNewNavItem("Menu", "menu.php", "bi bi-book"),
         getNewNavItem("Accedi", "login.php", "bi bi-box-arrow-in-right")
     );
-    
+
     $templateParams["link_utili"][] = array(
         "name" => "Menu",
         "link" => "menu.php",

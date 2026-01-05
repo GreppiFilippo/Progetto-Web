@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
     const dishId = params.get("id");
 
-    fetch(`utils/api-get-dish.php?id=${dishId}`)
+    fetch(`api/get-dish.php?id=${dishId}`)
         .then(response => response.json())
         .then(data => {
             if (!data) return; // se l'endpoint non restituisce dati, esci

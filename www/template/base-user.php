@@ -52,7 +52,7 @@ if (!defined('IN_APP')) {
 
       <!-- Menu -->
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto align-items-md-center">
+        <ul class="navbar-nav ms-auto align-items-lg-center">
           <?php foreach ($templateParams["nav_items"] as $nav_item): ?>
             <li class="nav-item">
               <a class="nav-link active text-white" aria-current="page"

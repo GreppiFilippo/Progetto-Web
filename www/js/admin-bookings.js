@@ -1,16 +1,16 @@
-import {isToday, isTomorrow, debounce, renderPagination} from './common-functions.js';
+import { isToday, isTomorrow, debounce, renderPagination } from './common-functions.js';
 
 let bookingsCache = [];
 let currentPage = 1;
 const resultsPerPage = 4;
 
 document.getElementById('date').addEventListener('change', () => loadData(1));
-document.getElementById('hour').addEventListener('change', () => loadData(1));  
+document.getElementById('hour').addEventListener('change', () => loadData(1));
 document.getElementById('state').addEventListener('change', () => loadData(1));
 document.getElementById('name').addEventListener('input', debounce(() => loadData(1), 150));
 
 async function loadData(page = 1) {
-    const url = `utils/api-admin-bookings.php`;
+    const url = `api/admin-bookings.php`;
     currentPage = page;
     try {
         const date = document.getElementById('date').value;
@@ -23,8 +23,8 @@ async function loadData(page = 1) {
             hour,
             state,
             name,
-            page: currentPage,   
-            per_page: resultsPerPage 
+            page: currentPage,
+            per_page: resultsPerPage
         });
 
 
@@ -126,7 +126,5 @@ function renderBookingItem(booking) {
         </div>
     `;
 }
-
-
 
 loadData();

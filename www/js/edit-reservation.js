@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!reservationId) return console.error("reservation_id mancante");
     console.log("si")
     // Fetch dei piatti
-    fetch(`utils/api-reservation-details.php?reservation_id=${reservationId}`)
+    fetch(`api/reservation-details.php?reservation_id=${reservationId}`)
         .then(res => res.json())
         .then(dishes => {
             if (!Array.isArray(dishes) || dishes.length === 0) {
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     btn.addEventListener("click", () => {
         const status = document.getElementById('statusSelect').value;
-        fetch('utils/api-admin-update-reservation.php', {
+        fetch('api/admin-update-reservation.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

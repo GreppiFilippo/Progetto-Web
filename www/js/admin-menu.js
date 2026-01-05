@@ -30,7 +30,7 @@ async function loadData(page = 1) {
             per_page: resultsPerPage
         });
 
-        const res = await fetch(`utils/api-admin-menu.php?${params.toString()}`);
+        const res = await fetch(`api/admin-menu.php?${params.toString()}`);
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
         cachedDishes = data.dishes;
