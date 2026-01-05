@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("dishDescription").value = data.description || "";
             document.getElementById("dishPrice").value = data.price || "";
             document.getElementById("dishCalories").value = data.calories || "";
-            document.getElementById("dishAvailability").value = data.availability || "";
+            document.getElementById("dishAvailability").value = data.stock || "";
 
             if (data.category_id) {
                 document.getElementById("dishCategory").value = data.category_id;
