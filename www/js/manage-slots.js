@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const formData = new FormData();
         formData.append("date", date);
         formData.append("hour", time);
-        fetch("utils/api-add-slot.php", {
+        fetch("api/add-slot.php", {
             method: "POST",
             body: formData
         })
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append("date", slotDate);
         formData.append("hour", slotTime);
 
-        fetch("utils/api-delete-slot.php", {
+        fetch("api/delete-slot.php", {
             method: "POST",
             body: formData
         })
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         slotList.innerHTML = `<div class="col-12 text-center text-muted">Caricamento...</div>`;
 
         try {
-            const res = await fetch(`utils/get-time-slots.php?date=${selectedDate}`);
+            const res = await fetch(`api/get-time-slots.php?date=${selectedDate}`);
             const data = await res.json();
 
             const slots = data.slots;

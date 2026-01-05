@@ -19,7 +19,7 @@ async function renderBooking(bookings) {
         // fetch dei piatti della prenotazione
         let dishes = [];
         try {
-            const res = await fetch(`utils/api-reservation-details.php?reservation_id=${booking.reservation_id}`);
+            const res = await fetch(`api/reservation-details.php?reservation_id=${booking.reservation_id}`);
             if (res.ok) {
                 const data = await res.json();
                 // prendiamo solo i nomi dei piatti
