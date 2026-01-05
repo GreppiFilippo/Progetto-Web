@@ -53,17 +53,6 @@
             <label for="hour" class="form-label">Orario</label>
             <select id="hour" class="form-select">
                 <option value="" selected>--</option>
-                <?php
-                    $start = new DateTime("11:45");
-                    $end = new DateTime("14:15");
-
-                    // intervallo di 15 minuti
-                    $interval = new DateInterval("PT5M");
-
-                    for ($time = $start; $time <= $end; $time->add($interval)) {
-                        echo '<option value="' . $time->format("H:i") . '">' . $time->format("H:i") . '</option>';
-                    }
-                ?>
             </select>
         </div>
         <div class="col-12 col-md-2">

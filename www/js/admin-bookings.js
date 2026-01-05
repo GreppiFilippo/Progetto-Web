@@ -4,7 +4,10 @@ let bookingsCache = [];
 let currentPage = 1;
 const resultsPerPage = 4;
 
-document.getElementById('date').addEventListener('change', () => loadData(1));
+document.getElementById('date').addEventListener('change', async () => {
+    await loadTimeSlots();
+    loadData(1);
+});
 document.getElementById('hour').addEventListener('change', () => loadData(1));
 document.getElementById('state').addEventListener('change', () => loadData(1));
 document.getElementById('name').addEventListener('input', debounce(() => loadData(1), 150));
@@ -125,6 +128,39 @@ function renderBookingItem(booking) {
             </div>
         </div>
     `;
+}
+
+async function loadTimeSlots() {
+    const dateInput = document.getElementById('date');
+    const hourSelect = document.getElementById('hour');
+    const selectedDate = dateInput.value;
+
+    if (!selectedDate) {
+        hourSelect.innerHTML = '<option value="" selected>--</option>';
+        return;
+    }
+
+    try {
+        const response = await fetch(`api/get-time-slots.php?date=${selectedDate}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        hourSelect.innerHTML = '<option value="" selected>--</option>';
+        
+        if (data.slots && Array.isArray(data.slots)) {
+            data.slots.forEach(slot => {
+                const option = document.createElement('option');
+                option.value = slot.value;
+                option.textContent = slot.label;
+                hourSelect.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error("Error loading time slots:", error);
+        hourSelect.innerHTML = '<option value="" selected>--</option>';
+    }
 }
 
 loadData();
