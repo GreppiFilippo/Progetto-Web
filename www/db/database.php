@@ -1000,16 +1000,56 @@ class DatabaseHelper {
         ] : [];
     }
 
-public function modifyDish($dishId, $name, $price, $stock, $categoryId, $description, $calories, $specIds = []) {
-    // 1️⃣ Aggiorna la tabella dishes
+public function modifyDish(
+    int $dishId,
+    string $name,
+    float $price,
+    int $stock,
+    int $categoryId,
+    string $description,
+    int $calories,
+    string $imageName,
+    array $specIds = []
+) {
     $sql = "UPDATE dishes 
-            SET name = ?, price = ?, stock = ?, category_id = ?, description = ?, calories = ? 
-            WHERE dish_id = ?";
-    $stmt = $this->db->prepare($sql);
-    if (!$stmt) return ["success" => false, "error" => $this->db->error];
+            SET name = ?, price = ?, stock = ?, category_id = ?, description = ?, calories = ?";
 
-    // Tipi: s = stringa, d = double, i = int
-    $stmt->bind_param("sdiisii", $name, $price, $stock, $categoryId, $description, $calories, $dishId);
+    // se immagine caricata la aggiorno
+    if ($imageName !== "") {
+        $sql .= ", image = ?";
+    }
+
+    $sql .= " WHERE dish_id = ?";
+
+    $stmt = $this->db->prepare($sql);
+    if (!$stmt) {
+        return ["success" => false, "error" => $this->db->error];
+    }
+
+    if ($imageName !== "") {
+        $stmt->bind_param(
+            "sdiisisi",
+            $name,
+            $price,
+            $stock,
+            $categoryId,
+            $description,
+            $calories,
+            $imageName,
+            $dishId
+        );
+    } else {
+        $stmt->bind_param(
+            "sdiisii",
+            $name,
+            $price,
+            $stock,
+            $categoryId,
+            $description,
+            $calories,
+            $dishId
+        );
+    }
 
     if (!$stmt->execute()) {
         return ["success" => false, "error" => $stmt->error];
@@ -1030,6 +1070,7 @@ public function modifyDish($dishId, $name, $price, $stock, $categoryId, $descrip
 
     return ["success" => true];
 }
+
 
 
 public function updateReservationStatus($reservationId, $newStatus) {
