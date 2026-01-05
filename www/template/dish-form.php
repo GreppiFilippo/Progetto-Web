@@ -217,7 +217,6 @@
                   <i class="bi bi-x-lg me-2"></i>Annulla
                 </button>
                 <button type="submit" class="admin-btn btn btn-primary w-100" id="confirm">
-                  <i class="bi bi-check-lg me-2"></i>Aggiungi Piatto
                 </button>
               </div>
             </div>

@@ -4,6 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
     const dishId = params.get("id");
 
+    document.getElementById("confirm").innerHTML = `<i class="bi bi-pencil me-2"></i>Modifica Piatto`;
+
     fetch(`api/get-dish.php?id=${dishId}`)
         .then(response => response.json())
         .then(data => {
