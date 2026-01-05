@@ -12,7 +12,7 @@
     <div class="row g-3 mb-4">
         <!-- FILTERS -->
         <section class="col-12 col-md-8">
-            <form class="row g-3">
+            <form class="row g-3" autocomplete="off">
                 <div class="col-12 col-sm-6">
                     <label for="category" class="form-label">Categoria</label>
                     <select id="category" class="form-select">
@@ -34,7 +34,12 @@
                 </div>
                 <div class="col-12">
                     <label for="name" class="form-label">Cerca</label>
-                    <input type="text" class="form-control" placeholder="Cerca piatto per nome..." id="name">
+                    <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Cerca piatto per nome..."
+                        id="name"
+                    >
                 </div>
             </form>
         </section>
