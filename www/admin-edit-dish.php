@@ -40,18 +40,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $specIds = $_POST["specs"] ?? [];
 
     // 2) Upload immagine
-    $imageName = null;
-    if (empty($errors)) {
-        $res = uploadImage(UPLOAD_DIR, $_FILES['dishImage'] ?? []);
+    $imageName = "";
+    if (
+        empty($errors) &&
+        isset($_FILES['dishImage']) &&
+        $_FILES['dishImage']['error'] !== UPLOAD_ERR_NO_FILE
+    ) {
+        $res = uploadImage(UPLOAD_DIR, $_FILES['dishImage']);
+
         if (($res['result'] ?? 0) == 0) {
             $errors[] = $res['msg'] ?? 'Errore upload sconosciuto';
         } else {
-            $imageName = $res['filename'] ?? null;
+            $imageName = $res['filename'] ?? "";
         }
     }
+
     // 3) Inserimento DB
     if (empty($errors)) {
-        $res = $dbh->modifyDish($dishId, $name, $price, $stock, $categoryId, $description, $calories, $specIds);
+        $res = $dbh->modifyDish($dishId, $name, $price, $stock, $categoryId, $description, $calories, $imageName, $specIds);
         if (!($res["success"] ?? false)) {
             $errors[] = "Errore DB: " . ($res["error"] ?? "sconosciuto");
         } else {
