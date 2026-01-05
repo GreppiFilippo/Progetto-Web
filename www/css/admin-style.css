@@ -114,6 +114,22 @@ div.card > div.ratio img,
     }
 }
 
+/* Fix per label che escono dal riquadro tra 768px e 820px */
+@media (min-width: 768px) and (max-width: 820px) {
+    #dish_list .card-body {
+        font-size: 0.9rem;
+    }
+    
+    #dish_list .card-body small {
+        font-size: 0.8rem;
+    }
+    
+    #dish_list .card-body .btn {
+        font-size: 0.85rem;
+        padding: 0.375rem 0.5rem;
+    }
+}
+
 
 
 .admin-page .form-text,
