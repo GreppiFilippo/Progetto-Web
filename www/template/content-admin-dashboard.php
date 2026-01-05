@@ -60,9 +60,9 @@
     </section>
 
     <section class="mb-3">
-        <header class="d-flex align-items-center">
+        <div class="d-flex align-items-center">
             <h2 class="h5 m-0">Ultime prenotazioni</h2>
-        </header>
+        </div>
     </section>
 
     <div class="row g-3">
