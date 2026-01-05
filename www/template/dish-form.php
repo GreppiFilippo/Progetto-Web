@@ -17,7 +17,9 @@
 
       <h1 class="h3 mb-3">
         <i class="bi admin-icon bi-plus-circle me-2" aria-hidden="true"></i>
-        Aggiungi Nuovo Piatto
+        <?php
+          echo $templateParams["titolo"];
+        ?>
       </h1>
 
       <div class="border-0 shadow-sm p-4">

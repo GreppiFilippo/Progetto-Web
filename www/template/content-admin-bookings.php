@@ -1,4 +1,4 @@
-<main class="container-fluid my-3">
+<main class="container-fluid my-5">
     <header class="mb-3 text-center text-md-start">
         <div class="row align-items-center">
             <div class="col-12 col-md mb-1">

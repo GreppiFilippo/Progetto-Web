@@ -71,12 +71,12 @@ function renderBookingItem(booking, dishes) {
                             <i class="bi bi-calendar-event text-primary me-2"></i>
                             Prenotazione #${booking.reservation_id}
                         </h3>
-                        <div class="small text-muted">
+                        <div class="small text-muted mb-1">
                             ${when} ${time} – ${booking.first_name} ${booking.last_name}
                         </div>
                         ${booking.badge || ''}
                     </div>
-                    <strong>€ ${booking.total_amount}</strong>
+                    <strong mb-1>€ ${booking.total_amount}</strong>
                 </div>
                 ${dishesHtml}
             </div>

@@ -9,13 +9,6 @@
                 </h1>
                 <p class="lead mb-0">Visualizza, modifica o elimina gli slot disponibili</p>
             </div>
-            
-            <div class="col-12 col-md-auto text-md-end">
-                <button type="button" class="btn admin-btn btn-primary w-100 w-md-auto" id="add-slot">
-                    <i class="bi admin-icon bi-plus-circle me-1"></i>
-                    Aggiungi Slot
-                </button>
-            </div>
         </div>
     </section>
 

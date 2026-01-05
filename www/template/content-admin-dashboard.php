@@ -1,8 +1,8 @@
-<main class="container-fluid my-2">
+<main class="container-fluid my-2 ">
     <div class="row dashboard m-0 mb-2">
         <div class="col-12">
             <!-- Titolo + icona -->
-            <div class="d-flex align-items-center mb-1">
+            <div class="d-flex align-items-center mb-2">
                 <i class="bi bi-speedometer2 me-3" aria-hidden="true"></i>
                 <h1 class="h6 mb-0">Dashboard Amministratore</h1>
             </div>
@@ -12,7 +12,7 @@
     </div>
 
     <!-- ICONS -->
-    <section class="row mb-3 ">
+    <section class="row mb-2">
         <div class="col mb-2 d-flex align-items-center col-md-3">
             <div class="bgicon bg-primary-subtle text-primary mx-3">
                 <i class="bi bi-calendar-check"></i>

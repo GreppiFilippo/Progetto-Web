@@ -108,7 +108,7 @@ function renderBookingItem(booking) {
 
                     <div class="d-flex justify-content-between align-items-center">
                         Numero piatti
-                        <span class="badge bg-secondary">${booking.num_dishes} piatti</span>
+                        <span class="badge bg-secondary">${booking.num_dishes + " "+ booking.num_dishes == 1 ? "Piatto" : "Piatti"}</span>
                     </div>
                     <div class="d-flex justify-content-between align-items-center">
                         <span>Totale</span>
