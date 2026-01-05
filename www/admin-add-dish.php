@@ -1,15 +1,16 @@
 <?php
-require_once "bootstrap.php";
-ini_set('display_errors', 1);   // mostra gli errori a video
-ini_set('display_startup_errors', 1); // mostra errori di avvio
-error_reporting(E_ALL);
+// Admin template access control
+    if (!isUserLoggedIn()) {
+        http_response_code(403);
+        require "login.php";
+        exit();
+    }
 
-// Controlli admin
-if (!isUserLoggedIn() || !isAdmin()) {
-    http_response_code(403);
-    require "login.php";
-    exit();
-}
+    if (!isAdmin()) {
+        http_response_code(401);
+        require "not-authorized.php";
+        exit();
+    }
 
 $errors = [];
 

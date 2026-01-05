@@ -1,12 +1,18 @@
 <?php
 require_once "bootstrap.php";
 
-// Controllo admin
-if (!isUserLoggedIn() || !isAdmin()) {
-    http_response_code(403);
-    require "login.php";
-    exit();
-}
+// Admin template access control
+    if (!isUserLoggedIn()) {
+        http_response_code(403);
+        require "login.php";
+        exit();
+    }
+
+    if (!isAdmin()) {
+        http_response_code(401);
+        require "not-authorized.php";
+        exit();
+    }
 
 $errors = [];
 $dishId = $_GET["id"];
