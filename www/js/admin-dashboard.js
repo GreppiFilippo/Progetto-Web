@@ -3,120 +3,119 @@ import { isToday, isTomorrow } from './common-functions.js';
 document.getElementById("add-dish").addEventListener("click", () => {
     window.location.href = "admin-add-dish.php";
 });
-
 document.getElementById("manage-bookings").addEventListener("click", () => {
     window.location.href = "admin-bookings.php";
 });
-
 document.getElementById("manage-slots").addEventListener("click", () => {
     window.location.href = "admin-time-slots.php";
 });
 
-
-function renderBooking(bookings) {
+// Renderizza prenotazioni con piatti
+async function renderBooking(bookings) {
     if (!Array.isArray(bookings)) return '';
     let html = '';
-    bookings.forEach(booking => {
-        html += renderBookingItem(booking);
-    });
-    return html;
-}
 
-function renderBookingItem(booking) {
-    const dt = new Date(booking.date_time);
-    const dayNum = dt.getDate();
-    let displayDate;
+    for (const booking of bookings) {
+        // fetch dei piatti della prenotazione
+        let dishes = [];
+        try {
+            const res = await fetch(`utils/api-reservation-details.php?reservation_id=${booking.reservation_id}`);
+            if (res.ok) {
+                const data = await res.json();
+                // prendiamo solo i nomi dei piatti
+                dishes = Array.isArray(data) ? data.map(d => d.name) : [];
+            }
+        } catch (e) {
+            console.error("Errore fetch piatti per prenotazione", booking.reservation_id, e);
+        }
 
-    if (isToday(booking.date_time)) {
-        displayDate = "Oggi";
-    } else if (isTomorrow(booking.date_time)) {
-        displayDate = "Domani";
-    } else {
-        displayDate = String(dayNum).padStart(2, '0') + "/" + String(dt.getMonth() + 1).padStart(2, '0');
+        html += renderBookingItem(booking, dishes);
     }
 
-    const time = String(dt.getHours()).padStart(2, '0') + ":" + String(dt.getMinutes()).padStart(2, '0');
+    document.getElementById("booking-list").innerHTML = html;
+}
+
+// Render singola prenotazione con lista piatti
+function renderBookingItem(booking, dishes) {
+    const dt = new Date(booking.date_time);
+
+    let when;
+    if (isToday(booking.date_time)) {
+        when = "Oggi";
+    } else if (isTomorrow(booking.date_time)) {
+        when = "Domani";
+    } else {
+        when =
+            String(dt.getDate()).padStart(2, '0') + "/" +
+            String(dt.getMonth() + 1).padStart(2, '0');
+    }
+
+    const time =
+        String(dt.getHours()).padStart(2, '0') + ":" +
+        String(dt.getMinutes()).padStart(2, '0');
+
+    const dishesHtml = `<ul class="mb-2 list-unstyled">
+                            ${dishes.map(d => `
+                                <li>
+                                    <i class="bi bi-check2 text-success me-2" aria-hidden="true"></i>
+                                    ${d}
+                                </li>`).join('')}
+                        </ul>`;
 
     return `
-        <div class="col-12 col-md-6 g-md-2 mb-2">
-            <div class="card shadow-sm mb-2 h-100">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <h3 class="h6 mb-0 text-truncate">
-                            #${booking.reservation_id} ${booking.first_name} ${booking.last_name}
+        <div class="col-12 mb-3">
+            <div class="p-3 border rounded-3 shadow-sm" id="reservation-${booking.reservation_id}">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <h3 class="h6 mb-1">
+                            <i class="bi bi-calendar-event text-primary me-2"></i>
+                            Prenotazione #${booking.reservation_id}
                         </h3>
+                        <div class="small text-muted">
+                            ${when} ${time} – ${booking.first_name} ${booking.last_name}
+                        </div>
                         ${booking.badge || ''}
                     </div>
-
-                    <!-- Separatore -->
-                    <hr class="my-2">
-
-                    <!-- Data/Ora sotto -->
-                    <div class="small text-muted">
-                        <span>Data</span>
-                        <span>${displayDate} ${time}</span>
-                    </div>
-
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span>Numero piatti</span>
-                        <span class="badge bg-secondary">${booking.num_dishes} piatti</span>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <span>Totale</span>
-                        <span>€ ${booking.total_amount}</span>
-                    </div>
+                    <strong>€ ${booking.total_amount}</strong>
                 </div>
+                ${dishesHtml}
             </div>
         </div>
     `;
 }
 
+// Render top dishes
 function renderTopDishes(dishes) {
     if (!Array.isArray(dishes)) return '';
-    let html = '';
-    dishes.forEach(dish => {
-        html += `
-            <div class="d-flex justify-content-between align-items-start">
-                <span>
-                    ${dish.name}<br>
-                    <small class="text-muted">${dish.category_name}</small>
-                </span>
-                <span class="badge bg-primary text-white">
-                    ${dish.total_sold}
-                </span>
-            </div>
-            <hr/>
-        `;
-    });
-    return html;
+    return dishes.map(dish => `
+        <div class="d-flex justify-content-between align-items-start">
+            <span>${dish.name}<br><small class="text-muted">${dish.category_name}</small></span>
+            <span class="badge bg-primary text-white">${dish.total_sold}</span>
+        </div><hr/>
+    `).join('');
 }
 
-
+// Prendi dati dashboard
 async function getData() {
     const url = `utils/api-admin-dashboard.php`;
 
     try {
         const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         console.log("Fetched booking data:", data);
-        const bookingsHtml = renderBooking(data.bookings);
-        document.getElementById("booking-list").innerHTML = bookingsHtml;
-        document.getElementById("bookings").innerHTML = data.bookings_count;
-        document.getElementById("users").innerHTML = data.users_count;
-        document.getElementById("earnings").innerHTML = data.earnings_today;
-        document.getElementById("dishes").innerHTML = data.active_dishes;
+
+        await renderBooking(data.bookings); // qui mostriamo prenotazioni con piatti
+        document.getElementById("bookings").textContent = data.bookings_count;
+        document.getElementById("users").textContent = data.users_count;
+        document.getElementById("earnings").textContent = data.earnings_today;
+        document.getElementById("dishes").textContent = data.active_dishes;
         document.getElementById("top_dishes").innerHTML = renderTopDishes(data.top_dishes);
+
     } catch (error) {
         console.error("Error fetching booking data:", error);
     }
 }
 
 document.addEventListener('DOMContentLoaded', getData);
-
-
-setInterval(() => {
-    getData();
-}, 30000);
+setInterval(getData, 30000);
