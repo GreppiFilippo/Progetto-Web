@@ -16,6 +16,10 @@ $templateParams["errors"] = $errors;
 $templateParams["content"] = "template/dish-form.php";
 $templateParams["titolo"] = "Modifica Piatto";
 $templateParams["js"] = ["js/image-preview.js", "js/edit-dish.js"]; 
+$templateParams["icon"] = `<div class="bg-primary bg-opacity-10 rounded-3 p-3" aria-hidden="true">
+                        <i class="bi bi-calendar-check text-primary fs-2" aria-hidden="true"></i>
+                        Modifica Piatto
+                    </div>`;
 
 $templateParams["nav_items"] = array(
         getNewNavItem("Dashboard", "admin-dashboard.php", "bi bi-speedometer2 me-1"),
