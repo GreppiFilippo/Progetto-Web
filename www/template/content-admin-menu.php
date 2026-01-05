@@ -34,12 +34,8 @@
                 </div>
                 <div class="col-12">
                     <label for="name" class="form-label">Cerca</label>
-                    <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Cerca piatto per nome..."
-                        id="name"
-                    >
+                    <input type="text" class="form-control" placeholder="Cerca piatto per nome..." id="name"
+                        autocomplete="off">
                 </div>
             </form>
         </section>
