@@ -1,16 +1,17 @@
 <?php
+require_once "bootstrap.php";
 // Admin template access control
-    if (!isUserLoggedIn()) {
-        http_response_code(403);
-        require "login.php";
-        exit();
-    }
+if (!isUserLoggedIn()) {
+    http_response_code(403);
+    require "login.php";
+    exit();
+}
 
-    if (!isAdmin()) {
-        http_response_code(401);
-        require "not-authorized.php";
-        exit();
-    }
+if (!isAdmin()) {
+    http_response_code(401);
+    require "not-authorized.php";
+    exit();
+}
 
 $errors = [];
 
@@ -19,10 +20,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // 1) Leggi e valida
     $name = trim($_POST["dishName"] ?? "");
     $description = trim($_POST["dishDescription"] ?? "");
-    $price = (float)($_POST["dishPrice"] ?? 0);
-    $stock = (int)($_POST["dishAvailability"] ?? -1);
-    $calories = (int)($_POST["dishCalories"] ?? -1);
-    $categoryId = (int)($_POST["dishCategory"] ?? 0);
+    $price = (float) ($_POST["dishPrice"] ?? 0);
+    $stock = (int) ($_POST["dishAvailability"] ?? -1);
+    $calories = (int) ($_POST["dishCalories"] ?? -1);
+    $categoryId = (int) ($_POST["dishCategory"] ?? 0);
     $specIds = $_POST["specs"] ?? [];
 
     // 2) Upload immagine
@@ -51,11 +52,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 $templateParams["nav_items"] = array(
-        getNewNavItem("Dashboard", "admin-dashboard.php", "bi bi-speedometer2 me-1"),
-        getNewNavItem("Gestione menu", "admin-menu.php", "bi bi-book me-1"),
-        getNewNavItem("Prenotazioni", "admin-bookings.php", "bi bi-calendar-check me-1"),
-        getNewNavItem("Esci", "logout.php", "bi bi-box-arrow-right me-1")
-    );
+    getNewNavItem("Dashboard", "admin-dashboard.php", "bi bi-speedometer2 me-1"),
+    getNewNavItem("Gestione menu", "admin-menu.php", "bi bi-book me-1"),
+    getNewNavItem("Prenotazioni", "admin-bookings.php", "bi bi-calendar-check me-1"),
+    getNewNavItem("Esci", "logout.php", "bi bi-box-arrow-right me-1")
+);
 
 
 $templateParams["errors"] = $errors;

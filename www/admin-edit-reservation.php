@@ -1,4 +1,7 @@
 <?php
+
+require_once "bootstrap.php";
+
 // Admin template access control
 if (!isUserLoggedIn()) {
     http_response_code(403);
