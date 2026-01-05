@@ -1,66 +1,74 @@
-<main class="container-fluid my-2 ">
-    <div class="row dashboard m-0 mb-2">
-        <div class="col-12">
-            <!-- Titolo + icona -->
-            <div class="d-flex align-items-center mb-2">
-                <i class="bi bi-speedometer2 me-3" aria-hidden="true"></i>
-                <h1 class="h6 mb-0">Dashboard Amministratore</h1>
-            </div>
-            <!-- Sottotitolo -->
-            <p class="ts-4 fw-light mb-0">Panoramica generale del sistema</p>
-        </div>
-    </div>
+<main class="container-fluid py-4 px-3 px-md-4">
+    <!-- Intestazione Dashboard -->
+    <header class="dashboard border rounded-3 p-4 mb-4 shadow-sm">
+        <h1 class="h3 mb-2 text-white">
+            <i class="bi bi-speedometer2 me-2"></i>
+            Dashboard Amministratore
+        </h1>
+        <p class="mb-0 opacity-75 text-white">Panoramica generale del sistema</p>
+    </header>
 
     <!-- ICONS -->
-    <section class="row mb-2">
-        <div class="col mb-2 d-flex align-items-center col-md-3">
-            <div class="bgicon bg-primary-subtle text-primary mx-3">
-                <i class="bi bi-calendar-check"></i>
-            </div>
-            <div class="d-flex flex-column align-items-start justify-content-center">
-                <label for="bookings" class="small">Prenotazioni di oggi</label>
-                <data id="bookings" value="47" class="h2 fw-bold mb-0"></data>
-            </div>
-        </div>
-        <div class="mb-2 d-flex align-items-center col-md-3">
-            <div class="bgicon bg-warning-subtle mx-3">
-                <i class="bi bi-people bg-warning-subtle text-warning mx-3"></i>
-            </div>
-            <div class="d-flex flex-column align-items-start justify-content-center">
-                <label for="users" class="small">Utenti registrati</label>
-                <data id="users" value="47" class="h2 fw-bold mb-0"></data>
+    <section class="row mb-4 g-3">
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="bg-white border rounded-3 p-3 shadow-sm d-flex align-items-center">
+                <div class="bgicon bg-primary-subtle text-primary me-3">
+                    <i class="bi bi-calendar-check fs-2"></i>
+                </div>
+                <div class="d-flex flex-column align-items-start justify-content-center">
+                    <label for="bookings" class="small text-muted mb-0">Prenotazioni Oggi</label>
+                    <data id="bookings" value="47" class="h2 fw-bold mb-0"></data>
+                </div>
             </div>
         </div>
-        <div class="mb-2 d-flex align-items-center col-md-3">
-            <div class="bgicon bg-success-subtle mx-3">
-                <i class="bi bi-currency-euro bg-success-subtle text-success mx-3"></i>
-            </div>
-            <div class="d-flex flex-column align-items-start justify-content-center">
-                <label for="earnings" class="small">Incasso giornaliero</label>
-                <data id="earnings" value="47" class="h2 fw-bold mb-0"></data>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="bg-white border rounded-3 p-3 shadow-sm d-flex align-items-center">
+                <div class="bgicon bg-warning-subtle text-warning me-3">
+                    <i class="bi bi-people fs-2"></i>
+                </div>
+                <div class="d-flex flex-column align-items-start justify-content-center">
+                    <label for="users" class="small text-muted mb-0">Utenti Registrati</label>
+                    <data id="users" value="342" class="h2 fw-bold mb-0"></data>
+                </div>
             </div>
         </div>
-        <div class="mb-2 d-flex align-items-center col-md-3">
-            <div class="bgicon bg-info-subtle mx-3">
-               <i class="bi bi-egg-fried bg-info-subtle text-info mx-3"></i>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="bg-white border rounded-3 p-3 shadow-sm d-flex align-items-center">
+                <div class="bgicon bg-success-subtle text-success me-3">
+                    <i class="bi bi-currency-euro fs-2"></i>
+                </div>
+                <div class="d-flex flex-column align-items-start justify-content-center">
+                    <label for="earnings" class="small text-muted mb-0">Incasso Giornaliero</label>
+                    <data id="earnings" value="487.50" class="h2 fw-bold mb-0"></data>
+                </div>
             </div>
-            <div class="d-flex flex-column align-items-start justify-content-center">
-                <label for="dishes" class="small">Piatti attivi oggi</label>
-                <data id="dishes" value="47" class="h2 fw-bold mb-0"></data>
+        </div>
+
+        <div class="col-12 col-sm-6 col-lg-3">
+            <div class="bg-white border rounded-3 p-3 shadow-sm d-flex align-items-center">
+                <div class="bgicon bg-info-subtle text-info me-3">
+                    <i class="bi bi-egg-fried fs-2"></i>
+                </div>
+                <div class="d-flex flex-column align-items-start justify-content-center">
+                    <label for="dishes" class="small text-muted mb-0">Piatti attivi oggi</label>
+                    <data id="dishes" value="18" class="h2 fw-bold mb-0"></data>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="mb-3 ms-3">
-        <header class="d-flex align-items-center">
+    <section class="mb-3">
+        <div class="d-flex align-items-center">
             <h2 class="h5 m-0">Ultime prenotazioni</h2>
-        </header>
+        </div>
     </section>
 
-    <div class="row m-0">
+    <div class="row g-3">
         <!-- Contenuto principale -->
-        <section class="col-12 col-md-8 mb-3">
-            <div id="booking-list" class="row g-md-1"></div>
+        <section class="col-12 col-md-8">
+            <div id="booking-list" class="row g-3"></div>
         </section>
 
         <!-- Aside -->
@@ -88,13 +96,13 @@
         </aside>
     </div>
 
-    
+
     <?php
-    if(isset($templateParams["js"])):
-        foreach($templateParams["js"] as $script):
-    ?>
-        <script src="<?php echo $script; ?>" type="module"></script>
-    <?php
+    if (isset($templateParams["js"])):
+        foreach ($templateParams["js"] as $script):
+            ?>
+            <script src="<?php echo $script; ?>" type="module"></script>
+            <?php
         endforeach;
     endif;
     ?>
