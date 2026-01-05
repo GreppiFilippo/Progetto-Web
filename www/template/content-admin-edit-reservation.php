@@ -91,7 +91,7 @@
                         </div>
                         <?php if ($reservation["status"] !== "Completato" && $reservation["status"] !== "Annullato"): ?>
                             <label for="statusSelect" class="form-label">Cambia stato</label>
-                            <select id="statusSelect" class="form-select mb-3" disabled>
+                            <select id="statusSelect" class="form-select mb-3">
                                 <?php
                                 $currentStatus = $reservation["status"];
 
@@ -114,11 +114,7 @@
                             </select>
 
                             <div class="d-grid">
-                                <button id="enableEditBtn" class="btn btn-outline-primary mb-2" type="button">
-                                    <i class="bi bi-pencil me-1"></i>
-                                    Modifica stato
-                                </button>
-                                <button id="saveStatusBtn" class="btn admin-btn" type="button" style="display: none;">
+                                <button id="saveStatusBtn" class="btn admin-btn" type="button">
                                     <i class="bi bi-check-circle me-1"></i>
                                     Salva modifiche
                                 </button>

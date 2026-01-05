@@ -17,23 +17,11 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(err => console.error("Errore fetch piatti:", err));
 
-    const enableEditBtn = document.getElementById('enableEditBtn');
     const saveStatusBtn = document.getElementById('saveStatusBtn');
-    const statusSelect = document.getElementById('statusSelect');
 
-    // Abilita la modifica dello stato
-    if (enableEditBtn) {
-        enableEditBtn.addEventListener("click", () => {
-            statusSelect.disabled = false;
-            enableEditBtn.style.display = 'none';
-            saveStatusBtn.style.display = 'block';
-        });
-    }
-
-    // Salva il nuovo stato
     if (saveStatusBtn) {
         saveStatusBtn.addEventListener("click", () => {
-            const status = statusSelect.value;
+            const status = document.getElementById('statusSelect').value;
             if (!status) {
                 alert("Seleziona un nuovo stato prima di salvare");
                 return;
