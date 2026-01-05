@@ -87,8 +87,8 @@ function renderDish(dish) {
                     <hr class="my-2">
 
                     <div class="btn-group g-1 d-flex">
-                        <button type="button" class="btn btn-outline-primary" data-id="${dish.dish_id}">
-                            <i class="bi bi-pencil text-primary"></i>
+                        <button type="button" class="btn btn-outline-primary admin-btn" data-id="${dish.dish_id}">
+                            <i class="bi bi-pencil"></i>
                             Modifica
                         </button>
                     </div>

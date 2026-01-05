@@ -47,100 +47,15 @@ async function loadData(page = 1) {
     }
 }
 
-document.addEventListener('click', async (e) => {
+document.addEventListener('click', (e) => {
     const btn = e.target.closest('.btn-outline-primary');
     if (!btn) return;
 
     const bookingId = btn.dataset.id;
-    const data = bookingsCache.find(b => b.reservation_id == bookingId);
-    if (!data) return;
-
-    // Creo modal Bootstrap
-    const modalEl = document.getElementById('bookingModal');
-    const modal = new bootstrap.Modal(modalEl);
-
-    try {
-        // Prendo i dettagli dal server
-        const res = await fetch(`api/reservation-details.php?reservation_id=${bookingId}`);
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        const dishes = await res.json();
-
-
-        // Popolo il modal
-        let html = `
-            <h5>Aggiorna Prenotazione</h5>
-            <select id="statusSelect" class="form-select mb-3">
-                <option value="Da Visualizzare" ${data.status === 'Da Visualizzare' ? 'selected' : ''}>Da visualizzare</option>
-                <option value="In Preparazione" ${data.status === 'In Preparazione' ? 'selected' : ''}>In Preparazione</option>
-                <option value="Pronto al ritiro" ${data.status === 'Pronto al ritiro' ? 'selected' : ''}>Pronto al ritiro</option>
-                <option value="Completato" ${data.status === 'Completato' ? 'selected' : ''}>Completato</option>`
-        if (data.status === 'In Preparazione' || data.status === 'Da Visualizzare') {
-            html += `<option value="Annullato" ${data.status === 'Annullato' ? 'selected' : ''}>Annulla Prenotazione</option>`;
-        }
-        html += `</select>
-            <h5>Dettagli Prenotazione</h5>
-            <ul class="list-group mb-2">
-        `;
-        dishes.forEach(dish => {
-            html += `<li class="list-group-item d-flex justify-content-between">
-                        ${dish.name} (x${dish.quantity})
-                        <span>€ ${dish.price * dish.quantity}</span>
-                    </li>`;
-        });
-        html += `</ul>
-                 <div class="d-flex justify-content-end">
-                     <button type="button" class="btn btn-primary" id="saveStatusBtn">Salva</button>
-                 </div>`;
-
-        document.getElementById('modalContent').innerHTML = html;
-
-        // Listener sul pulsante Salva
-        const saveBtn = document.getElementById('saveStatusBtn');
-        saveBtn.addEventListener('click', async () => {
-            const newStatus = document.getElementById('statusSelect').value;
-            if (newStatus === data.status) return;
-
-            if (newStatus === 'Annullato') {
-                // Cancella prenotazione
-                const resDel = await fetch('api/admin-delete-reservation.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `reservation_id=${bookingId}&user_id=${data.user_id}`
-                });
-                const delResult = await resDel.json();
-                if (resDel.ok && delResult.success) {
-                    alert("Prenotazione eliminata!");
-                    modal.hide();
-                    loadData(currentPage);
-                } else {
-                    alert("Errore nell'eliminazione");
-                }
-            } else {
-                // Aggiorna stato
-                const resUpd = await fetch('api/admin-update-reservation.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `reservation_id=${bookingId}&status=${newStatus}`
-                });
-                const updResult = await resUpd.json();
-                if (resUpd.ok && updResult.success) {
-                    alert("Stato aggiornato!");
-                    modal.hide();
-                    loadData(currentPage);
-                } else {
-                    alert("Errore nell'aggiornamento" + updResult.message);
-                }
-            }
-        });
-
-        modal.show();
-
-    } catch (err) {
-        console.error(err);
-        document.getElementById('modalContent').innerHTML = '<p class="text-danger">Errore nel caricamento dei dettagli.</p>';
-        modal.show();
-    }
+    const status = bookingsCache.find(b => b.reservation_id == bookingId).status
+    window.location.href = `admin-edit-reservation.php?reservation_id=${bookingId}&status=${status}`;
 });
+
 
 function renderBooking(bookings) {
     if (!Array.isArray(bookings)) return '';
@@ -201,8 +116,9 @@ function renderBookingItem(booking) {
                     </div>
                     <hr class="my-2">
                     <div class="btn-group g-1 d-flex">
-                        <button type="button" class="btn btn-outline-primary" data-id="${booking.reservation_id}">
-                            <i class="bi bi-eye text-primary"></i>
+                        <button type="button" class="admin-btn btn btn-outline-primary" data-id="${booking.reservation_id}">
+                            <i class="bi bi-eye"></i>
+                            Dettagli
                         </button>
                     </div>
                 </div>

@@ -1133,5 +1133,22 @@ public function addSlot(string $date, string $hour): bool {
     return $stmt->execute();
 }
 
+public function getUserByReservation(int $reservationId): ?int {
+    $stmt = $this->db->prepare(
+        "SELECT user_id FROM reservations WHERE reservation_id = ?"
+    );
+    if (!$stmt) return null;
+
+    $stmt->bind_param("i", $reservationId);
+    if (!$stmt->execute()) return null;
+
+    $result = $stmt->get_result();
+    $row = $result ? $result->fetch_assoc() : null;
+    $stmt->close();
+
+    return $row ? (int)$row['user_id'] : null;
+}
+
+
 
 }

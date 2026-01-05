@@ -85,7 +85,8 @@ export function renderPagination(totalPages, currentPage, loadData) {
     const container = document.getElementById("pagination");
     container.innerHTML = "";
     const prev = document.createElement("button");
-    prev.className = "btn btn-outline-secondary mx-1";
+    prev.className = "btn admin-btn mx-1";
+    prev.type = "button";
     prev.textContent = "<";
     prev.disabled = currentPage === 1;
     prev.addEventListener("click", () => loadData(currentPage - 1));
@@ -93,14 +94,16 @@ export function renderPagination(totalPages, currentPage, loadData) {
 
     for (let i = 1; i <= totalPages; i++) {
         const btn = document.createElement("button");
-        btn.className = `btn btn-outline-primary mx-1 ${i === currentPage ? "active" : ""}`;
+        btn.className = `admin-btn btn mx-1 ${i === currentPage ? "active" : ""}`;
+        btn.type = i === currentPage ? "button" : "submit";
         btn.textContent = i;
         btn.addEventListener("click", () => loadData(i));
         container.appendChild(btn);
     }
 
     const next = document.createElement("button");
-    next.className = "btn btn-outline-secondary mx-1";
+    next.className = "btn mx-1 admin-btn";
+    next.type = "button";
     next.textContent = ">";
     next.disabled = currentPage === totalPages;
     next.addEventListener("click", () => loadData(currentPage + 1));
