@@ -1,6 +1,15 @@
 <?php
 require_once 'bootstrap.php';
 
+if (isUserLoggedIn()) {
+    if (isAdmin()) {
+        header("Location: admin-dashboard.php");
+        exit();
+    }
+    header("Location: user-dashboard.php");
+    exit();
+}
+
 //Messaggi di errore e successo
 $errors = [];
 $success = false;
@@ -14,25 +23,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validazioni di base
     if (empty($nome)) {
-        $errors[] = "Il campo Nome è obbligatorio.";    
+        $errors[] = "Il campo Nome è obbligatorio.";
     }
     if (empty($cognome)) {
-        $errors[] = "Il campo Cognome è obbligatorio.";    
+        $errors[] = "Il campo Cognome è obbligatorio.";
     }
     if (empty($email)) {
-        $errors[] = "Il campo Email è obbligatorio.";    
+        $errors[] = "Il campo Email è obbligatorio.";
     }
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Il formato dell'email non è valido.";    
+        $errors[] = "Il formato dell'email non è valido.";
     }
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Il formato dell'email non è valido.";    
+        $errors[] = "Il formato dell'email non è valido.";
     }
     if (empty($password)) {
-        $errors[] = "Il campo Password è obbligatorio.";    
+        $errors[] = "Il campo Password è obbligatorio.";
     }
     if ($password !== $confermapassword) {
-        $errors[] = "Le password non corrispondono.";    
+        $errors[] = "Le password non corrispondono.";
     }
 
     if (empty($errors)) {

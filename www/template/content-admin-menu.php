@@ -1,3 +1,9 @@
+<?php
+if (!defined('IN_APP')) {
+    http_response_code(404);
+    exit;
+}
+?>
 <main class="container-fluid py-4 px-3 px-md-4">
 
     <!-- Intestazione Dashboard -->

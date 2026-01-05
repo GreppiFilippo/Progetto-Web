@@ -6,6 +6,10 @@ $templateParams["titolo"] = "Mensa Campus - Menu";
 
 
 if (isUserLoggedIn()) {
+    if (isAdmin()) {
+        header("Location: admin-dashboard.php");
+        exit();
+    }
     $templateParams["nav_items"] = array(
         getNewNavItem("Dashboard", "user-dashboard.php", "bi bi-speedometer2"),
         getNewNavItem("Menu", "menu.php", "bi bi-book"),

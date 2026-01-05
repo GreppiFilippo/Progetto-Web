@@ -7,6 +7,11 @@ if (!isUserLoggedIn()) {
     exit();
 }
 
+if (isAdmin()) {
+    header("Location: admin-dashboard.php");
+    exit();
+}
+
 $userId = $_SESSION["user_id"];
 $templateParams["user"] = $dbh->getUserById($userId);
 

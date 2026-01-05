@@ -1,6 +1,17 @@
 <?php
 require_once 'bootstrap.php';
 
+if (!isUserLoggedIn()) {
+    http_response_code(403);
+    require "login.php";
+    exit();
+}
+
+if (isAdmin()) {
+    header("Location: admin-dashboard.php");
+    exit();
+}
+
 // Base Template
 $templateParams["titolo"] = "Mensa Campus - Profilo Utente";
 $templateParams["user_id"] = $_SESSION["user_id"];

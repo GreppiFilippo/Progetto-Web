@@ -7,33 +7,38 @@ if (!isUserLoggedIn()) {
     exit();
 }
 
+if (isAdmin()) {
+    header("Location: admin-dashboard.php");
+    exit();
+}
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userId = $_SESSION['user_id'];
     $date = $_POST['booking-date'] ?? '';
     $time = $_POST['booking-time'] ?? '';
     $notes = !empty($_POST['booking-notes']) ? trim($_POST['booking-notes']) : null;
-    
+
     // Combine date and time
     $dateTime = $date . ' ' . $time . ':00';
-    
+
     // Collect items from form - now clean array with dish IDs
     $items = [];
     if (isset($_POST['dishes']) && is_array($_POST['dishes'])) {
         foreach ($_POST['dishes'] as $dish_id => $quantity) {
-            $quantity = (int)$quantity;
+            $quantity = (int) $quantity;
             if ($quantity > 0) {
                 $items[] = [
-                    'dish_id' => (int)$dish_id,
+                    'dish_id' => (int) $dish_id,
                     'quantity' => $quantity
                 ];
             }
         }
     }
-    
+
     if (!empty($items)) {
         $result = $dbh->setNewReservation($userId, $dateTime, $items, $notes);
-        
+
         if ($result['success']) {
             $_SESSION['success_message'] = "Prenotazione creata con successo!";
             header("Location: single-order.php?reservation_id=" . $result['reservation_id']);
