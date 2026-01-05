@@ -16,7 +16,7 @@
                     <i class="bi bi-calendar-check fs-2" aria-hidden="true"></i>
                 </div>
                 <div class="d-flex flex-column align-items-start justify-content-center">
-                    <label for="bookings" class="small">Prenotazioni oggi</label>
+                    <span class="small">Prenotazioni oggi</span>
                     <data id="bookings" value="47" class="h2 fw-bold mb-0">47</data>
                 </div>
             </div>
@@ -28,7 +28,7 @@
                     <i class="bi bi-check-square-fill fs-2" aria-hidden="true"></i>
                 </div>
                 <div class="d-flex flex-column align-items-start justify-content-center">
-                    <label for="completed" class="small">Completati oggi</label>
+                    <span class="small">Completati oggi</span>
                     <data id="completed" value="47" class="h2 fw-bold mb-0">342</data>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                     <i class="bi bi-arrow-clockwise fs-2" aria-hidden="true"></i>
                 </div>
                 <div class="d-flex flex-column align-items-start justify-content-center">
-                    <label for="preparing" class="small">In preparazione oggi</label>
+                    <span class="small">In preparazione oggi</span>
                     <data id="preparing" value="47" class="h2 fw-bold mb-0"></data>
                 </div>
             </div>
@@ -52,7 +52,7 @@
                     <i class="bi bi-box-seam fs-2" aria-hidden="true"></i>
                 </div>
                 <div class="d-flex flex-column align-items-start justify-content-center">
-                    <label for="ready" class="small">Pronti al ritiro oggi</label>
+                    <span class="small">Pronti al ritiro oggi</span>
                     <data id="ready" value="47" class="h2 fw-bold mb-0">18</data>
                 </div>
             </div>
@@ -83,7 +83,7 @@
         </div>
         <div class="col-12 col-md-6">
             <label for="name" class="form-label">Cerca</label>
-            <input type="text" class="form-control" placeholder="Nome utente..." id="name">
+            <input type="text" class="form-control" placeholder="Nome utente..." id="name" autocomplete="off" />
         </div>
     </form>
 

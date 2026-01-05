@@ -24,21 +24,21 @@ nav.navbar ul li:hover {
 }
 
 /* Menu Filter */
-main form select, 
+main form select,
 main form input[type="date"] {
     cursor: pointer;
 }
 
-ul li div.card > div.card-body span.badge i.bi {
+ul li div.card>div.card-body span.badge i.bi {
     color: white;
 }
 
 /* Page Footer */
-body > footer a {
+body>footer a {
     color: #FFFFFFB3;
 }
 
-body > footer a:hover {
+body>footer a:hover {
     border-bottom: solid #FFFFFFB3 1.5px;
     transition: all 0.1s ease-in-out;
 }
@@ -57,19 +57,26 @@ main i.bi.admin-icon {
 }
 
 /* Admin Buttons */
+a.admin-btn,
 button.admin-btn[type="button"] {
     background-color: #942222;
     border-color: #942222;
     color: white;
 }
 
+a.admin-btn i,
 button.admin-btn[type="button"] i {
     color: white;
 }
 
+a.admin-btn:hover,
 button.admin-btn[type="button"]:hover {
     background-color: #7A1A1A;
     border-color: #7A1A1A;
+}
+
+a.admin-btn:hover {
+    color: white;
 }
 
 button.admin-btn[type="submit"] {
@@ -92,12 +99,14 @@ button.admin-btn[type="submit"]:hover i {
     color: white;
 }
 
-div.card > div.ratio,
+
+
+div.card>div.ratio,
 .card-img-top {
     overflow: hidden;
 }
 
-div.card > div.ratio img,
+div.card>div.ratio img,
 .card-img-top {
     display: block;
     width: 100%;
@@ -108,9 +117,26 @@ div.card > div.ratio img,
 
 /* adattamento per schermi piccoli */
 @media (max-width: 576px) {
-    div.card > div.ratio img,
+
+    div.card>div.ratio img,
     .card-img-top {
         height: 160px;
+    }
+}
+
+/* Fix per label che escono dal riquadro tra 768px e 820px */
+@media (min-width: 768px) and (max-width: 820px) {
+    #dish_list .card-body {
+        font-size: 0.9rem;
+    }
+
+    #dish_list .card-body small {
+        font-size: 0.8rem;
+    }
+
+    #dish_list .card-body .btn {
+        font-size: 0.85rem;
+        padding: 0.375rem 0.5rem;
     }
 }
 
@@ -118,7 +144,8 @@ div.card > div.ratio img,
 
 .admin-page .form-text,
 .admin-page .text-muted {
-  color: #444444 !important; /* contrasto AAA su #ffffff */
+    color: #444444 !important;
+    /* contrasto AAA su #ffffff */
 }
 
 /* ===== WCAG AAA Focus Styles ===== */
@@ -218,23 +245,22 @@ input[type="radio"]:focus-visible,
 }
 
 .dashboard {
-  background-color: #942222;
-  color: white;
-  padding: 1rem;
-  border-radius: 0.5rem;
-}
-.dashboard i{
-  color: white;
+    background-color: #942222;
+    color: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
 }
 
-.bgicon{
+.dashboard i {
+    color: white;
+}
+
+.bgicon {
     width: 3rem;
     height: 4rem;
     border: 0px;
     border-radius: 0.3rem;
-    display: flex;     
-    align-items: center;  
+    display: flex;
+    align-items: center;
     justify-content: center;
 }
-
-

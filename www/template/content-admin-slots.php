@@ -1,16 +1,14 @@
 <main class="container-fluid my-3">
-    <!-- INTRO -->
-    <section class="mb-2">
-        <div class="row align-items-center">
-            <div class="col-12 col-md mb-1">
-                <h1 class="h3 mb-1">
-                    <i class="bi admin-icon bi-clock me-1" aria-hidden="true"></i>
-                    Gestione Slot Orari
-                </h1>
-                <p class="lead mb-0">Visualizza, modifica o elimina gli slot disponibili</p>
-            </div>
-        </div>
-    </section>
+    <!-- Intestazione Dashboard -->
+    <header class="dashboard border rounded-3 p-4 mb-4 shadow-sm">
+        <h1 class="h3 mb-2 text-white">
+            <i class="bi admin-icon bi-clock text-white" aria-hidden="true"></i>
+            Gestione Slot Orari
+        </h1>
+        <p class="mb-0 opacity-75 text-white">Visualizza, modifica o elimina gli slot disponibili</p>
+    </header>
+
+
 
     <!-- FILTERS -->
     <form class="row g-2 mb-3">
@@ -23,7 +21,7 @@
             <input type="time" class="form-control" id="slot_time" step="900" id="slot_time" required>
         </div>
         <div class="col-12 col-md-4 d-flex align-items-end">
-            <button type="button" class="btn btn-secondary w-100" id="add_slot">
+            <button type="button" class="btn admin-btn w-100" id="add_slot">
                 <i class="bi bi-bookmark-plus me-1"></i> Aggiungi
             </button>
         </div>
@@ -38,11 +36,11 @@
 
     <!-- SCRIPTS -->
     <?php
-    if(isset($templateParams["js"])):
-        foreach($templateParams["js"] as $script):
-    ?>
-        <script src="<?php echo $script; ?>" type="module"></script>
-    <?php
+    if (isset($templateParams["js"])):
+        foreach ($templateParams["js"] as $script):
+            ?>
+            <script src="<?php echo $script; ?>" type="module"></script>
+            <?php
         endforeach;
     endif;
     ?>
