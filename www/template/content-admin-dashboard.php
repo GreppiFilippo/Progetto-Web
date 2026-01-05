@@ -59,21 +59,10 @@
         </div>
     </section>
 
-    <section class="mb-3">
-        <div class="d-flex align-items-center">
-            <h2 class="h5 m-0">Ultime prenotazioni</h2>
-        </div>
-    </section>
-
     <div class="row g-3">
-        <!-- Contenuto principale -->
-        <section class="col-12 col-md-8">
-            <div id="booking-list" class="row g-3"></div>
-        </section>
-
         <!-- Aside -->
-        <aside class="col-12 col-md-4">
-            <section class="row mx-0 mb-3">
+        <aside class="col-12 col-md-4 order-0 order-md-1">
+            <section class="row mx-0 mb-3 shadow-sm border-3 rounded-3 p-3">
                 <h1 class="h5 p-0">Azioni rapide</h1>
                 <button type="button" class="btn admin-btn mb-1" id="add-dish">
                     <i class="bi bi-plus-circle"></i>
@@ -89,11 +78,19 @@
                 </button>
             </section>
 
-            <section class="row mx-0">
+            <section class="row mx-0 shadow-sm border-3 rounded-3 p-3">
                 <h1 class="h5 p-0">Piatti più ordinati</h1>
                 <div id="top_dishes"></div>
             </section>
         </aside>
+
+        <!-- Contenuto principale -->
+        <section class="col-12 col-md-8 order-1 order-md-0">
+            <div class="mb-3">
+                <h2 class="h5 m-0">Ultime prenotazioni</h2>
+            </div>
+            <div id="booking-list" class="row g-3"></div>
+        </section>
     </div>
 
 
