@@ -1,6 +1,6 @@
-<main class="container-fluid my-2">
+<main class="container-fluid py-4 px-3 px-md-4">
     <!-- Intestazione Dashboard -->
-    <header class="dashboard border rounded-3 p-4 mb-3 shadow-sm">
+    <header class="dashboard border rounded-3 p-4 mb-4 shadow-sm">
         <h1 class="h3 mb-2 text-white">
             <i class="bi bi-speedometer2 me-2"></i>
             Dashboard Amministratore
@@ -9,11 +9,11 @@
     </header>
 
     <!-- ICONS -->
-    <section class="row mb-3 g-3">
+    <section class="row mb-4 g-3">
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="bg-white border rounded-3 p-3 shadow-sm d-flex align-items-center">
                 <div class="bgicon bg-primary-subtle text-primary me-3">
-                    <i class="bi bi-calendar-check"></i>
+                    <i class="bi bi-calendar-check fs-2"></i>
                 </div>
                 <div class="d-flex flex-column align-items-start justify-content-center">
                     <label for="bookings" class="small text-muted mb-0">Prenotazioni Oggi</label>
@@ -25,7 +25,7 @@
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="bg-white border rounded-3 p-3 shadow-sm d-flex align-items-center">
                 <div class="bgicon bg-warning-subtle text-warning me-3">
-                    <i class="bi bi-people"></i>
+                    <i class="bi bi-people fs-2"></i>
                 </div>
                 <div class="d-flex flex-column align-items-start justify-content-center">
                     <label for="users" class="small text-muted mb-0">Utenti Registrati</label>
@@ -37,7 +37,7 @@
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="bg-white border rounded-3 p-3 shadow-sm d-flex align-items-center">
                 <div class="bgicon bg-success-subtle text-success me-3">
-                    <i class="bi bi-currency-euro"></i>
+                    <i class="bi bi-currency-euro fs-2"></i>
                 </div>
                 <div class="d-flex flex-column align-items-start justify-content-center">
                     <label for="earnings" class="small text-muted mb-0">Incasso Giornaliero</label>
@@ -49,7 +49,7 @@
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="bg-white border rounded-3 p-3 shadow-sm d-flex align-items-center">
                 <div class="bgicon bg-info-subtle text-info me-3">
-                    <i class="bi bi-egg-fried"></i>
+                    <i class="bi bi-egg-fried fs-2"></i>
                 </div>
                 <div class="d-flex flex-column align-items-start justify-content-center">
                     <label for="dishes" class="small text-muted mb-0">Piatti attivi oggi</label>
@@ -59,16 +59,16 @@
         </div>
     </section>
 
-    <section class="mb-3 ms-3">
+    <section class="mb-3">
         <header class="d-flex align-items-center">
             <h2 class="h5 m-0">Ultime prenotazioni</h2>
         </header>
     </section>
 
-    <div class="row m-0">
+    <div class="row g-3">
         <!-- Contenuto principale -->
-        <section class="col-12 col-md-8 mb-3">
-            <div id="booking-list" class="row g-md-1"></div>
+        <section class="col-12 col-md-8">
+            <div id="booking-list" class="row g-3"></div>
         </section>
 
         <!-- Aside -->
