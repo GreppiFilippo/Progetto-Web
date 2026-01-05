@@ -16,10 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
         loadSlots(selectedDate);
     });
 
+    //bottone per aggiungere slot
     addBtn.addEventListener("click", (e) => {
         const date = slotDateInput.value;
         const time = hourInput.value;
-
+        console.log(time);
         if (!date || !time) {
             return;
         }
