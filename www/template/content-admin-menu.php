@@ -40,7 +40,7 @@
         </section>
 
         <!-- Aside -->
-        <aside class="col-12 col-md-4 order-first order-md-last shadow-sm rounded-3 pt-2">
+        <aside class="col-12 col-md-4 order-first order-md-last shadow-sm border-3 rounded-3 p-3">
             <section class="row mx-0 mb-3">
                 <h2 class="h5 p-0 mb-2">Azioni rapide</h2>
                 <button type="button" class="btn admin-btn mb-1" id="add-dish">
