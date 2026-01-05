@@ -40,7 +40,8 @@ if (!defined('IN_APP')) {
             <div class="row">
               <div class="col-md-6">
                 <label for="dishImage" class="form-label">
-                  Carica Immagine <span class="text-danger">*</span>
+                  Carica Immagine <span class="text-danger" id="axt">
+                  </span>
                 </label>
                 <input type="file" class="form-control" id="dishImage" name="dishImage" accept="image/*" required>
                 <div class="form-text">
