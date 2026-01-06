@@ -982,7 +982,8 @@ class DatabaseHelper
         $sql = "SELECT COALESCE(SUM(total_amount), 0)
                 AS today_revenue
                 FROM reservations
-                WHERE DATE(date_time) = CURDATE();";
+                WHERE DATE(date_time) = CURDATE()
+                AND status = 'completato';";
         $stmt = $this->db->prepare($sql);
         if (!$stmt)
             return 0;
