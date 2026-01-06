@@ -24,6 +24,22 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!date || !time) {
             return;
         }
+        
+        // Validazione: lo slot deve essere almeno 15 minuti dopo l'ora corrente
+        const now = new Date();
+        const slotDateTime = new Date(`${date}T${time}`);
+        const minAllowedTime = new Date(now.getTime() + 15 * 60 * 1000);
+        
+        if (slotDateTime <= now) {
+            alert("Errore: Non puoi aggiungere uno slot nel passato o nell'ora corrente.");
+            return;
+        }
+        
+        if (slotDateTime < minAllowedTime) {
+            alert("Errore: Lo slot deve essere almeno 15 minuti dopo l'ora corrente.");
+            return;
+        }
+        
         // FormData per POST tradizionale
         const formData = new FormData();
         formData.append("date", date);
@@ -38,10 +54,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Ricarica la lista di slot
                 loadSlots(date);
             } else {
-                alert("Errore: " + (data.error || "Impossibile eliminare slot"));
+                alert("Errore: " + (data.error || "Impossibile aggiungere slot"));
             }
         })
-        .catch(err => {});
+        .catch(err => {
+            console.error("Errore nella richiesta:", err);
+            alert("Errore nel server");
+        });
     });
 
     //bottone per eliminare slot

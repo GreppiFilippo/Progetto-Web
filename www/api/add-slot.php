@@ -10,6 +10,21 @@ if(isset($_POST['date']) && isset($_POST['hour'])) {
     exit;
 }
 
+// Validazione: lo slot deve essere almeno 15 minuti dopo l'ora corrente
+$slotDateTime = new DateTime("$date $hour");
+$now = new DateTime();
+$minAllowedTime = (clone $now)->modify('+15 minutes');
+
+if ($slotDateTime <= $now) {
+    echo json_encode(["success" => false, "error" => "Non puoi aggiungere uno slot nel passato o nell'ora corrente"]);
+    exit;
+}
+
+if ($slotDateTime < $minAllowedTime) {
+    echo json_encode(["success" => false, "error" => "Lo slot deve essere almeno 15 minuti dopo l'ora corrente"]);
+    exit;
+}
+
 // Inserisci slot nel DB
 $result = $dbh->addSlot($date, $hour);
 
