@@ -88,6 +88,7 @@ export function renderPagination(totalPages, currentPage, loadData) {
     prev.className = "btn admin-btn mx-1";
     prev.type = "button";
     prev.textContent = "<";
+    prev.setAttribute("aria-label", "Pagina precedente"); 
     prev.disabled = currentPage === 1;
     prev.addEventListener("click", () => loadData(currentPage - 1));
     container.appendChild(prev);
@@ -111,5 +112,6 @@ export function renderPagination(totalPages, currentPage, loadData) {
     next.textContent = ">";
     next.disabled = currentPage === totalPages;
     next.addEventListener("click", () => loadData(currentPage + 1));
+    next.setAttribute("aria-label", "Pagina successiva"); 
     container.appendChild(next);
 }
