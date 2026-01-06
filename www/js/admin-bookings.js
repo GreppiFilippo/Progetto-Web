@@ -47,6 +47,7 @@ async function loadData(page = 1) {
         bookingsCache = data.bookings;
         renderBooking(bookingsCache);
         renderPagination(res.totalPages, currentPage, loadData);
+        document.getElementById("resultsAnnounce").innerHTML = "Risultati: "+ bookingsCache.length;
     } catch (error) {
         console.error("Error fetching booking data:", error);
     }

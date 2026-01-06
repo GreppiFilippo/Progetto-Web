@@ -34,6 +34,7 @@ async function loadData(page = 1) {
         const data = await res.json();
         renderDishes(data.dishes);
         renderPagination(data.totalPages, currentPage, loadData);
+        document.getElementById("resultsAnnounce").innerHTML = "Risultati: "+ data.dishes.length;
     } catch (error) {
         console.error("Error fetching booking data:", error);
     }

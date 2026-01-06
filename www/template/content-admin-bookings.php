@@ -101,6 +101,9 @@ if (!defined('IN_APP')) {
         <!-- bottoni paginazione generati da JS -->
     </div>
 
+    <!-- Live region for screen readers -->
+    <div id="resultsAnnounce" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+
     <?php
     if (isset($templateParams["js"])):
         foreach ($templateParams["js"] as $script):

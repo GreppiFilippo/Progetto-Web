@@ -69,6 +69,9 @@ if (!defined('IN_APP')) {
         <div class="d-none d-md-block col-md-4"></div>
     </div>
 
+    <!-- Live region for screen readers -->
+    <div id="resultsAnnounce" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+
     <?php
     if (isset($templateParams["js"])):
         foreach ($templateParams["js"] as $script):
