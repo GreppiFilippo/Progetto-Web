@@ -8,7 +8,7 @@ if (!defined('IN_APP')) {
     <!-- Intestazione Dashboard -->
     <header class="dashboard border rounded-3 p-4 mb-4 shadow-sm">
         <h1 class="h3 mb-2 text-white">
-            <i class="bi bi-speedometer2 me-2"></i>
+            <i class="bi bi-speedometer2 me-2" aria-hidden="true"></i>
             Dashboard Amministratore
         </h1>
         <p class="mb-0 opacity-75 text-white">Panoramica generale del sistema</p>
@@ -19,7 +19,7 @@ if (!defined('IN_APP')) {
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="bg-white border rounded-3 p-3 shadow-sm d-flex align-items-center">
                 <div class="bgicon bg-primary-subtle text-primary me-3">
-                    <i class="bi bi-calendar-check fs-2"></i>
+                    <i class="bi bi-calendar-check fs-2" aria-hidden="true"></i>
                 </div>
                 <div class="d-flex flex-column align-items-start justify-content-center">
                     <label for="bookings" class="small text-muted mb-0">Prenotazioni Oggi</label>
@@ -31,7 +31,7 @@ if (!defined('IN_APP')) {
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="bg-white border rounded-3 p-3 shadow-sm d-flex align-items-center">
                 <div class="bgicon bg-warning-subtle text-warning me-3">
-                    <i class="bi bi-people fs-2"></i>
+                    <i class="bi bi-people fs-2" aria-hidden="true"></i>
                 </div>
                 <div class="d-flex flex-column align-items-start justify-content-center">
                     <label for="users" class="small text-muted mb-0">Utenti Registrati</label>
@@ -43,7 +43,7 @@ if (!defined('IN_APP')) {
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="bg-white border rounded-3 p-3 shadow-sm d-flex align-items-center">
                 <div class="bgicon bg-success-subtle text-success me-3">
-                    <i class="bi bi-currency-euro fs-2"></i>
+                    <i class="bi bi-currency-euro fs-2" aria-hidden="true"></i>
                 </div>
                 <div class="d-flex flex-column align-items-start justify-content-center">
                     <label for="earnings" class="small text-muted mb-0">Incasso Giornaliero</label>
@@ -55,7 +55,7 @@ if (!defined('IN_APP')) {
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="bg-white border rounded-3 p-3 shadow-sm d-flex align-items-center">
                 <div class="bgicon bg-info-subtle text-info me-3">
-                    <i class="bi bi-egg-fried fs-2"></i>
+                    <i class="bi bi-egg-fried fs-2" aria-hidden="true"></i>
                 </div>
                 <div class="d-flex flex-column align-items-start justify-content-center">
                     <label for="dishes" class="small text-muted mb-0">Piatti attivi oggi</label>
@@ -71,15 +71,15 @@ if (!defined('IN_APP')) {
             <section class="row mx-0 mb-3 shadow-sm border-3 rounded-3 p-3">
                 <h1 class="h5 p-0">Azioni rapide</h1>
                 <button type="button" class="btn admin-btn mb-1" id="add-dish">
-                    <i class="bi bi-plus-circle"></i>
+                    <i class="bi bi-plus-circle" aria-hidden="true"></i>
                     Aggiungi piatto
                 </button>
                 <button type="submit" class="btn admin-btn mb-1" id="manage-bookings">
-                    <i class="bi bi-calendar-check"></i>
+                    <i class="bi bi-calendar-check" aria-hidden="true"></i>
                     Gestisci prenotazioni
                 </button>
                 <button type="submit" class="btn admin-btn mb-1" id="manage-slots">
-                    <i class="bi bi-clock"></i>
+                    <i class="bi bi-clock" aria-hidden="true"></i>
                     Gestisci slots
                 </button>
             </section>

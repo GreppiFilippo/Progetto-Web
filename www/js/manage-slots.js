@@ -104,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         </div>
                         <div class="d-flex gap-2">
                             <button class="btn btn-sm btn-danger delete-slot" data-id="${slot.value}">
-                                <i class="bi bi-trash me-1"></i> Elimina
+                                <i class="bi bi-trash me-1" aria-hidden="true"></i> Elimina
                             </button>
                         </div>
                     </div>

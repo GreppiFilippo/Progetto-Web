@@ -28,7 +28,7 @@ if (!defined('IN_APP')) {
         </div>
         <div class="col-12 col-md-4 d-flex align-items-end">
             <button type="button" class="btn admin-btn w-100" id="add_slot">
-                <i class="bi bi-bookmark-plus me-1"></i> Aggiungi
+                <i class="bi bi-bookmark-plus me-1" aria-hidden="true"></i> Aggiungi
             </button>
         </div>
     </form>

@@ -69,7 +69,7 @@ if (!defined('IN_APP')) {
         <label for="email" class="form-label">Email<span class="text-danger">*</span></label>
 
         <div class="input-group">
-            <span class="input-group-text" id="visible-addon"><i class="bi bi-envelope"></i></span>
+            <span class="input-group-text" id="visible-addon"><i class="bi bi-envelope" aria-hidden="true"></i></span>
             <input type="email" class="form-control" id="email" name="email"
                 placeholder="Inserire email..." autocomplete="email"
                 aria-describedby="visible-addon" required />

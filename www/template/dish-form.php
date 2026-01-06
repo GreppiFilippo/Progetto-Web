@@ -33,7 +33,7 @@ if (!defined('IN_APP')) {
           <div class="row mb-4">
             <div class="col-12">
               <h2 class="admin-h2 h5 mb-3">
-                <i class="bi admin-icon bi-camera me-2"></i>Immagine del Piatto
+                <i class="bi admin-icon bi-camera me-2"  aria-hidden="true"></i>Immagine del Piatto
               </h2>
             </div>
 
@@ -52,7 +52,7 @@ if (!defined('IN_APP')) {
               <div class="col-md-6">
                 <p class="form-label mb-2">Anteprima</p>
                 <div id="imagePreview" class="border rounded p-3 text-center">
-                  <i class="bi bi-image text-muted fs-2" id="previewIcon"></i>
+                  <i class="bi bi-image text-muted fs-2" id="previewIcon" aria-hidden="true"></i>
                   <p class="text-muted mb-0 mt-2" id="previewText">
                     Nessuna immagine selezionata
                   </p>
@@ -70,7 +70,7 @@ if (!defined('IN_APP')) {
           <div class="row mb-4">
             <div class="col-12">
               <h2 class="admin-h2 h5 mb-3">
-                <i class="bi admin-icon bi-info-circle me-2"></i>Informazioni Base
+                <i class="bi admin-icon bi-info-circle me-2" aria-hidden="true"></i>Informazioni Base
               </h2>
             </div>
 
@@ -118,7 +118,7 @@ if (!defined('IN_APP')) {
           <div class="row mb-4">
             <div class="col-12">
               <h2 class="admin-h2 h5 mb-3">
-                <i class="bi admin-icon bi-tag me-2"></i>Prezzo e Disponibilità
+                <i class="bi admin-icon bi-tag me-2" aria-hidden="true"></i>Prezzo e Disponibilità
               </h2>
             </div>
 
@@ -163,7 +163,7 @@ if (!defined('IN_APP')) {
           <div class="row mb-4">
             <div class="col-12">
               <h2 class="admin-h2 h5 mb-3">
-                <i class="bi admin-icon bi-heart me-2"></i>Informazioni Dietetiche
+                <i class="bi admin-icon bi-heart me-2" aria-hidden="true"></i>Informazioni Dietetiche
               </h2>
             </div>
 
@@ -209,7 +209,7 @@ if (!defined('IN_APP')) {
             <div class="col-md-6 offset-md-6">
               <div class="d-flex gap-2 justify-content-end">
                 <button type="button" class="admin-btn btn btn-secondary w-100" id="cancel">
-                  <i class="bi bi-x-lg me-2"></i>Annulla
+                  <i class="bi bi-x-lg me-2" aria-hidden="true"></i>Annulla
                 </button>
                 <button type="submit" class="admin-btn btn btn-primary w-100" id="confirm">
                 </button>
