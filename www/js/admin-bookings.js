@@ -162,4 +162,5 @@ async function loadTimeSlots() {
     }
 }
 
-loadData(currentPage);
+document.addEventListener('DOMContentLoaded', loadData(currentPage));
+setInterval(loadData(currentPage), 30000);
