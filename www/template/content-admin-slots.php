@@ -37,8 +37,8 @@ if (!defined('IN_APP')) {
     </form>
 
     <!-- SLOT LIST -->
-    <section id="slot_list" class="row m-0 g-2" aria-live="polite" aria-atomic="false">
-    </section>
+    <div id="slot_list" class="row m-0 g-2" aria-live="polite" aria-atomic="false">
+    </div>
 
     <!-- PAGINATION -->
     <div class="d-flex justify-content-center mt-3" id="pagination"></div>
