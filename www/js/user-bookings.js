@@ -319,4 +319,30 @@ function escapeHtml(str) {
 document.addEventListener('DOMContentLoaded', () => {
     setupDateTimeHandler();
     setupQuantityHandler();
+    setupFormSubmitHandler();
 });
+
+/**
+ * Setup form submit handler to announce status to screen readers.
+ * 
+ * @returns {void}
+ */
+function setupFormSubmitHandler() {
+    const form = document.querySelector('form[action="user-bookings.php"]');
+    const announcement = document.getElementById('order-status-announcement');
+    
+    if (!form || !announcement) return;
+    
+    form.addEventListener('submit', (e) => {
+        const dateInput = document.getElementById('booking-date');
+        const timeSelect = document.getElementById('booking-time');
+        
+        // Check if required fields are filled
+        if (!dateInput?.value || !timeSelect?.value || cart.isEmpty()) {
+            return; // Let browser validation handle it
+        }
+        
+        // Announce that order is being submitted
+        announcement.textContent = 'Invio ordine in corso, attendere...';
+    });
+}

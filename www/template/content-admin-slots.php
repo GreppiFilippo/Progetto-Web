@@ -40,9 +40,6 @@ if (!defined('IN_APP')) {
     <div id="slot_list" class="row m-0 g-2" aria-live="polite" aria-atomic="false">
     </div>
 
-    <!-- PAGINATION -->
-    <div class="d-flex justify-content-center mt-3" id="pagination"></div>
-
     <!-- SCRIPTS -->
     <?php
     if (isset($templateParams["js"])):

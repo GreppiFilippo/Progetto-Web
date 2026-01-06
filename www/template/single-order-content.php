@@ -12,6 +12,11 @@ $status = $r["status"];
 ?>
 
 <main class="container my-5">
+    <!-- Success announcement for screen readers -->
+    <div class="visually-hidden" role="status" aria-live="polite" aria-atomic="true">
+        Ordine confermato con successo. Numero ordine <?php echo (int) $r["reservation_id"] ?>, stato <?php echo htmlspecialchars((string) $status, ENT_QUOTES, 'UTF-8'); ?>
+    </div>
+    
     <div class="row">
         <div class="col-md-8">
             <header class="border rounded-3 p-4 mb-3 shadow-sm">

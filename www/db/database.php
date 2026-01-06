@@ -1321,6 +1321,20 @@ class DatabaseHelper
      */
     public function addSlot(string $date, string $hour): bool
     {
+        // Prima verifica se lo slot esiste già
+        $checkSql = "SELECT COUNT(*) as count FROM time_slots WHERE slot_date = ? AND slot_time = ?";
+        $checkStmt = $this->db->prepare($checkSql);
+        if ($checkStmt) {
+            $checkStmt->bind_param("ss", $date, $hour);
+            $checkStmt->execute();
+            $result = $checkStmt->get_result();
+            $row = $result->fetch_assoc();
+            if ($row['count'] > 0) {
+                // Slot già esistente
+                return false;
+            }
+        }
+        
         $sql = "INSERT INTO time_slots (slot_date, slot_time) VALUES (?, ?)";
         $stmt = $this->db->prepare($sql);
         if (!$stmt)

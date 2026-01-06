@@ -29,5 +29,9 @@ if ($slotDateTime < $minAllowedTime) {
 $result = $dbh->addSlot($date, $hour);
 
 // Ritorna JSON puro
-echo json_encode(["success" => $result]);
+if ($result) {
+    echo json_encode(["success" => true]);
+} else {
+    echo json_encode(["success" => false, "error" => "Orario già presente"]);
+}
 ?>

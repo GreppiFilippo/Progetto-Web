@@ -77,7 +77,7 @@ if (!defined('IN_APP')) {
                                         <div class="d-flex flex-column flex-sm-row justify-content-between gap-3">
                                             <div class="flex-grow-1">
                                                 <strong class="d-block"><?php echo htmlspecialchars($dish["name"]); ?></strong>
-                                                <span
+                                                <span id="dish-desc-<?php echo $dish['dish_id']; ?>"
                                                     class="small text-muted d-block mb-2"><?php echo htmlspecialchars($dish["description"]); ?></span>
                                                 <?php getTags($dbh->getDietaryTagsForDish($dish["dish_id"])); ?>
                                             </div>
@@ -85,12 +85,12 @@ if (!defined('IN_APP')) {
                                                 <strong class="fs-5">€<?php echo htmlspecialchars($dish["price"]); ?></strong>
                                                 <div class="d-flex flex-column align-items-end">
                                                     <label for="dish-<?php echo $dish['dish_id']; ?>"
-                                                        class="form-label small mb-1">Quantità</label>
+                                                        class="form-label small mb-1">Quantità <?php echo htmlspecialchars($dish["name"]); ?></label>
                                                     <div class="input-group" style="width: 130px;">
                                                         <button class="btn btn-outline-secondary quantity-btn px-2"
                                                             type="button" data-action="decrease"
                                                             data-target="dish-<?php echo $dish['dish_id']; ?>"
-                                                            aria-label="Diminuisci quantità">
+                                                            aria-label="Diminuisci quantità <?php echo htmlspecialchars($dish["name"]); ?>">
                                                             <i class="bi bi-dash" aria-hidden="true"></i>
                                                         </button>
                                                         <input type="number"
@@ -100,11 +100,12 @@ if (!defined('IN_APP')) {
                                                             max="<?php echo htmlspecialchars($dish["stock"]); ?>" value="0"
                                                             placeholder="0" data-dish-id="<?php echo $dish['dish_id']; ?>"
                                                             data-dish-name="<?php echo htmlspecialchars($dish['name']); ?>"
-                                                            data-price="<?php echo htmlspecialchars($dish["price"]); ?>" />
+                                                            data-price="<?php echo htmlspecialchars($dish["price"]); ?>"
+                                                            aria-describedby="dish-desc-<?php echo $dish['dish_id']; ?>" />
                                                         <button class="btn btn-outline-secondary quantity-btn px-2"
                                                             type="button" data-action="increase"
                                                             data-target="dish-<?php echo $dish['dish_id']; ?>"
-                                                            aria-label="Aumenta quantità">
+                                                            aria-label="Aumenta quantità <?php echo htmlspecialchars($dish["name"]); ?>">
                                                             <i class="bi bi-plus" aria-hidden="true"></i>
                                                         </button>
                                                     </div>
@@ -187,8 +188,11 @@ if (!defined('IN_APP')) {
             </div>
 
             <div class="d-grid mt-3">
-                <input type="submit" class="btn btn-primary btn-lg rounded-4" value="Invia Ordine" />
+                <input type="submit" class="btn btn-primary btn-lg rounded-4" value="Invia Ordine" id="submit-order-btn" />
             </div>
+            
+            <!-- Screen reader announcement for order submission -->
+            <div id="order-status-announcement" class="visually-hidden" aria-live="assertive" aria-atomic="true"></div>
         </aside>
     </form>
 </main>
