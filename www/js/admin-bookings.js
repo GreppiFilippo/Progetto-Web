@@ -110,7 +110,7 @@ function renderBookingItem(booking) {
 
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         Numero piatti
-                        <span class="badge bg-secondary">${booking.num_dishes + " "+ booking.num_dishes == 1 ? "Piatto" : "Piatti"}</span>
+                        <span class="badge bg-secondary">  ${booking.num_dishes} ${booking.num_dishes == 1 ? "Piatto" : "Piatti"}</span>
                     </div>
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <span>Totale</span>
@@ -145,9 +145,9 @@ async function loadTimeSlots() {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        
+
         hourSelect.innerHTML = '<option value="" selected>--</option>';
-        
+
         if (data.slots && Array.isArray(data.slots)) {
             data.slots.forEach(slot => {
                 const option = document.createElement('option');
