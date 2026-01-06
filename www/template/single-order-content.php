@@ -14,9 +14,10 @@ $status = $r["status"];
 <main class="container my-5">
     <!-- Success announcement for screen readers -->
     <div class="visually-hidden" role="status" aria-live="polite" aria-atomic="true">
-        Ordine confermato con successo. Numero ordine <?php echo (int) $r["reservation_id"] ?>, stato <?php echo htmlspecialchars((string) $status, ENT_QUOTES, 'UTF-8'); ?>
+        Ordine confermato con successo. Numero ordine <?php echo (int) $r["reservation_id"] ?>, stato
+        <?php echo htmlspecialchars((string) $status, ENT_QUOTES, 'UTF-8'); ?>
     </div>
-    
+
     <div class="row">
         <div class="col-md-8">
             <header class="border rounded-3 p-4 mb-3 shadow-sm">
@@ -139,7 +140,7 @@ $status = $r["status"];
                                 <i class="bi bi-arrow-left me-2" aria-hidden="true"></i>Torna alla Dashboard
                             </a>
                             <?php if (canCancelReservation($reservation['status'])) { ?>
-                                <a class="btn btn-sm btn-outline-danger" type="button" data-cancel-btn
+                                <a class="btn btn-sm btn-outline-danger" data-cancel-btn
                                     href="user-dashboard.php?cancel_id=<?php echo (int) $reservation['reservation_id']; ?>">
                                     <i class="bi bi-trash me-1" aria-hidden="true"></i>
                                     <span>Annulla ordine</span>
