@@ -1,7 +1,7 @@
 <?php
 if (!defined('IN_APP')) {
-  http_response_code(404);
-  exit;
+    http_response_code(404);
+    exit;
 }
 ?>
 <main>
@@ -17,7 +17,7 @@ if (!defined('IN_APP')) {
                         </div>
 
                         <!-- Login Form -->
-                        <form action="#" method="post">
+                        <form action="login.php" method="post">
 
                             <!-- email field -->
                             <div class="mb-3">
@@ -26,7 +26,8 @@ if (!defined('IN_APP')) {
                                     <span class="input-group-text">
                                         <i class="bi bi-envelope" aria-hidden="true"></i>
                                     </span>
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="Inserisci email" autocomplete="username" required />
+                                    <input type="email" class="form-control" id="email" name="email"
+                                        placeholder="Inserisci email" autocomplete="username" required />
                                 </div>
                             </div>
 
@@ -37,13 +38,14 @@ if (!defined('IN_APP')) {
                                     <span class="input-group-text">
                                         <i class="bi bi-lock" aria-hidden="true"></i>
                                     </span>
-                                    <input type="password" class="form-control" id="password" name="password" placeholder="Inserisci password" autocomplete="current-password" required />
+                                    <input type="password" class="form-control" id="password" name="password"
+                                        placeholder="Inserisci password" autocomplete="current-password" required />
                                 </div>
                             </div>
 
                             <?php if (is_array($templateParams) && isset($templateParams["login_error"])): ?>
                                 <p class="text-danger">
-                                    <?php echo htmlspecialchars((string)$templateParams["login_error"]); ?>
+                                    <?php echo htmlspecialchars((string) $templateParams["login_error"]); ?>
                                 </p>
                             <?php endif; ?>
 
@@ -53,18 +55,18 @@ if (!defined('IN_APP')) {
                                 <button type="submit" class="btn text-white btn-lg">
                                     <i class="bi bi-box-arrow-in-right me-2" aria-hidden="true"></i>
                                     Accedi
-                                </button>                    
+                                </button>
                             </div>
 
                         </form>
 
-                        <hr class="my-4">
+                        <hr class="my-4" />
 
                         <!-- registration link -->
                         <div class="text-center">
                             <p class="mb-0">
-                            Non hai un account?
-                            <a href="register.php" class="fw-bold text-decoration-none">Registrati qui</a>
+                                Non hai un account?
+                                <a href="register.php" class="fw-bold text-decoration-none">Registrati qui</a>
                             </p>
                         </div>
 
