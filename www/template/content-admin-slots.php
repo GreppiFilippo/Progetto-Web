@@ -16,6 +16,7 @@ if (!defined('IN_APP')) {
 
     <!-- FILTERS -->
     <form class="row g-2 mb-3">
+        <h2 class="visually-hidden">Filtra slots</h2>
         <div class="col-12 col-md-4">
             <label for="slot_date" class="form-label">Data</label>
             <input type="date" class="form-control" id="slot_date" required>
@@ -32,8 +33,8 @@ if (!defined('IN_APP')) {
     </form>
 
     <!-- SLOT LIST -->
-    <div id="slot_list" class="row m-0 g-2">
-    </div>
+    <section id="slot_list" class="row m-0 g-2">
+    </section>
 
     <!-- PAGINATION -->
     <div class="d-flex justify-content-center mt-3" id="pagination"></div>

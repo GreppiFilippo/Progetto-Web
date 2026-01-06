@@ -32,7 +32,9 @@ async function loadData(page = 1) {
         const res = await fetch(`api/admin-menu.php?${params.toString()}`);
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
-        renderDishes(data.dishes);
+        let dishes = '<h2 class="h5 m-0">Lista piatti</h2>';
+        dishes += renderDishes(data.dishes);
+        document.getElementById("dish_list").innerHTML = dishes;
         renderPagination(data.totalPages, currentPage, loadData);
         document.getElementById("resultsAnnounce").innerHTML = "Risultati: "+ data.dishes.length;
     } catch (error) {
@@ -45,7 +47,7 @@ function renderDishes(dishes) {
     dishes.forEach(dish => {
         html += renderDish(dish);
     });
-    document.getElementById("dish_list").innerHTML = html;
+    return html;
 }
 
 function renderDish(dish) {

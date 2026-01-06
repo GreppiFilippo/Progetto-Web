@@ -45,7 +45,9 @@ async function loadData(page = 1) {
         document.getElementById("preparing").innerHTML = data.preparing;
         document.getElementById("ready").innerHTML = data.ready;
         bookingsCache = data.bookings;
-        renderBooking(bookingsCache);
+        let bookings = '<h2 class="h5 m-0">Lista prenotazioni</h2>';
+        bookings += renderBooking(bookingsCache);
+        document.getElementById("booking_list").innerHTML = bookings;
         renderPagination(res.totalPages, currentPage, loadData);
         document.getElementById("resultsAnnounce").innerHTML = "Risultati: "+ bookingsCache.length;
     } catch (error) {
@@ -69,7 +71,7 @@ function renderBooking(bookings) {
     bookings.forEach(booking => {
         html += renderBookingItem(booking);
     });
-    document.getElementById("booking_list").innerHTML = html;
+    return html;
 }
 
 function renderBookingItem(booking) {

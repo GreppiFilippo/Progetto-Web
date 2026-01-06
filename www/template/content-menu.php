@@ -28,6 +28,7 @@ if (!defined('IN_APP')) {
 
     <!-- Filter -->
     <form action="menu.php" method="GET" id="filterForm" class="card my-4 shadow-sm rounded-4">
+        <h2 class="visually-hidden">Filtra piatti</h2>
         <div class="card-body">
             <div class="row g-3">
 

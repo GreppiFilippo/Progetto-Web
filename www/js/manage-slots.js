@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            slotList.innerHTML = "";
+            slotList.innerHTML = '<h2 class="h5 m-0">Lista slots</h2>';
             slots.forEach(slot => {
                 const html = `
                 <div class="col-12 col-md-6" data-id="${slot.value}">

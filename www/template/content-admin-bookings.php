@@ -66,6 +66,7 @@ if (!defined('IN_APP')) {
     </div>
 
     <form class="row g-3 mb-4" onsubmit="return false;">
+        <h2 class="visually-hidden">Filtra prenotazioni</h2>
         <div class="col-12 col-md-2">
             <label for="date" class="form-label">Data</label>
             <input type="date" id="date" class="form-control"></select>
@@ -94,7 +95,7 @@ if (!defined('IN_APP')) {
     </form>
 
     <!-- DATA -->
-    <section id="booking_list" class="row g-3">
+    <section id="booking_list" class="row g-3"> 
     </section>
 
     <div class="d-flex justify-content-center mt-4" id="pagination">

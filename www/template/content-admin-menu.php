@@ -19,6 +19,7 @@ if (!defined('IN_APP')) {
         <!-- FILTERS -->
         <div class="col-12 col-md-8">
             <form class="row g-3" autocomplete="off" onsubmit="return false;">
+                <h2 class="visually-hidden">Filtra piatti</h2>
                 <div class="col-12 col-sm-6">
                     <label for="category" class="form-label">Categoria</label>
                     <select id="category" class="form-select">
