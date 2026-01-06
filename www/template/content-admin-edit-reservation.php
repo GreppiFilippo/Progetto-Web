@@ -131,7 +131,7 @@ if (!defined('IN_APP')) {
                     </div>
                 </section>
 
-                <section class="card border-0 shadow-sm">
+                <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <div class="d-grid">
                             <a href="admin-bookings.php?currentPage=<?php echo $_GET["currentPage"] ?>"
@@ -140,7 +140,7 @@ if (!defined('IN_APP')) {
                             </a>
                         </div>
                     </div>
-                </section>
+                </div>
             </aside>
         </div>
     </div>
