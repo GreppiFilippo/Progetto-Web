@@ -1,7 +1,8 @@
 <?php
 require_once "../bootstrap.php";
 require_once "../utils/functions.php";
-list($response["bookings"], $totalItems) = $dbh->getFilteredReservations("", "", "all", "", 0, 6);
+$today = date('Y-m-d');
+list($response["bookings"], $totalItems) = $dbh->getFilteredReservations($today, "", "all", "", 0, 6);
 for ($i = 0; $i < count($response["bookings"]); $i++) {
     $response["bookings"][$i]["badge"] = bookingStatusBadge($response["bookings"][$i]["status"]);
 }
