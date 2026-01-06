@@ -57,10 +57,11 @@ $status = $r["status"];
                                 <div class="flex-grow-1">
                                     <h3 class="h6 mb-1">
                                         <?php echo htmlspecialchars((string) $item["name"], ENT_QUOTES, 'UTF-8'); ?>
-                                        <span class="text-muted">x<?php echo $qty; ?></span>
+                                        <span class="text-muted"><?php echo $qty; ?></span>
                                     </h3>
                                     <p class="small text-muted mb-0">
-                                        <?php echo htmlspecialchars((string) $item["description"], ENT_QUOTES, 'UTF-8'); ?></p>
+                                        <?php echo htmlspecialchars((string) $item["description"], ENT_QUOTES, 'UTF-8'); ?>
+                                    </p>
                                     <div class="mt-2">
                                         <?php getTags($dishTags); ?>
                                     </div>
@@ -70,7 +71,8 @@ $status = $r["status"];
                                         €<?php echo htmlspecialchars((string) formatEuro($lineTotal), ENT_QUOTES, 'UTF-8'); ?>
                                     </strong>
                                     <div class="small text-muted">
-                                        (€<?php echo htmlspecialchars((string) formatEuro($price), ENT_QUOTES, 'UTF-8'); ?> cad.)
+                                        (€<?php echo htmlspecialchars((string) formatEuro($price), ENT_QUOTES, 'UTF-8'); ?>
+                                        cad.)
                                     </div>
                                 </div>
                             </li>
@@ -84,15 +86,15 @@ $status = $r["status"];
                         <i class="bi bi-chat-left-text me-2" aria-hidden="true"></i>
                         Note
                     </h2>
-                    <div class="card-body">
-                        <p class="mb-0">
-                            <?php if (!empty($r["notes"])) {
-                                echo htmlspecialchars((string) $r["notes"], ENT_QUOTES, 'UTF-8');
-                            } else {
-                                echo '<span class="text-muted">Nessuna nota aggiunta.</span>';
-                            } ?>
-                        </p>
-                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">
+                        <?php if (!empty($r["notes"])) {
+                            echo htmlspecialchars((string) $r["notes"], ENT_QUOTES, 'UTF-8');
+                        } else {
+                            echo '<span class="text-muted">Nessuna nota aggiunta.</span>';
+                        } ?>
+                    </p>
                 </div>
             </section>
         </div>
@@ -125,7 +127,7 @@ $status = $r["status"];
                         </div>
                     </div>
                 </section>
-                <section class="card border-0 shadow-sm">
+                <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <div class="d-grid gap-2">
                             <a href="user-dashboard.php" class="btn btn-outline-secondary text-white">
@@ -140,7 +142,7 @@ $status = $r["status"];
                             <?php } ?>
                         </div>
                     </div>
-                </section>
+                </div>
             </aside>
         </div>
     </div>
