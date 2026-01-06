@@ -25,7 +25,7 @@ if (!defined('IN_APP')) {
       </h1>
 
       <div class="border-0 shadow-sm p-4">
-        <form action="" method="POST" enctype="multipart/form-data" id="dish-form">
+        <form action="admin-add-dish.php" method="POST" enctype="multipart/form-data" id="dish-form">
 
           <!-- ===================== -->
           <!-- IMMAGINE -->
@@ -33,7 +33,7 @@ if (!defined('IN_APP')) {
           <div class="row mb-4">
             <div class="col-12">
               <h2 class="admin-h2 h5 mb-3">
-                <i class="bi admin-icon bi-camera me-2"  aria-hidden="true"></i>Immagine del Piatto
+                <i class="bi admin-icon bi-camera me-2" aria-hidden="true"></i>Immagine del Piatto
               </h2>
             </div>
 
@@ -56,7 +56,7 @@ if (!defined('IN_APP')) {
                   <p class="text-muted mb-0 mt-2" id="previewText">
                     Nessuna immagine selezionata
                   </p>
-                  <img id="previewImg" class="img-fluid rounded d-none mt-2" alt="Anteprima immagine">
+                  <img id="previewImg" class="img-fluid rounded d-none mt-2" alt="Anteprima immagine" src="#" />
                 </div>
               </div>
             </div>
@@ -226,8 +226,8 @@ if (!defined('IN_APP')) {
   if (isset($templateParams["js"])):
     foreach ($templateParams["js"] as $script):
       ?>
-          <script src="<?php echo $script; ?>" type="module"></script>
-          <?php
+      <script src="<?php echo $script; ?>" type="module"></script>
+      <?php
     endforeach;
   endif;
   ?>
