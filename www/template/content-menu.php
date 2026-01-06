@@ -86,7 +86,7 @@ if (!defined('IN_APP')) {
         // Recupera e filtra i piatti per la categoria corrente
         $piatti = $dbh->getAllDishes($categoria['category_id']);
         $piattiFiltrati = array_filter($piatti, function($piatto) use ($ricerca) {
-            return empty($ricerca) || mb_stripos($piatto['name'], $ricerca) !== false;
+            return $piatto['stock'] > 0 && (empty($ricerca) || mb_stripos($piatto['name'], $ricerca) !== false);
         });
 
         // Se la ricerca è attiva e non ci sono piatti filtrati, salta la categoria
