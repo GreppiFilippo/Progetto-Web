@@ -674,30 +674,6 @@ class DatabaseHelper
     }
 
     /**
-     * Get all categories ordered by name.
-     * 
-     * @return array<int, array<string, mixed>> Returns array of categories
-     */
-    public function getCategories()
-    {
-        $sql = "SELECT category_id, category_name FROM categories ORDER BY category_name";
-        $stmt = $this->db->prepare($sql);
-        if (!$stmt)
-            return [];
-
-        if (!$stmt->execute()) {
-            $stmt->close();
-            return [];
-        }
-
-        $res = $stmt->get_result();
-        $rows = $res ? $res->fetch_all(MYSQLI_ASSOC) : [];
-        $stmt->close();
-
-        return $rows;
-    }
-
-    /**
      * Get time slots for a given date.
      * Filters out slots that are in the past or too close to current time.
      *
