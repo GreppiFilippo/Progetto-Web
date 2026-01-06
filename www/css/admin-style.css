@@ -274,3 +274,8 @@ main a:hover {
     border-bottom: solid #942222 1.5px;
     transition: all 0.1s ease-in-out;
 }
+
+/* Icons */
+main i.bi {
+    color: #942222;
+}
