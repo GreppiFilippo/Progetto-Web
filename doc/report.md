@@ -4,12 +4,17 @@ _Sistema di Prenotazione Pasti Universitari – Mensa Campus_
 ## 1 Introduzione
 
 ### 1.1 Obiettivo del Progetto
-**Mensa Campus** è un'applicazione web sviluppata per gestire le prenotazioni dei pasti presso una mensa universitaria. Il sistema permette agli studenti di consultare il menù giornaliero, effettuare prenotazioni con specifici orari, e agli amministratori di gestire i piatti disponibili e monitorare le prenotazioni.
+**Mensa Campus** è un'applicazione web sviluppata come prototipo per la gestione delle prenotazioni dei pasti presso una mensa universitaria.
+
 
 ### 1.2 Contesto e Motivazioni
-Il progetto nasce dall'esigenza di digitalizzare e ottimizzare il processo di prenotazione dei pasti in una mensa universitaria, riducendo i tempi di attesa, migliorando l'esperienza utente e facilitando la gestione operativa per il personale amministrativo.
+Il progetto nasce dalla constatazione che nel campus universitario di Cesena non è attualmente presente un servizio di mensa. Questa mancanza rappresenta un limite per molti studenti, che spesso devono organizzarsi autonomamente per i pasti durante le giornate di lezione.
+Per confermare questa esigenza, è stata condotta un’indagine informale coinvolgendo studenti del campus di Cesena e il profilo social “Spotted” ufficiale. Dalle risposte raccolte è emersa con particolare frequenza la richiesta di un servizio di mensa universitaria.
+Alla luce di questi risultati, il progetto Mensa Campus è stato concepito come esercizio progettuale e tecnologico volto a simulare un sistema completo di prenotazione e gestione dei pasti, ipotizzando l’introduzione futura di una mensa universitaria nel campus.
+
 
 ## 2 Analisi dei Requisiti
+I requisiti del sistema sono stati definiti a partire da un confronto diretto con studenti universitari del campus di Cesena. Attraverso domande informali rivolte a colleghi e amici, sono state raccolte indicazioni sulle funzionalità ritenute più utili per un ipotetico servizio di mensa universitaria. Le risposte ottenute hanno guidato la definizione delle principali caratteristiche dell’applicazione, con particolare attenzione alla semplicità di utilizzo, alla gestione delle prenotazioni e alla chiarezza delle informazioni fornite.
 
 ### 2.1 Requisiti Funzionali
 
@@ -101,15 +106,25 @@ Nelle fasi iniziali del progetto, dopo aver definito le personas e i principali 
 
 #### Menù Admin
 ![Menù Admin](mockup/admin-menu.png)
-*Gestione completa del menù con possibilità di modifica ed eliminazione piatti*
+*Visualizzazione dei piatti disponibili con possibilià di ricerca*
 
 #### Aggiungi Piatto
 ![Aggiungi Piatto](mockup/admin-add-dish.png)
 *Form per l'inserimento di nuovi piatti con upload immagine, dettagli nutrizionali e categorie*
 
+#### Modifica Piatto
+*Form dedicato alla modifica dei dati di un piatto esistente, inclusi immagine, prezzo, informazioni nutrizionali e categoria.*
+
+
+#### Gestione slot
+*Pagina dedicata alla gestione degli slot orari in cui prenotare i pasti*
+
 #### Gestione Prenotazioni
 ![Gestione Prenotazioni](mockup/admin-bookings.png)
-*Visualizzazione e gestione di tutte le prenotazioni degli utenti con cambio stato*
+*Visualizzazione e gestione di tutte le prenotazioni degli utenti con possibilità di ricerca*
+
+#### Modifica Stato Prenotazioni
+*Visualizzazione dei dettagli di una prenotazione con cpossibilità di cambio stato*
 
 
 ## 5 Tecnologie Utilizzate
@@ -123,6 +138,8 @@ Nelle fasi iniziali del progetto, dopo aver definito le personas e i principali 
 - **HTML5**: Struttura semantica delle pagine
 - **CSS3**: Stilizzazione custom (user-style.css, admin-style.css)
 - **JavaScript**: Interattività client-side
+- **AJAX**: Aggiornamento dinamico dei contenuti tramite dati forniti da API
+
 
 ### 5.3 Ambiente di Sviluppo
 - **XAMPP**: Stack di sviluppo (Apache, MySQL, PHP)
@@ -131,8 +148,11 @@ Nelle fasi iniziali del progetto, dopo aver definito le personas e i principali 
 ### 6.1 Diagramma ER
 ![Diagramma ER](./img/cafeteria%20relational.png)
 
-
 ## 7 Deployment e Configurazione
+-Scaricare il repository del progetto in locale e posizionarlo all’interno della cartella htdocs di XAMPP.
+-Avviare XAMPP e assicurarsi che i servizi Apache Web Server e MySQL Database siano attivi.
+-Accedere a phpMyAdmin tramite il browser e, nella sezione SQL, eseguire gli script creazione_db.sql e insert_data.sql per la creazione e il popolamento del database.
+-Aprire un browser web e accedere all’applicazione tramite localhost.
 
 ### 7.1 Credenziali Default
 
@@ -140,3 +160,8 @@ Nelle fasi iniziali del progetto, dopo aver definito le personas e i principali 
 |-----------------|---------------------------|------------|
 | **Admin**       | `admin@mensa.it`          | `admin123` |
 | **Utente Test** | `mario.rossi@studenti.it`| `mario123` |
+
+### 8 Test e Validazione con gli Utenti
+Al fine di valutare l’usabilità e l’efficacia del sistema Mensa Campus, è stata effettuata una fase di test informale coinvolgendo un gruppo di studenti universitari del campus di Cesena. Ai partecipanti è stato chiesto di utilizzare l’applicazione simulando le principali operazioni previste dal sistema, quali la consultazione del menù, l’effettuazione di una prenotazione e la navigazione tra le diverse sezioni dell’interfaccia.
+Durante i test sono stati raccolti feedback relativi alla chiarezza dell’interfaccia, alla semplicità di utilizzo e alla comprensione del flusso di prenotazione. I risultati ottenuti hanno evidenziato una buona facilità di utilizzo generale e hanno permesso di individuare alcuni aspetti migliorabili, successivamente corretti durante la fase di sviluppo.
+Questa attività di validazione ha contribuito a rendere l’applicazione più intuitiva e coerente con le esigenze degli utenti finali, confermando la validità delle scelte progettuali effettuate.
