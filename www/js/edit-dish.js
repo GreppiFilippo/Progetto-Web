@@ -3,6 +3,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
     const dishId = params.get("id");
+    const currentPage = params.get("currentPage");
 
     document.getElementById("confirm").innerHTML = `<i class="bi bi-pencil me-2"></i>Modifica Piatto`;
     document.getElementById("title").innerHTML = `<i class="bi bi-pencil admin-icon fs-2" aria-hidden="true"></i> Modifica Piatto`;
@@ -47,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const cancelBtn = document.getElementById("cancel");
     if (cancelBtn) {
         cancelBtn.addEventListener("click", (e) => {
-            window.location.href = "admin-dashboard.php";
+            window.location.href = `admin-menu.php?currentPage=${currentPage}`;
         });
     }
 });

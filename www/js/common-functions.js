@@ -97,11 +97,10 @@ export function renderPagination(totalPages, currentPage, loadData) {
         btn.className = `admin-btn btn mx-1 ${i === currentPage ? "active" : ""}`;
         btn.type = i === currentPage ? "button" : "submit";
         btn.textContent = i;
-        btn.addEventListener("click", () => loadData(i));
         if (i > totalPages) {
             btn.disabled = true;
         } else {
-            btn.addEventListener("click", () => loadData(pageNum));
+            btn.addEventListener("click", () => loadData(i));
         }
         container.appendChild(btn);
     }

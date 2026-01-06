@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 require_once "bootstrap.php";
 
 // Admin template access control
@@ -16,7 +19,7 @@ require_once "bootstrap.php";
 
 $errors = [];
 $dishId = $_GET["id"];
-
+$currentPage = $_GET["currentPage"];
 // Parametri per template
 $templateParams["errors"] = $errors;
 $templateParams["content"] = "template/dish-form.php";
@@ -67,7 +70,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (!($res["success"] ?? false)) {
             $errors[] = "Errore DB: " . ($res["error"] ?? "sconosciuto");
         } else {
-            header("Location: admin-menu.php");
+            header("Location: admin-menu.php?currentPage=".$currentPage);
             exit;
         }
     }

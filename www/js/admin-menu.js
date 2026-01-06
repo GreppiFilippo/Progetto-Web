@@ -4,10 +4,9 @@ document.getElementById("add-dish").addEventListener("click", () => {
     window.location.href = "admin-add-dish.php";
 });
 
-let currentPage = 1;
+const params = new URLSearchParams(window.location.search);
+let currentPage = params.get("currentPage") == null ? 1 : Number(params.get("currentPage"));
 const resultsPerPage = 4;
-
-let cachedDishes = [];
 
 document.getElementById("category").addEventListener("change", () => loadData(1));
 document.getElementById("state").addEventListener("change", () => loadData(1));
@@ -33,7 +32,6 @@ async function loadData(page = 1) {
         const res = await fetch(`api/admin-menu.php?${params.toString()}`);
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         const data = await res.json();
-        cachedDishes = data.dishes;
         renderDishes(data.dishes);
         renderPagination(data.totalPages, currentPage, loadData);
     } catch (error) {
@@ -107,8 +105,8 @@ document.addEventListener('click', (e) => {
     const dishId = btn.dataset.id;
     if (!dishId) return;
     // reindirizza a admin-edit-dish.php?id=<dishId>
-    window.location.href = `admin-edit-dish.php?id=${dishId}`;
+    window.location.href = `admin-edit-dish.php?id=${dishId}&currentPage=${currentPage}`;
 });
 
 
-loadData();
+loadData(currentPage);
