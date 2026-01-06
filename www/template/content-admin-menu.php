@@ -17,7 +17,7 @@ if (!defined('IN_APP')) {
 
     <div class="row g-3 mb-4">
         <!-- FILTERS -->
-        <section class="col-12 col-md-8">
+        <div class="col-12 col-md-8">
             <form class="row g-3" autocomplete="off" onsubmit="return false;">
                 <div class="col-12 col-sm-6">
                     <label for="category" class="form-label">Categoria</label>
@@ -44,26 +44,26 @@ if (!defined('IN_APP')) {
                         autocomplete="off">
                 </div>
             </form>
-        </section>
+        </div>
 
         <!-- Aside -->
         <aside class="col-12 col-md-4 order-first order-md-last shadow-sm border-3 rounded-3 p-3">
             <section class="row mx-0 mb-3">
                 <h2 class="h5 p-0 mb-2">Azioni rapide</h2>
-                <button type="button" class="btn admin-btn mb-1" id="add-dish">
+                <a href="admin-add-dish.php" class="btn admin-btn mb-1" id="add-dish">
                     <i class="bi bi-plus-circle" aria-hidden="true"></i>
                     Aggiungi piatto
-                </button>
+                </a>
             </section>
         </aside>
     </div>
 
     <div class="row g-3">
         <!-- DISH LIST -->
-        <section class="col-12 col-md-8">
+        <div class="col-12 col-md-8">
             <div id="dish_list" class="row g-3"></div>
             <div class="d-flex justify-content-center mt-3" id="pagination"></div>
-        </section>
+        </div>
 
         <!-- Aside spacer for alignment -->
         <div class="d-none d-md-block col-md-4"></div>
