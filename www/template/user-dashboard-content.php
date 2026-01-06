@@ -105,7 +105,7 @@ if (!defined('IN_APP')) {
                                 <div class="d-flex gap-2">
 
                                     <!-- DETTAGLI: vai a single-order.php -->
-                                    <a class="btn btn-sm btn-outline-primary" type="button"
+                                    <a class="btn btn-sm btn-outline-primary"
                                         href="single-order.php?reservation_id=<?php echo (int) $reservation['reservation_id']; ?>">
                                         <i class="bi bi-eye me-1" aria-hidden="true"></i>
                                         <span class="text-white">Dettagli</span>
@@ -113,7 +113,7 @@ if (!defined('IN_APP')) {
 
                                     <!-- ANNULLA: appare solo se canCancel è true -->
                                     <?php if (canCancelReservation($reservation['status'])) { ?>
-                                        <a class="btn btn-sm" type="button" data-cancel-btn
+                                        <a class="btn btn-sm" data-cancel-btn
                                             href="user-dashboard.php?cancel_id=<?php echo (int) $reservation['reservation_id']; ?>">
                                             <i class="bi bi-trash me-1" aria-hidden="true"></i>
                                             <span>Annulla ordine</span>

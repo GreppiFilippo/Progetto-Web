@@ -8,7 +8,7 @@ if (!defined('IN_APP')) {
 
     <!-- Page Header -->
     <header class="text-center">
-        <h1 class="fw-bold">Menu del Giorno</h1>
+        <h1 class="fw-bold">Menu</h1>
         <p class="lead text-muted">
             <i class="bi bi-calendar-event me-2" aria-hidden="true"></i>
             <?php
