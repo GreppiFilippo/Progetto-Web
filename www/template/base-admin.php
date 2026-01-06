@@ -5,7 +5,7 @@ if (!defined('IN_APP')) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="it-IT">
+<html lang="it-IT" xml:lang="it-IT">
 
 <head>
   <meta charset="UTF-8" />
@@ -49,9 +49,12 @@ if (!defined('IN_APP')) {
       <!-- Menu -->
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto align-items-md-center">
-          <?php foreach ($templateParams["nav_items"] as $nav_item): ?>
+          <?php foreach ($templateParams["nav_items"] as $nav_item):
+            $currentPage = basename($_SERVER['PHP_SELF']);
+            $isActive = ($nav_item["link"] === $currentPage);
+            ?>
             <li class="nav-item">
-              <a class="nav-link active text-white" aria-current="page"
+              <a class="nav-link <?php echo $isActive ? 'active' : ''; ?> text-white" <?php echo $isActive ? 'aria-current="page"' : ''; ?>
                 href="<?php echo htmlspecialchars((string) $nav_item["link"], ENT_QUOTES, 'UTF-8'); ?>">
                 <i class="<?php echo htmlspecialchars((string) $nav_item["iconClass"], ENT_QUOTES, 'UTF-8'); ?> me-1"
                   aria-hidden="true"></i><?php echo htmlspecialchars((string) $nav_item["name"], ENT_QUOTES, 'UTF-8'); ?>
