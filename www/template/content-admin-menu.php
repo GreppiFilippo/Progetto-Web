@@ -25,7 +25,7 @@ if (!defined('IN_APP')) {
                         <option value="all">Tutte</option>
                         <?php foreach ($templateParams['categories'] as $categoria): ?>
                             <option value="<?php echo $categoria['category_id']; ?>">
-                                <?php echo ucfirst($categoria['category_name']); ?>
+                                <?php echo ucfirst(htmlspecialchars((string) $categoria['category_name'], ENT_QUOTES, 'UTF-8')); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -41,7 +41,7 @@ if (!defined('IN_APP')) {
                 <div class="col-12">
                     <label for="name" class="form-label">Cerca</label>
                     <input type="text" class="form-control" placeholder="Cerca piatto per nome..." id="name"
-                        autocomplete="off" >
+                        autocomplete="off">
                 </div>
             </form>
         </section>

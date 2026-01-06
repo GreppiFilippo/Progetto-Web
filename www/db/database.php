@@ -4,7 +4,8 @@ if (!defined('IN_APP')) {
     exit('Access denied');
 }
 
-class DatabaseHelper {
+class DatabaseHelper
+{
     /** @var mysqli */
     private $db;
 
@@ -17,7 +18,8 @@ class DatabaseHelper {
      * @param string $dbname The database name
      * @param int $port The database port
      */
-    public function __construct($servername, $username, $password, $dbname, $port) {
+    public function __construct($servername, $username, $password, $dbname, $port)
+    {
         $this->db = new mysqli($servername, $username, $password, $dbname, $port);
         if ($this->db->connect_error) {
             die("Connection failed: " . $this->db->connect_error);
@@ -36,11 +38,12 @@ class DatabaseHelper {
      * @param bool $isAdmin Whether the user is an admin
      * @return array{success: bool, error?: string, insert_id?: int}
      */
-    public function createUser($email, $password, $firstName, $lastName, $isAdmin = false) {
+    public function createUser($email, $password, $firstName, $lastName, $isAdmin = false)
+    {
         $sql = "INSERT INTO users (email, password, first_name, last_name, admin) VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->db->prepare($sql);
         if (!$stmt) {
-            return ['success' => false, 'error' => (string)$this->db->error];
+            return ['success' => false, 'error' => (string) $this->db->error];
         }
 
         // admin is stored as BOOLEAN; use 1/0
@@ -49,7 +52,7 @@ class DatabaseHelper {
 
         $executed = $stmt->execute();
         if (!$executed) {
-            $err = (string)$stmt->error;
+            $err = (string) $stmt->error;
             $stmt->close();
             return ['success' => false, 'error' => $err];
         }
@@ -64,10 +67,12 @@ class DatabaseHelper {
      * @param string $email The email to check
      * @return bool Returns true if the email exists, false otherwise
      */
-    public function emailExists($email) {
+    public function emailExists($email)
+    {
         $sql = "SELECT user_id FROM users WHERE email = ? LIMIT 1";
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return false;
+        if (!$stmt)
+            return false;
 
         $stmt->bind_param('s', $email);
 
@@ -87,10 +92,12 @@ class DatabaseHelper {
      * 
      * @return array<int, array<string, mixed>> Returns an array of categories
      */
-    public function getAllCategories() {
+    public function getAllCategories()
+    {
         $sql = "SELECT * FROM categories";
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return [];
+        if (!$stmt)
+            return [];
 
         if (!$stmt->execute()) {
             $stmt->close();
@@ -111,12 +118,14 @@ class DatabaseHelper {
      * @param string $password The user's password
      * @return array<int, array<string, mixed>> Returns an array with user details if credentials are valid, empty array otherwise
      */
-    public function checkLogin(string $email, string $password) {
+    public function checkLogin(string $email, string $password)
+    {
         $query = "SELECT user_id, email, first_name, last_name, admin
                   FROM users
                   WHERE email = ? AND password = ?";
         $stmt = $this->db->prepare($query);
-        if (!$stmt) return [];
+        if (!$stmt)
+            return [];
 
         $stmt->bind_param('ss', $email, $password);
 
@@ -138,10 +147,12 @@ class DatabaseHelper {
      * @param int $categoryId The ID of the category
      * @return array<int, array<string, mixed>> Returns an array of dishes
      */
-    public function getAllDishes($categoryId) {
+    public function getAllDishes($categoryId)
+    {
         $sql = "SELECT * FROM dishes WHERE category_id = ?";
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return [];
+        if (!$stmt)
+            return [];
 
         $stmt->bind_param('i', $categoryId);
 
@@ -163,13 +174,15 @@ class DatabaseHelper {
      * @param int $dishId The ID of the dish
      * @return array<int, array<string, mixed>> Returns an array of dietary tags
      */
-    public function getDietaryTagsForDish($dishId) {
+    public function getDietaryTagsForDish($dishId)
+    {
         $sql = "SELECT ds.dietary_spec_name 
                 FROM dietary_specifications ds
                 JOIN dish_specifications dsp ON ds.dietary_spec_id = dsp.dietary_spec_id
                 WHERE dsp.dish_id = ?";
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return [];
+        if (!$stmt)
+            return [];
 
         $stmt->bind_param('i', $dishId);
 
@@ -189,13 +202,15 @@ class DatabaseHelper {
      * Fetch all dietary specifications from the database.
      * @return array<int, array<string, mixed>> Returns an array of dietary specifications
      */
-    public function getDietarySpecifications() {
+    public function getDietarySpecifications()
+    {
         $sql = "SELECT dietary_spec_id, dietary_spec_name
                 FROM dietary_specifications
                 ORDER BY dietary_spec_name";
 
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return [];
+        if (!$stmt)
+            return [];
 
         if (!$stmt->execute()) {
             $stmt->close();
@@ -214,10 +229,12 @@ class DatabaseHelper {
      * @param int $userId The user ID
      * @return int[] Returns an array of dietary specification IDs
      */
-    public function getUserDietarySpecIds($userId): array {
+    public function getUserDietarySpecIds($userId): array
+    {
         $sql = "SELECT dietary_spec_id FROM user_specifications WHERE user_id = ?";
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return [];
+        if (!$stmt)
+            return [];
 
         $stmt->bind_param("i", $userId);
 
@@ -230,7 +247,7 @@ class DatabaseHelper {
 
         $ids = [];
         while ($row = $res->fetch_assoc()) {
-            $ids[] = (int)$row['dietary_spec_id'];
+            $ids[] = (int) $row['dietary_spec_id'];
         }
         $stmt->close();
 
@@ -244,27 +261,32 @@ class DatabaseHelper {
      * @throws Exception on database errors
      * @return array{success: bool, error?: string}
      */
-    public function saveUserDietarySpecs($userId, $specIds): array {
+    public function saveUserDietarySpecs($userId, $specIds): array
+    {
         $specIds = array_values(array_unique(array_map('intval', $specIds)));
         $this->db->begin_transaction();
 
         try {
             // 1) Remove old specifications
             $del = $this->db->prepare("DELETE FROM user_specifications WHERE user_id = ?");
-            if (!$del) throw new Exception($this->db->error);
+            if (!$del)
+                throw new Exception($this->db->error);
 
             $del->bind_param("i", $userId);
-            if (!$del->execute()) throw new Exception((string)$del->error);
+            if (!$del->execute())
+                throw new Exception((string) $del->error);
             $del->close();
 
             // 2) Insert new specifications (if any)
             if (count($specIds) > 0) {
                 $ins = $this->db->prepare("INSERT INTO user_specifications (user_id, dietary_spec_id) VALUES (?, ?)");
-                if (!$ins) throw new Exception((string)$this->db->error);
+                if (!$ins)
+                    throw new Exception((string) $this->db->error);
 
                 foreach ($specIds as $specId) {
                     $ins->bind_param("ii", $userId, $specId);
-                    if (!$ins->execute()) throw new Exception((string)$ins->error);
+                    if (!$ins->execute())
+                        throw new Exception((string) $ins->error);
                 }
                 $ins->close();
             }
@@ -276,17 +298,19 @@ class DatabaseHelper {
             return ['success' => false, 'error' => $e->getMessage()];
         }
     }
-    
-   /**
-    * Get user data by user ID (including registration date).
-    * 
-    * @param int $userId The user ID
-    * @return array<string, mixed>|null Returns user data array or null if not found
-    */
-    public function getUserById($userId) {
+
+    /**
+     * Get user data by user ID (including registration date).
+     * 
+     * @param int $userId The user ID
+     * @return array<string, mixed>|null Returns user data array or null if not found
+     */
+    public function getUserById($userId)
+    {
         $sql = "SELECT * FROM users WHERE user_id = ?";
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return null;
+        if (!$stmt)
+            return null;
 
         $stmt->bind_param("i", $userId);
 
@@ -308,7 +332,8 @@ class DatabaseHelper {
      * @param int $userId The user ID
      * @return array<string, int> Returns array with 'active_count' and 'completed_count' keys
      */
-   public function getReservationCountsByUser($userId): array {
+    public function getReservationCountsByUser($userId): array
+    {
         $sql = "SELECT
                     SUM(CASE WHEN status IN ('Da Visualizzare','In Preparazione','Pronto al ritiro') THEN 1 ELSE 0 END) AS active_count,
                     SUM(CASE WHEN status = 'Completato' THEN 1 ELSE 0 END) AS completed_count
@@ -316,7 +341,8 @@ class DatabaseHelper {
                 WHERE user_id = ?";
 
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return ['active_count' => 0, 'completed_count' => 0];
+        if (!$stmt)
+            return ['active_count' => 0, 'completed_count' => 0];
 
         $stmt->bind_param("i", $userId);
 
@@ -338,14 +364,16 @@ class DatabaseHelper {
      * @param int $reservationId The reservation ID
      * @return array<int, array<string, mixed>> Returns array of dishes with quantities
      */
-    public function getReservationItems($reservationId): array {
+    public function getReservationItems($reservationId): array
+    {
         $sql = "SELECT d.dish_id, d.name, rd.quantity
                 FROM reservation_dishes rd
                 JOIN dishes d ON d.dish_id = rd.dish_id
                 WHERE rd.reservation_id = ?";
 
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return [];
+        if (!$stmt)
+            return [];
 
         $stmt->bind_param("i", $reservationId);
 
@@ -369,7 +397,8 @@ class DatabaseHelper {
      * @param int $userId The user ID (to verify ownership)
      * @return array{success: bool, error?: string} Returns success status and optional error message
      */
-    public function deleteReservation($reservationId, $userId): array {
+    public function deleteReservation($reservationId, $userId): array
+    {
         $this->db->begin_transaction();
         try {
             // lock riga, verifica ownership + status
@@ -378,18 +407,21 @@ class DatabaseHelper {
                  WHERE reservation_id = ? AND user_id = ?
                  FOR UPDATE"
             );
-            if (!$chk) throw new Exception((string)$this->db->error);
+            if (!$chk)
+                throw new Exception((string) $this->db->error);
 
             $chk->bind_param("ii", $reservationId, $userId);
-            if (!$chk->execute()) throw new Exception($chk->error);
+            if (!$chk->execute())
+                throw new Exception($chk->error);
 
             $res = $chk->get_result();
             $r = $res ? $res->fetch_assoc() : null;
             $chk->close();
 
-            if (!$r) throw new Exception("Prenotazione non trovata.");
+            if (!$r)
+                throw new Exception("Prenotazione non trovata.");
 
-            $status = (string)$r["status"];
+            $status = (string) $r["status"];
 
             // annullabile solo se "Da Visualizzare" o "In Preparazione"
             if (!in_array($status, array("Da Visualizzare", "In Preparazione"), true)) {
@@ -400,20 +432,24 @@ class DatabaseHelper {
             $getItems = $this->db->prepare(
                 "SELECT dish_id, quantity FROM reservation_dishes WHERE reservation_id = ?"
             );
-            if (!$getItems) throw new Exception((string)$this->db->error);
-            
+            if (!$getItems)
+                throw new Exception((string) $this->db->error);
+
             $getItems->bind_param("i", $reservationId);
-            if (!$getItems->execute()) throw new Exception($getItems->error);
-            
+            if (!$getItems->execute())
+                throw new Exception($getItems->error);
+
             $itemsResult = $getItems->get_result();
             while ($item = $itemsResult->fetch_assoc()) {
                 $updateStock = $this->db->prepare(
                     "UPDATE dishes SET stock = stock + ? WHERE dish_id = ?"
                 );
-                if (!$updateStock) throw new Exception((string)$this->db->error);
-                
+                if (!$updateStock)
+                    throw new Exception((string) $this->db->error);
+
                 $updateStock->bind_param("ii", $item['quantity'], $item['dish_id']);
-                if (!$updateStock->execute()) throw new Exception($updateStock->error);
+                if (!$updateStock->execute())
+                    throw new Exception($updateStock->error);
                 $updateStock->close();
             }
             $getItems->close();
@@ -424,10 +460,12 @@ class DatabaseHelper {
                  SET status = 'Annullato'
                  WHERE reservation_id = ? AND user_id = ?"
             );
-            if (!$upd) throw new Exception((string)$this->db->error);
+            if (!$upd)
+                throw new Exception((string) $this->db->error);
 
             $upd->bind_param("ii", $reservationId, $userId);
-            if (!$upd->execute()) throw new Exception((string)$upd->error);
+            if (!$upd->execute())
+                throw new Exception((string) $upd->error);
             $upd->close();
 
             $this->db->commit();
@@ -446,7 +484,8 @@ class DatabaseHelper {
      * @param int|null $limit Optional limit for number of results
      * @return array<int, array<string, mixed>> Returns array of reservations
      */
-    public function getReservationsByUser($userId, $limit = null): array {
+    public function getReservationsByUser($userId, $limit = null): array
+    {
         $sql = "SELECT reservation_id, total_amount, date_time, status
                 FROM reservations
                 WHERE user_id = ?
@@ -457,7 +496,8 @@ class DatabaseHelper {
         }
 
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return [];
+        if (!$stmt)
+            return [];
 
         if ($limit !== null) {
             $stmt->bind_param("ii", $userId, $limit);
@@ -484,14 +524,16 @@ class DatabaseHelper {
      * @param int $userId The user ID (to verify ownership)
      * @return array<string, mixed>|null Returns reservation data or null if not found
      */
-    public function getReservationById($reservationId, $userId) {
+    public function getReservationById($reservationId, $userId)
+    {
         $sql = "SELECT reservation_id, total_amount, date_time, notes, status
                 FROM reservations
                 WHERE reservation_id = ? AND user_id = ?
                 LIMIT 1";
 
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return null;
+        if (!$stmt)
+            return null;
 
         $stmt->bind_param("ii", $reservationId, $userId);
 
@@ -513,14 +555,16 @@ class DatabaseHelper {
      * @param int $reservationId The reservation ID
      * @return array<int, array<string, mixed>> Returns array of detailed dish items
      */
-    public function getReservationItemsDetailed($reservationId) {
+    public function getReservationItemsDetailed($reservationId)
+    {
         $sql = "SELECT d.dish_id, d.name, d.description, d.price, rd.quantity
                 FROM reservation_dishes rd
                 JOIN dishes d ON d.dish_id = rd.dish_id
                 WHERE rd.reservation_id = ?";
 
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return [];
+        if (!$stmt)
+            return [];
 
         $stmt->bind_param("i", $reservationId);
 
@@ -542,7 +586,8 @@ class DatabaseHelper {
      * @param int $reservationId The reservation ID
      * @return array<int, array<int, array<string, mixed>>> Returns array grouped by dish_id with dietary tags
      */
-    public function getDietaryTagsForReservation($reservationId) {
+    public function getDietaryTagsForReservation($reservationId)
+    {
         $sql = "SELECT rd.dish_id, ds.dietary_spec_name
                 FROM reservation_dishes rd
                 JOIN dish_specifications dsp ON dsp.dish_id = rd.dish_id
@@ -550,7 +595,8 @@ class DatabaseHelper {
                 WHERE rd.reservation_id = ?";
 
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return [];
+        if (!$stmt)
+            return [];
 
         $stmt->bind_param("i", $reservationId);
 
@@ -566,7 +612,7 @@ class DatabaseHelper {
         // Raggruppa per dish_id: [dish_id => [tag1, tag2...]]
         $map = [];
         foreach ($rows as $r) {
-            $dishId = (int)$r["dish_id"];
+            $dishId = (int) $r["dish_id"];
             $map[$dishId][] = ["dietary_spec_name" => $r["dietary_spec_name"]];
         }
         return $map;
@@ -585,17 +631,20 @@ class DatabaseHelper {
      * @param array<int> $specIds Array of dietary specification IDs (optional)
      * @return array{success: bool, error?: string, dish_id?: int} Returns success status and dish ID or error message
      */
-    public function createDish($name, $description, $price, $stock, $imagePath, $calories, $categoryId, $specIds = []) {
+    public function createDish($name, $description, $price, $stock, $imagePath, $calories, $categoryId, $specIds = [])
+    {
         $this->db->begin_transaction();
 
         try {
             $sql = "INSERT INTO dishes (name, description, price, stock, image, calories, category_id)
                     VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $this->db->prepare($sql);
-            if (!$stmt) throw new Exception($this->db->error);
+            if (!$stmt)
+                throw new Exception($this->db->error);
 
             $stmt->bind_param("ssdisii", $name, $description, $price, $stock, $imagePath, $calories, $categoryId);
-            if (!$stmt->execute()) throw new Exception($stmt->error);
+            if (!$stmt->execute())
+                throw new Exception($stmt->error);
 
             $dishId = $stmt->insert_id;
             $stmt->close();
@@ -604,11 +653,13 @@ class DatabaseHelper {
             $specIds = array_values(array_unique(array_map("intval", $specIds)));
             if (count($specIds) > 0) {
                 $ins = $this->db->prepare("INSERT INTO dish_specifications (dish_id, dietary_spec_id) VALUES (?, ?)");
-                if (!$ins) throw new Exception($this->db->error);
+                if (!$ins)
+                    throw new Exception($this->db->error);
 
                 foreach ($specIds as $sid) {
                     $ins->bind_param("ii", $dishId, $sid);
-                    if (!$ins->execute()) throw new Exception($ins->error);
+                    if (!$ins->execute())
+                        throw new Exception($ins->error);
                 }
                 $ins->close();
             }
@@ -621,16 +672,18 @@ class DatabaseHelper {
             return ["success" => false, "error" => $e->getMessage()];
         }
     }
-    
+
     /**
      * Get all categories ordered by name.
      * 
      * @return array<int, array<string, mixed>> Returns array of categories
      */
-    public function getCategories() {
+    public function getCategories()
+    {
         $sql = "SELECT category_id, category_name FROM categories ORDER BY category_name";
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return [];
+        if (!$stmt)
+            return [];
 
         if (!$stmt->execute()) {
             $stmt->close();
@@ -652,14 +705,16 @@ class DatabaseHelper {
      * @param int $minMinutesAdvance Minimum minutes in advance required (default: 15)
      * @return array List of available time slots
      */
-    public function getTimeSlotsByDate($slot_date, $minMinutesAdvance = 15) {
+    public function getTimeSlotsByDate($slot_date, $minMinutesAdvance = 15)
+    {
         $sql = "SELECT slot_time
                 FROM time_slots
                 WHERE slot_date = ?
                 ORDER BY slot_time ASC";
 
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return [];
+        if (!$stmt)
+            return [];
 
         $stmt->bind_param("s", $slot_date);
 
@@ -704,7 +759,8 @@ class DatabaseHelper {
      * @param string|null $notes Optional notes for the reservation
      * @return array{success: bool, error?: string, reservation_id?: int}
      */
-    public function setNewReservation($userId, $dateTime, $items, $notes = null) {
+    public function setNewReservation($userId, $dateTime, $items, $notes = null)
+    {
         $this->db->begin_transaction();
 
         try {
@@ -718,8 +774,8 @@ class DatabaseHelper {
 
             // Lock and validate each dish for stock and price
             foreach ($items as $item) {
-                $dishId = (int)$item['dish_id'];
-                $quantity = (int)$item['quantity'];
+                $dishId = (int) $item['dish_id'];
+                $quantity = (int) $item['quantity'];
 
                 if ($quantity <= 0) {
                     throw new Exception("Invalid quantity for dish ID: " . $dishId);
@@ -732,10 +788,12 @@ class DatabaseHelper {
                      WHERE dish_id = ? 
                      FOR UPDATE"
                 );
-                if (!$stmt) throw new Exception($this->db->error);
+                if (!$stmt)
+                    throw new Exception($this->db->error);
 
                 $stmt->bind_param("i", $dishId);
-                if (!$stmt->execute()) throw new Exception($stmt->error);
+                if (!$stmt->execute())
+                    throw new Exception($stmt->error);
 
                 $result = $stmt->get_result();
                 $dish = $result ? $result->fetch_assoc() : null;
@@ -767,10 +825,12 @@ class DatabaseHelper {
                 "INSERT INTO reservations (user_id, total_amount, date_time, notes, status) 
                  VALUES (?, ?, ?, ?, 'Da Visualizzare')"
             );
-            if (!$stmt) throw new Exception($this->db->error);
+            if (!$stmt)
+                throw new Exception($this->db->error);
 
             $stmt->bind_param("idss", $userId, $totalAmount, $dateTime, $notes);
-            if (!$stmt->execute()) throw new Exception($stmt->error);
+            if (!$stmt->execute())
+                throw new Exception($stmt->error);
 
             $reservationId = $stmt->insert_id;
             $stmt->close();
@@ -780,21 +840,25 @@ class DatabaseHelper {
                 "INSERT INTO reservation_dishes (reservation_id, dish_id, quantity) 
                  VALUES (?, ?, ?)"
             );
-            if (!$stmtInsert) throw new Exception($this->db->error);
+            if (!$stmtInsert)
+                throw new Exception($this->db->error);
 
             $stmtUpdate = $this->db->prepare(
                 "UPDATE dishes SET stock = ? WHERE dish_id = ?"
             );
-            if (!$stmtUpdate) throw new Exception($this->db->error);
+            if (!$stmtUpdate)
+                throw new Exception($this->db->error);
 
             foreach ($validatedItems as $item) {
                 // Insert reservation dish
                 $stmtInsert->bind_param("iii", $reservationId, $item['dish_id'], $item['quantity']);
-                if (!$stmtInsert->execute()) throw new Exception($stmtInsert->error);
+                if (!$stmtInsert->execute())
+                    throw new Exception($stmtInsert->error);
 
                 // Update stock
                 $stmtUpdate->bind_param("ii", $item['new_stock'], $item['dish_id']);
-                if (!$stmtUpdate->execute()) throw new Exception($stmtUpdate->error);
+                if (!$stmtUpdate->execute())
+                    throw new Exception($stmtUpdate->error);
             }
 
             $stmtInsert->close();
@@ -809,7 +873,19 @@ class DatabaseHelper {
         }
     }
 
-    public function getFilteredReservations($date, $hour, $state, $name, $offset, $perPage) {
+    /**
+     * Get filtered reservations with pagination.
+     * 
+     * @param string $date Filter by date (YYYY-MM-DD format, empty string for no filter)
+     * @param string $hour Filter by hour (empty string for no filter)
+     * @param string $state Filter by status ('all' for no filter)
+     * @param string $name Filter by user first name or last name (empty string for no filter)
+     * @param int $offset Pagination offset
+     * @param int $perPage Number of results per page
+     * @return array{0: array<int, array<string, mixed>>, 1: int} Returns array with paginated results and total count
+     */
+    public function getFilteredReservations($date, $hour, $state, $name, $offset, $perPage)
+    {
         $sql = "SELECT
                 r.reservation_id,
                 r.date_time,
@@ -857,7 +933,8 @@ class DatabaseHelper {
 
         // Prepare and execute the statement
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return [];
+        if (!$stmt)
+            return [];
         if (!empty($params)) {
             $stmt->bind_param($types, ...$params);
         }
@@ -872,12 +949,19 @@ class DatabaseHelper {
         return [$paginatedRows, $rows ? count($rows) : 0];
     }
 
-    public function todayBookingsCount() {
+    /**
+     * Count today's reservations.
+     * 
+     * @return int The number of reservations for today
+     */
+    public function todayBookingsCount()
+    {
         $sql = "SELECT COUNT(*) AS count
                 FROM reservations r
                 WHERE DATE(r.date_time) = CURRENT_DATE;";
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return 0;
+        if (!$stmt)
+            return 0;
         if (!$stmt->execute()) {
             $stmt->close();
             return 0;
@@ -885,16 +969,23 @@ class DatabaseHelper {
         $res = $stmt->get_result();
         $row = $res ? $res->fetch_assoc() : null;
         $stmt->close();
-        return $row ? (int)$row['count'] : 0;
+        return $row ? (int) $row['count'] : 0;
     }
 
-    public function countUsers() {
+    /**
+     * Count non-admin users.
+     * 
+     * @return int The number of non-admin users
+     */
+    public function countUsers()
+    {
         $sql = "SELECT COUNT(*) 
                 AS user_count
                 FROM users
                 WHERE admin=0;";
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return 0;
+        if (!$stmt)
+            return 0;
         if (!$stmt->execute()) {
             $stmt->close();
             return 0;
@@ -902,16 +993,23 @@ class DatabaseHelper {
         $res = $stmt->get_result();
         $row = $res ? $res->fetch_assoc() : null;
         $stmt->close();
-        return $row ? (int)$row['user_count'] : 0;
+        return $row ? (int) $row['user_count'] : 0;
     }
 
-    public function todayEarnings(){
+    /**
+     * Calculate today's total earnings from reservations.
+     * 
+     * @return float The total revenue for today
+     */
+    public function todayEarnings()
+    {
         $sql = "SELECT COALESCE(SUM(total_amount), 0)
                 AS today_revenue
                 FROM reservations
                 WHERE DATE(date_time) = CURDATE();";
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return 0;
+        if (!$stmt)
+            return 0;
         if (!$stmt->execute()) {
             $stmt->close();
             return 0;
@@ -919,10 +1017,17 @@ class DatabaseHelper {
         $res = $stmt->get_result();
         $row = $res ? $res->fetch_assoc() : null;
         $stmt->close();
-        return $row ? (float)$row['today_revenue'] : 0.0;
+        return $row ? (float) $row['today_revenue'] : 0.0;
     }
 
-    public function getTopDishes($limit) {
+    /**
+     * Get top-selling dishes ordered by total quantity sold.
+     * 
+     * @param int $limit Maximum number of dishes to return
+     * @return array<int, array<string, mixed>> Returns array of top dishes with sales data
+     */
+    public function getTopDishes($limit)
+    {
         $sql = "SELECT d.name, SUM(rd.quantity) AS total_sold, 
                     c.category_name
                 FROM dishes d
@@ -932,7 +1037,8 @@ class DatabaseHelper {
                 ORDER BY total_sold DESC
                 LIMIT ?;";
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return [];
+        if (!$stmt)
+            return [];
         $stmt->bind_param("i", $limit);
         if (!$stmt->execute()) {
             $stmt->close();
@@ -944,7 +1050,18 @@ class DatabaseHelper {
         return $rows;
     }
 
-    public function getFilteredDishes($category, $state, $name, $offset = 0, $limit = 6) {
+    /**
+     * Get filtered dishes with pagination.
+     * 
+     * @param string $category Filter by category ID ('all' for no filter)
+     * @param string $state Filter by availability ('available', 'unavailable', or 'all')
+     * @param string $name Filter by dish name (empty string for no filter)
+     * @param int $offset Pagination offset (default: 0)
+     * @param int $limit Number of results per page (default: 6)
+     * @return array{0: array<int, array<string, mixed>>, 1: int} Returns array with paginated results and total count
+     */
+    public function getFilteredDishes($category, $state, $name, $offset = 0, $limit = 6)
+    {
         $sql = "SELECT * FROM dishes WHERE 1=1";
         $params = [];
         $types = "";
@@ -956,8 +1073,10 @@ class DatabaseHelper {
         }
 
         if ($state !== "all") {
-            if ($state === "available") $sql .= " AND stock > 0";
-            elseif ($state === "unavailable") $sql .= " AND stock = 0";
+            if ($state === "available")
+                $sql .= " AND stock > 0";
+            elseif ($state === "unavailable")
+                $sql .= " AND stock = 0";
         }
 
         if ($name !== "") {
@@ -967,7 +1086,8 @@ class DatabaseHelper {
         }
 
         $stmt = $this->db->prepare($sql);
-        if (!empty($params)) $stmt->bind_param($types, ...$params);
+        if (!empty($params))
+            $stmt->bind_param($types, ...$params);
         $stmt->execute();
         $res = $stmt->get_result();
         $data = $res->fetch_all(MYSQLI_ASSOC);
@@ -975,7 +1095,13 @@ class DatabaseHelper {
         return [$paginatedRes, $data ? count($data) : 0];
     }
 
-    public function getReservationStats() {
+    /**
+     * Get today's reservation statistics by status.
+     * 
+     * @return array<string, int> Returns array with counts for completed, preparing, and ready reservations
+     */
+    public function getReservationStats()
+    {
         $sql = "SELECT
             COUNT(CASE WHEN r.status = 'Completato' THEN 1 END) AS Completato,
             COUNT(CASE WHEN r.status = 'In Preparazione' THEN 1 END) AS InPreparazione,
@@ -983,125 +1109,161 @@ class DatabaseHelper {
         FROM reservations r
         JOIN reservation_dishes rd ON rd.reservation_id = r.reservation_id
         WHERE DATE(r.date_time) = CURRENT_DATE
-        ";  
+        ";
         $stmt = $this->db->prepare($sql);
-        if (!$stmt) return [];
+        if (!$stmt)
+            return [];
         if (!$stmt->execute()) {
             $stmt->close();
-            return [];      
+            return [];
         }
         $res = $stmt->get_result();
         $row = $res ? $res->fetch_assoc() : null;
         $stmt->close();
         return $row ? [
-            "completed" => (int)$row['Completato'],
-            "preparing" => (int)$row['InPreparazione'],
-            "ready" => (int)$row['ProntoAlRitiro']
+            "completed" => (int) $row['Completato'],
+            "preparing" => (int) $row['InPreparazione'],
+            "ready" => (int) $row['ProntoAlRitiro']
         ] : [];
     }
 
-public function modifyDish(
-    int $dishId,
-    string $name,
-    float $price,
-    int $stock,
-    int $categoryId,
-    string $description,
-    int $calories,
-    string $imageName,
-    array $specIds = []
-) {
-    $sql = "UPDATE dishes 
+    /**
+     * Update an existing dish with new data and dietary specifications.
+     * 
+     * @param int $dishId The dish ID to update
+     * @param string $name The new dish name
+     * @param float $price The new price
+     * @param int $stock The new stock quantity
+     * @param int $categoryId The category ID
+     * @param string $description The new description
+     * @param int $calories The calorie count
+     * @param string $imageName The image filename (empty string to keep existing image)
+     * @param array<int> $specIds Array of dietary specification IDs (default: [])
+     * @return array{success: bool, error?: string} Returns success status and optional error message
+     */
+    public function modifyDish(
+        int $dishId,
+        string $name,
+        float $price,
+        int $stock,
+        int $categoryId,
+        string $description,
+        int $calories,
+        string $imageName,
+        array $specIds = []
+    ) {
+        $sql = "UPDATE dishes 
             SET name = ?, price = ?, stock = ?, category_id = ?, description = ?, calories = ?";
 
-    // se immagine caricata la aggiorno
-    if ($imageName !== "") {
-        $sql .= ", image = ?";
+        // se immagine caricata la aggiorno
+        if ($imageName !== "") {
+            $sql .= ", image = ?";
+        }
+
+        $sql .= " WHERE dish_id = ?";
+
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) {
+            return ["success" => false, "error" => $this->db->error];
+        }
+
+        if ($imageName !== "") {
+            $stmt->bind_param(
+                "sdiisisi",
+                $name,
+                $price,
+                $stock,
+                $categoryId,
+                $description,
+                $calories,
+                $imageName,
+                $dishId
+            );
+        } else {
+            $stmt->bind_param(
+                "sdiisii",
+                $name,
+                $price,
+                $stock,
+                $categoryId,
+                $description,
+                $calories,
+                $dishId
+            );
+        }
+
+        if (!$stmt->execute()) {
+            return ["success" => false, "error" => $stmt->error];
+        }
+
+        $sqlDel = "DELETE FROM dish_specifications WHERE dish_id = ?";
+        $stmtDel = $this->db->prepare($sqlDel);
+        $stmtDel->bind_param("i", $dishId);
+        $stmtDel->execute();
+
+        $sqlIns = "INSERT INTO dish_specifications (dish_id, dietary_spec_id) VALUES (?, ?)";
+        $stmtIns = $this->db->prepare($sqlIns);
+
+        foreach ($specIds as $specId) {
+            $stmtIns->bind_param("ii", $dishId, $specId);
+            $stmtIns->execute();
+        }
+
+        return ["success" => true];
     }
 
-    $sql .= " WHERE dish_id = ?";
+    /**
+     * Update the status of a reservation.
+     * 
+     * @param int $reservationId The reservation ID
+     * @param string $newStatus The new status value
+     * @return bool Returns true on success, false on failure
+     */
+    public function updateReservationStatus($reservationId, $newStatus)
+    {
+        $sql = "UPDATE reservations SET status = ? WHERE reservation_id = ?";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt)
+            return false;
 
-    $stmt = $this->db->prepare($sql);
-    if (!$stmt) {
-        return ["success" => false, "error" => $this->db->error];
+        $stmt->bind_param("si", $newStatus, $reservationId);
+
+        return $stmt->execute();
+
     }
 
-    if ($imageName !== "") {
-        $stmt->bind_param(
-            "sdiisisi",
-            $name,
-            $price,
-            $stock,
-            $categoryId,
-            $description,
-            $calories,
-            $imageName,
-            $dishId
-        );
-    } else {
-        $stmt->bind_param(
-            "sdiisii",
-            $name,
-            $price,
-            $stock,
-            $categoryId,
-            $description,
-            $calories,
-            $dishId
-        );
-    }
-
-    if (!$stmt->execute()) {
-        return ["success" => false, "error" => $stmt->error];
-    }
-
-    $sqlDel = "DELETE FROM dish_specifications WHERE dish_id = ?";
-    $stmtDel = $this->db->prepare($sqlDel);
-    $stmtDel->bind_param("i", $dishId);
-    $stmtDel->execute();
-
-    $sqlIns = "INSERT INTO dish_specifications (dish_id, dietary_spec_id) VALUES (?, ?)";
-    $stmtIns = $this->db->prepare($sqlIns);
-
-    foreach ($specIds as $specId) {
-        $stmtIns->bind_param("ii", $dishId, $specId);
-        $stmtIns->execute();
-    }
-
-    return ["success" => true];
-}
-
-
-
-public function updateReservationStatus($reservationId, $newStatus) {
-    $sql = "UPDATE reservations SET status = ? WHERE reservation_id = ?";
-    $stmt = $this->db->prepare($sql);
-    if (!$stmt) return false;
-
-    $stmt->bind_param("si", $newStatus, $reservationId);
-
-    return $stmt->execute();
-
-}
-
-public function countActiveDishes() {
-    $sql = "SELECT COUNT(*) AS TOTAL
+    /**
+     * Count dishes with available stock.
+     * 
+     * @return int The number of dishes with stock greater than 0
+     */
+    public function countActiveDishes()
+    {
+        $sql = "SELECT COUNT(*) AS TOTAL
             FROM dishes
             WHERE stock > 0;";
-    $stmt = $this->db->prepare($sql);
-    if (!$stmt) return 0;
-    if (!$stmt->execute()) {
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt)
+            return 0;
+        if (!$stmt->execute()) {
+            $stmt->close();
+            return 0;
+        }
+        $res = $stmt->get_result();
+        $row = $res ? $res->fetch_assoc() : null;
         $stmt->close();
-        return 0;
+        return $row ? (int) $row["TOTAL"] : 0;
     }
-    $res = $stmt->get_result();
-    $row = $res ? $res->fetch_assoc() : null;
-    $stmt->close();
-    return $row ? (int)$row["TOTAL"] : 0;
-}
 
-function getDishFromId($id) {
-    $sql = "
+    /**
+     * Get dish details by ID including dietary specifications.
+     * 
+     * @param int $id The dish ID
+     * @return array<string, mixed>|null|false Returns dish data with specs array, null if not found, false on error
+     */
+    function getDishFromId($id)
+    {
+        $sql = "
         SELECT 
             d.dish_id,
             d.name,
@@ -1126,70 +1288,94 @@ function getDishFromId($id) {
             d.category_id
     ";
 
-    $stmt = $this->db->prepare($sql);
-    if (!$stmt) {
-        return false; // errore prepare
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) {
+            return false; // errore prepare
+        }
+
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+
+        // get_result() come volevi
+        $result = $stmt->get_result();
+        if ($result && $row = $result->fetch_assoc()) {
+            $row['specs'] = !empty($row['specs']) ? explode(',', $row['specs']) : [];
+            return $row;
+        }
+        return null; // piatto non trovato
     }
 
-    $stmt->bind_param("i", $id);
-    $stmt->execute();
+    /**
+     * Delete a time slot by date and time.
+     * 
+     * @param string $slotDate The slot date (YYYY-MM-DD format)
+     * @param string $slotTime The slot time (HH:MM:SS format)
+     * @return array{success: bool, error?: string} Returns success status and optional error message
+     */
+    public function deleteSlotByDateTime(string $slotDate, string $slotTime)
+    {
+        // Validazione minima
+        if (empty($slotDate) || empty($slotTime)) {
+            return ["success" => false, "error" => "Data o orario non valido"];
+        }
 
-    // get_result() come volevi
-    $result = $stmt->get_result();
-    if ($result && $row = $result->fetch_assoc()) {
-        $row['specs'] = !empty($row['specs']) ? explode(',', $row['specs']) : [];
-        return $row;
+        $sql = "DELETE FROM time_slots WHERE slot_date = ? AND slot_time = ?";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt) {
+            return ["success" => false, "error" => "Errore prepare: " . $this->db->error];
+        }
+
+        $stmt->bind_param("ss", $slotDate, $slotTime);
+        $exec = $stmt->execute();
+
+        if ($exec) {
+            return ["success" => true];
+        } else {
+            return ["success" => false, "error" => $stmt->error];
+        }
     }
-    return null; // piatto non trovato
-}
 
-public function deleteSlotByDateTime(string $slotDate, string $slotTime) {
-    // Validazione minima
-    if (empty($slotDate) || empty($slotTime)) {
-        return ["success" => false, "error" => "Data o orario non valido"];
+    /**
+     * Add a new time slot.
+     * 
+     * @param string $date The slot date (YYYY-MM-DD format)
+     * @param string $hour The slot time (HH:MM:SS format)
+     * @return bool Returns true on success, false on failure
+     */
+    public function addSlot(string $date, string $hour): bool
+    {
+        $sql = "INSERT INTO time_slots (slot_date, slot_time) VALUES (?, ?)";
+        $stmt = $this->db->prepare($sql);
+        if (!$stmt)
+            return false;
+
+        $stmt->bind_param("ss", $date, $hour);
+        return $stmt->execute();
     }
 
-    $sql = "DELETE FROM time_slots WHERE slot_date = ? AND slot_time = ?";
-    $stmt = $this->db->prepare($sql);
-    if (!$stmt) {
-        return ["success" => false, "error" => "Errore prepare: " . $this->db->error];
+    /**
+     * Get user ID associated with a reservation.
+     * 
+     * @param int $reservationId The reservation ID
+     * @return int|null Returns user ID or null if not found
+     */
+    public function getUserByReservation(int $reservationId): ?int
+    {
+        $stmt = $this->db->prepare(
+            "SELECT user_id FROM reservations WHERE reservation_id = ?"
+        );
+        if (!$stmt)
+            return null;
+
+        $stmt->bind_param("i", $reservationId);
+        if (!$stmt->execute())
+            return null;
+
+        $result = $stmt->get_result();
+        $row = $result ? $result->fetch_assoc() : null;
+        $stmt->close();
+
+        return $row ? (int) $row['user_id'] : null;
     }
-
-    $stmt->bind_param("ss", $slotDate, $slotTime);
-    $exec = $stmt->execute();
-
-    if ($exec) {
-        return ["success" => true];
-    } else {
-        return ["success" => false, "error" => $stmt->error];
-    }
 }
-
-public function addSlot(string $date, string $hour): bool {
-    $sql = "INSERT INTO time_slots (slot_date, slot_time) VALUES (?, ?)";
-    $stmt = $this->db->prepare($sql);
-    if (!$stmt) return false;
-
-    $stmt->bind_param("ss", $date, $hour);
-    return $stmt->execute();
-}
-
-public function getUserByReservation(int $reservationId): ?int {
-    $stmt = $this->db->prepare(
-        "SELECT user_id FROM reservations WHERE reservation_id = ?"
-    );
-    if (!$stmt) return null;
-
-    $stmt->bind_param("i", $reservationId);
-    if (!$stmt->execute()) return null;
-
-    $result = $stmt->get_result();
-    $row = $result ? $result->fetch_assoc() : null;
-    $stmt->close();
-
-    return $row ? (int)$row['user_id'] : null;
-}
-
-
-
-}
+?>

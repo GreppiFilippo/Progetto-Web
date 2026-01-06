@@ -21,7 +21,7 @@ if (!defined('IN_APP')) {
                 $mese = $mesi[(int)$oggi->format('n')];
                 $anno = $oggi->format('Y');
 
-                echo "{$giornoSettimana} {$giorno} {$mese} {$anno}";
+                echo htmlspecialchars("{$giornoSettimana} {$giorno} {$mese} {$anno}", ENT_QUOTES, 'UTF-8');
             ?>
         </p>
     </header>
@@ -50,7 +50,7 @@ if (!defined('IN_APP')) {
                                 value="<?php echo $categoria['category_id']; ?>" 
                                 <?php if ($categoriaSelezionata == $categoria['category_id']) echo 'selected'; ?>
                             >
-                                <?php echo ucfirst($categoria['category_name']); ?>
+                                <?php echo ucfirst(htmlspecialchars((string) $categoria['category_name'], ENT_QUOTES, 'UTF-8')); ?>
                             </option>
                         <?php endforeach; ?>
 
@@ -99,7 +99,7 @@ if (!defined('IN_APP')) {
 
         <!-- Menu Items -->
         <section class="my-5" data-category-id="<?php echo $categoria['category_id']; ?>">
-            <h2 class="h4 mb-3"><?php echo ucfirst($categoria['category_name']); ?></h2>
+            <h2 class="h4 mb-3"><?php echo ucfirst(htmlspecialchars((string) $categoria['category_name'], ENT_QUOTES, 'UTF-8')); ?></h2>
             <hr>
 
             <ul class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 list-unstyled" id="menuList-<?php echo $categoria['category_id']; ?>">

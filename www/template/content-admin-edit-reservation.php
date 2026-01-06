@@ -12,11 +12,11 @@ if (!defined('IN_APP')) {
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <div>
                         <h1 class="h4 mb-2">
-                            <i class="bi bi-receipt text-primary me-2" aria-hidden="true"></i>
+                            <i class="bi bi-receipt receipt-icon me-2" aria-hidden="true"></i>
                             Prenotazione #<?php echo (int) $reservation['reservation_id']; ?>
                         </h1>
                         <p class="text-muted mb-0 pt-2">
-                            <i class="bi bi-calendar-event me-1" aria-hidden="true"></i>
+                            <i class="bi bi-calendar-event sub-icon me-1" aria-hidden="true"></i>
                             <?php echo htmlspecialchars((string) formatWhen($reservation["date_time"]), ENT_QUOTES, 'UTF-8'); ?>
                         </p>
                     </div>
@@ -32,7 +32,7 @@ if (!defined('IN_APP')) {
             <section class="border rounded-3 p-4 mb-3 shadow-sm">
                 <div class="bg-white border-0 pt-2 pb-3">
                     <h2 class="h5 mb-0">
-                        <i class="bi bi-bag-check me-2" aria-hidden="true"></i>
+                        <i class="bi bi-bag-check sub-icon me-2" aria-hidden="true"></i>
                         Piatti Ordinati
                     </h2>
                 </div>
@@ -44,7 +44,7 @@ if (!defined('IN_APP')) {
             <section class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-white border-0 pt-4 pb-3">
                     <h2 class="h5 mb-0">
-                        <i class="bi bi-chat-left-text me-2" aria-hidden="true"></i>
+                        <i class="bi bi-chat-left-text sub-icon me-2" aria-hidden="true"></i>
                         Note
                     </h2>
                 </div>
@@ -134,7 +134,8 @@ if (!defined('IN_APP')) {
                 <section class="card border-0 shadow-sm">
                     <div class="card-body">
                         <div class="d-grid">
-                            <a href="admin-bookings.php?currentPage=<?php echo $_GET["currentPage"]?>" class="btn admin-btn" >
+                            <a href="admin-bookings.php?currentPage=<?php echo $_GET["currentPage"] ?>"
+                                class="btn admin-btn">
                                 <i class="bi bi-arrow-left me-2" aria-hidden="true"></i>Torna alle Prenotazioni
                             </a>
                         </div>

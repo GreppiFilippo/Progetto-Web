@@ -68,7 +68,7 @@ function renderBookingItem(booking, dishes) {
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <div>
                         <h3 class="h6 mb-1">
-                            <i class="bi bi-calendar-event text-primary me-2" aria-hidden="true"></i>
+                            <i class="bi bi-calendar-event calendar-icon me-2" aria-hidden="true"></i>
                             Prenotazione #${booking.reservation_id}
                         </h3>
                         <div class="small text-muted mb-1">
@@ -108,7 +108,7 @@ async function getData() {
         await renderBooking(data.bookings); // qui mostriamo prenotazioni con piatti
         document.getElementById("bookings").textContent = data.bookings_count;
         document.getElementById("users").textContent = data.users_count;
-        document.getElementById("earnings").textContent = "€"+Number(data.earnings_today).toFixed(2);
+        document.getElementById("earnings").textContent = "€" + Number(data.earnings_today).toFixed(2);
         document.getElementById("dishes").textContent = data.active_dishes;
         document.getElementById("top_dishes").innerHTML = renderTopDishes(data.top_dishes);
     } catch (error) {
