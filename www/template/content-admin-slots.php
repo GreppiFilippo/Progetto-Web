@@ -14,8 +14,6 @@ if (!defined('IN_APP')) {
         <p class="mb-0 opacity-75 text-white">Visualizza, modifica o elimina gli slot disponibili</p>
     </header>
 
-
-
     <!-- FILTERS -->
     <form class="row g-2 mb-3">
         <div class="col-12 col-md-4">
@@ -34,8 +32,8 @@ if (!defined('IN_APP')) {
     </form>
 
     <!-- SLOT LIST -->
-    <section id="slot_list" class="row m-0 g-2">
-    </section>
+    <div id="slot_list" class="row m-0 g-2">
+    </div>
 
     <!-- PAGINATION -->
     <div class="d-flex justify-content-center mt-3" id="pagination"></div>
