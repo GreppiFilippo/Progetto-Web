@@ -93,10 +93,11 @@ if (!defined('IN_APP')) {
         <!-- Contenuto principale -->
         <section class="col-12 col-md-8 order-1 order-md-0">
             <div class="mb-3">
-                <h2 class="h5 m-0">Ultime prenotazioni</h2>
+                <h2 class="h5 m-0">Prenotazioni di Oggi</h2>
             </div>
             <div id="booking-list" class="row g-3"></div>
         </section>
+        <!-- TODO: metti le prenotazioni di oggi invece che le ultime -->
     </div>
 
 
