@@ -1,5 +1,6 @@
 import { isToday, isTomorrow, debounce, renderPagination } from './common-functions.js';
 
+const refreshTime = 30000;
 const params = new URLSearchParams(window.location.search);
 let bookingsCache = [];
 let currentPage = params.get("currentPage") == null ? 1 : Number(params.get("currentPage"));
@@ -163,4 +164,4 @@ async function loadTimeSlots() {
 }
 
 document.addEventListener('DOMContentLoaded', loadData(currentPage));
-setInterval(loadData(currentPage), 30000);
+setInterval(() => loadData(currentPage), refreshTime);

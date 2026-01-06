@@ -1,5 +1,6 @@
 import { isToday, isTomorrow } from './common-functions.js';
 
+const refreshTime = 30000;
 document.getElementById("add-dish").addEventListener("click", () => {
     window.location.href = "admin-add-dish.php";
 });
@@ -117,4 +118,4 @@ async function getData() {
 }
 
 document.addEventListener('DOMContentLoaded', getData);
-setInterval(getData, 30000);
+setInterval(getData, refreshTime);
