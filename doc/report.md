@@ -4,11 +4,11 @@ _Sistema di Prenotazione Pasti Universitari – Mensa Campus_
 ## 1 Introduzione
 
 ### 1.1 Obiettivo del Progetto
-**Mensa Campus** è un'applicazione web sviluppata come prototipo per la gestione delle prenotazioni dei pasti presso una mensa universitaria.
+**Mensa Campus** è un'applicazione web sviluppata come prototipo per la gestione di una mensa universitaria e delle prenotazioni dei pasti.
 
 
 ### 1.2 Contesto e Motivazioni
-Il progetto nasce dalla constatazione che nel campus universitario di Cesena non è attualmente presente un servizio di mensa. Questa mancanza rappresenta un limite per molti studenti, che spesso devono organizzarsi autonomamente per i pasti durante le giornate di lezione.
+Il progetto nasce dalla constatazione che nel campus universitario di Cesena non è presente un servizio di mensa. Questa mancanza rappresenta un limite per molti studenti, che spesso devono organizzarsi autonomamente per i pasti durante le giornate di lezione.
 Per confermare questa esigenza, è stata condotta un’indagine informale coinvolgendo studenti del campus di Cesena e il profilo social “Spotted” ufficiale. Dalle risposte raccolte è emersa con particolare frequenza la richiesta di un servizio di mensa universitaria.
 Alla luce di questi risultati, il progetto Mensa Campus è stato concepito come esercizio progettuale e tecnologico volto a simulare un sistema completo di prenotazione e gestione dei pasti, ipotizzando l’introduzione futura di una mensa universitaria nel campus.
 
@@ -29,7 +29,7 @@ I requisiti del sistema sono stati definiti a partire da un confronto diretto co
 - Paginazione menù e ricerca con filtri
 
 **Amministratore:**
-- Visualizzazione dashboard amminatrativa
+- Visualizzazione dashboard amministrativa
 - Aggiunta/modifica piatti con caricamento immagini
 - Gestione categorie e specifiche dietetiche (vegano, senza glutine, ecc.)
 - Monitoraggio prenotazioni con ricerca e filtri
@@ -42,7 +42,7 @@ I requisiti del sistema sono stati definiti a partire da un confronto diretto co
 - **Performance**: Gestione efficiente delle query con prepared statements
 - **Manutenibilità**: Codice modulare con separazione template/logica
 
-## 3. Casi D'uso
+## 3. Casi d'uso
 
 Il progetto include un diagramma UML dei casi d'uso che mostra le interazioni tra attori (Utente, Amministratore) e sistema.
 
@@ -94,7 +94,7 @@ Nelle fasi iniziali del progetto, dopo aver definito le personas e i principali 
 
 #### Menù Admin
 ![Menù Admin](mockup/admin-menu.png)
-*Visualizzazione dei piatti disponibili con possibilià di ricerca*
+*Visualizzazione dei piatti disponibili con possibilità di ricerca*
 
 #### Aggiungi Piatto
 ![Aggiungi Piatto](mockup/admin-add-dish.png)
@@ -112,7 +112,7 @@ Nelle fasi iniziali del progetto, dopo aver definito le personas e i principali 
 *Visualizzazione e gestione di tutte le prenotazioni degli utenti con possibilità di ricerca*
 
 #### Modifica Stato Prenotazioni
-*Visualizzazione dei dettagli di una prenotazione con cpossibilità di cambio stato*
+*Visualizzazione dei dettagli di una prenotazione con possibilità di cambio stato*
 
 
 ## 5 Tecnologie Utilizzate
