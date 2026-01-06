@@ -1,15 +1,6 @@
 import { isToday, isTomorrow } from './common-functions.js';
 
 const refreshTime = 30000;
-document.getElementById("add-dish").addEventListener("click", () => {
-    window.location.href = "admin-add-dish.php";
-});
-document.getElementById("manage-bookings").addEventListener("click", () => {
-    window.location.href = "admin-bookings.php";
-});
-document.getElementById("manage-slots").addEventListener("click", () => {
-    window.location.href = "admin-time-slots.php";
-});
 
 // Renderizza prenotazioni con piatti
 async function renderBooking(bookings) {
@@ -77,7 +68,7 @@ function renderBookingItem(booking, dishes) {
                         </div>
                         ${booking.badge || ''}
                     </div>
-                    <strong mb-1>€ ${booking.total_amount}</strong>
+                    <strong class="mb-1">€ ${booking.total_amount}</strong>
                 </div>
                 ${dishesHtml}
             </div>

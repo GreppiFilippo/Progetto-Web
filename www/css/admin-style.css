@@ -99,6 +99,26 @@ button.admin-btn[type="submit"]:hover i {
     color: white;
 }
 
+a.admin-btn.admin-btn-outline {
+    color: #942222;
+    background-color: white;
+    border-color: #942222;
+}
+
+a.admin-btn.admin-btn-outline i {
+    color: #942222;
+}
+
+a.admin-btn.admin-btn-outline:hover {
+    color: white;
+    background-color: #942222;
+    border-color: #942222;
+}
+
+a.admin-btn.admin-btn-outline:hover i {
+    color: white;
+}
+
 
 
 div.card>div.ratio,
