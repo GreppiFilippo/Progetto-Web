@@ -35,7 +35,7 @@ if (!defined('IN_APP')) {
                                 <label for="password" class="form-label">Password</label>
                                 <div class="input-group">
                                     <span class="input-group-text">
-                                        <i class="bi bi-lock"></i>
+                                        <i class="bi bi-lock" aria-hidden="true"></i>
                                     </span>
                                     <input type="password" class="form-control" id="password" name="password" placeholder="Inserisci password" autocomplete="current-password" required />
                                 </div>
@@ -51,7 +51,7 @@ if (!defined('IN_APP')) {
                             <!-- button submit -->
                             <div class="d-grid mb-3">
                                 <button type="submit" class="btn text-white btn-lg">
-                                    <i class="bi bi-box-arrow-in-right me-2"></i>
+                                    <i class="bi bi-box-arrow-in-right me-2" aria-hidden="true"></i>
                                     Accedi
                                 </button>                    
                             </div>

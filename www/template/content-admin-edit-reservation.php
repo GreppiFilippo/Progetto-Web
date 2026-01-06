@@ -121,7 +121,7 @@ if (!defined('IN_APP')) {
 
                             <div class="d-grid">
                                 <button id="saveStatusBtn" class="btn admin-btn" type="button">
-                                    <i class="bi bi-check-circle me-1"></i>
+                                    <i class="bi bi-check-circle me-1" aria-hidden="true"></i>
                                     Salva modifiche
                                 </button>
                             </div>

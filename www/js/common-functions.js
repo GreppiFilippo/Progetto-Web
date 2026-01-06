@@ -32,21 +32,21 @@ export function availableBadge(stock) {
     if (stock > 10) {
         return `
             <span class="badge bg-success text-white p-2">
-                <i class="bi bi-check-circle me-1"></i>
+                <i class="bi bi-check-circle me-1" aria-hidden="true"></i>
                 Disponibile
             </span>
         `;
     } else if (stock > 0) {
         return `
             <span class="badge bg-warning text-dark p-2">
-                <i class="bi bi-exclamation-triangle me-1"></i>
+                <i class="bi bi-exclamation-triangle me-1" aria-hidden="true"></i>
                 Disponibilità limitata
             </span>
         `;
     } else {
         return `
             <span class="badge bg-danger text-white p-2">
-                <i class="bi bi-x-circle me-1"></i>
+                <i class="bi bi-x-circle me-1" aria-hidden="true"></i>
                 Non disponibile
             </span>
         `;

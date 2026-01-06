@@ -119,7 +119,7 @@ function renderBookingItem(booking) {
                     <hr class="my-3">
                     <div class="d-grid">
                         <button type="button" class="admin-btn btn btn-outline-primary" data-id="${booking.reservation_id}">
-                            <i class="bi bi-eye"></i>
+                            <i class="bi bi-eye" aria-hidden="true"></i>
                             Dettagli
                         </button>
                     </div>

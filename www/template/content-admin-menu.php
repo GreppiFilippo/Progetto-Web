@@ -51,7 +51,7 @@ if (!defined('IN_APP')) {
             <section class="row mx-0 mb-3">
                 <h2 class="h5 p-0 mb-2">Azioni rapide</h2>
                 <button type="button" class="btn admin-btn mb-1" id="add-dish">
-                    <i class="bi bi-plus-circle"></i>
+                    <i class="bi bi-plus-circle" aria-hidden="true"></i>
                     Aggiungi piatto
                 </button>
             </section>

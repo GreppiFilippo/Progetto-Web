@@ -68,7 +68,7 @@ function renderBookingItem(booking, dishes) {
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <div>
                         <h3 class="h6 mb-1">
-                            <i class="bi bi-calendar-event text-primary me-2"></i>
+                            <i class="bi bi-calendar-event text-primary me-2" aria-hidden="true"></i>
                             Prenotazione #${booking.reservation_id}
                         </h3>
                         <div class="small text-muted mb-1">

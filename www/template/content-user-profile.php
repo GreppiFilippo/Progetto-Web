@@ -5,7 +5,7 @@ if (!defined('IN_APP')) {
 }
 ?>
 <main class="container my-5">
-    <h1 class="mb-4"><i class="bi bi-person-circle"></i> Il Mio Profilo</h1>
+    <h1 class="mb-4"><i class="bi bi-person-circle" aria-hidden="true"></i> Il Mio Profilo</h1>
     <div class="row">
         <?php
             $selectedIds = $templateParams["user_selected_spec_ids"] ?? [];
@@ -57,7 +57,7 @@ if (!defined('IN_APP')) {
         <aside class="col-md-5 order-1 order-md-2 border rounded-3 shadow p-4 mb-4 offset-md-1"
                 aria-labelledby="profilo-utente">
             <div class="text-center">
-            <i class="bi bi-person-circle fs-1"></i>
+            <i class="bi bi-person-circle fs-1" aria-hidden="true"></i>
             <h2 id="profilo-utente" class="h3 mt-3"><?php echo htmlspecialchars($templateParams["user"]["first_name"] . ' ' . $templateParams["user"]["last_name"], ENT_QUOTES, 'UTF-8'); ?></h2>
             <p>
                 <b>Membro da:</b>
