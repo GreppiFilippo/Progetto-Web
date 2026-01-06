@@ -18,32 +18,29 @@ I requisiti del sistema sono stati definiti a partire da un confronto diretto co
 
 ### 2.1 Requisiti Funzionali
 
-#### **Utente Standard**
-- Registrazione e login al sistema
-- Visualizzazione menù giornaliero con dettagli (nome, descrizione, prezzo, calorie, categoria)
-- Prenotazione pasti con selezione di data/ora e quantità
-- Gestione profilo personale (modifica dati, preferenze dietetiche)
-- Visualizzazione storico prenotazioni con stati
-- Possibilità di aggiungere note alle prenotazioni
+**Utente Standard:**
+- Registrazione e login con validazione email
+- Visualizzazione menù organizzato per categorie
+- Prenotazione pasti con selezione data/ora e quantità piatti
+- Gestione profilo
+- Storico prenotazioni con stati aggiornati in tempo reale
+- Aggiunta note alle prenotazioni
+- Carrello dinamico con calcolo totale
+- Paginazione menù e ricerca con filtri
 
-#### **Utente Amministratore**
-- Accesso a tutte le funzionalità utente standard
-- Aggiunta nuovi piatti con caricamento immagini
-- Gestione categorie e specifiche dietetiche
-- Monitoraggio prenotazioni
-- Gestione stock piatti disponibili
-
-#### **Sistema**
-- Gestione automatica degli slot temporali (11:30-15:45, intervalli 15 minuti)
-- Aggiornamento automatico degli slot futuri (finestra mobile di 14 giorni)
-- Controllo disponibilità e gestione giacenze
-- Stati prenotazione: "Da Visualizzare", "In Preparazione", "Pronto al ritiro", "Completato", "Annullato"
+**Amministratore:**
+- Visualizzazione dashboard amminatrativa
+- Aggiunta/modifica piatti con caricamento immagini
+- Gestione categorie e specifiche dietetiche (vegano, senza glutine, ecc.)
+- Monitoraggio prenotazioni con ricerca e filtri
+- Gestione stock e disponibilità piatti
+- Amministrazione slot temporali
+- Gestione prenotazioni (modifica stato, cancellazione)
 
 ### 2.2 Requisiti Non Funzionali
 - **Usabilità**: Interfaccia responsive, navigazione intuitiva
 - **Performance**: Gestione efficiente delle query con prepared statements
 - **Manutenibilità**: Codice modulare con separazione template/logica
-- **Compatibilità**: Browser moderni, dispositivi mobile e desktop
 
 ## 3. Casi D'uso
 
@@ -52,17 +49,8 @@ Il progetto include un diagramma UML dei casi d'uso che mostra le interazioni tr
 ![Use Case Diagram](./img/use-case-diagram.svg)
 
 **Attori**:
-- **Utente Studente**: Visualizza menù, prenota, gestisce profilo
-- **Amministratore**: Gestisce piatti, categorie, monitora prenotazioni
-
-**Casi d'uso principali**:
-- Registrazione/Login
-- Visualizzazione Menù
-- Effettua Prenotazione
-- Gestione Profilo
-- [Admin] Aggiunta Piatto
-- [Admin] Gestione Prenotazioni
-
+- **Utente**: Studenti e personale universitario che prenotano pasti
+- **Amministratore**: Il personale di gestione della mensa
 
 ## 4 Mockup e Design dell'Interfaccia
 
@@ -137,6 +125,7 @@ Nelle fasi iniziali del progetto, dopo aver definito le personas e i principali 
 ### 5.2 Tecnologie Frontend
 - **HTML5**: Struttura semantica delle pagine
 - **CSS3**: Stilizzazione custom (user-style.css, admin-style.css)
+- **Bootstrap 5**: Framework CSS per design responsive
 - **JavaScript**: Interattività client-side
 - **AJAX**: Aggiornamento dinamico dei contenuti tramite dati forniti da API
 
@@ -149,11 +138,6 @@ Nelle fasi iniziali del progetto, dopo aver definito le personas e i principali 
 ![Diagramma ER](./img/cafeteria%20relational.png)
 
 ## 7 Deployment e Configurazione
--Scaricare il repository del progetto in locale e posizionarlo all’interno della cartella htdocs di XAMPP.
--Avviare XAMPP e assicurarsi che i servizi Apache Web Server e MySQL Database siano attivi.
--Accedere a phpMyAdmin tramite il browser e, nella sezione SQL, eseguire gli script creazione_db.sql e insert_data.sql per la creazione e il popolamento del database.
--Aprire un browser web e accedere all’applicazione tramite localhost.
-
 ### 7.1 Credenziali Default
 
 | Ruolo           | Email                     | Password    |
@@ -161,7 +145,21 @@ Nelle fasi iniziali del progetto, dopo aver definito le personas e i principali 
 | **Admin**       | `admin@mensa.it`          | `admin123` |
 | **Utente Test** | `mario.rossi@studenti.it`| `mario123` |
 
-### 8 Test e Validazione con gli Utenti
-Al fine di valutare l’usabilità e l’efficacia del sistema Mensa Campus, è stata effettuata una fase di test informale coinvolgendo un gruppo di studenti universitari del campus di Cesena. Ai partecipanti è stato chiesto di utilizzare l’applicazione simulando le principali operazioni previste dal sistema, quali la consultazione del menù, l’effettuazione di una prenotazione e la navigazione tra le diverse sezioni dell’interfaccia.
-Durante i test sono stati raccolti feedback relativi alla chiarezza dell’interfaccia, alla semplicità di utilizzo e alla comprensione del flusso di prenotazione. I risultati ottenuti hanno evidenziato una buona facilità di utilizzo generale e hanno permesso di individuare alcuni aspetti migliorabili, successivamente corretti durante la fase di sviluppo.
-Questa attività di validazione ha contribuito a rendere l’applicazione più intuitiva e coerente con le esigenze degli utenti finali, confermando la validità delle scelte progettuali effettuate.
+## 8 Test e Validazione con gli Utenti
+### 8.1 Metodologia di Test
+Al fine di valutare l’usabilità e l’efficacia del sistema Mensa Campus, è stata effettuata una fase di test informale coinvolgendo un gruppo di studenti universitari del campus di Cesena. 
+
+Ai partecipanti è stato chiesto di utilizzare l’applicazione simulando le principali operazioni previste dal sistema, quali la consultazione del menù, l’effettuazione di più prenotazioni e la navigazione tra le diverse sezioni dell’interfaccia.
+
+Durante i test sono stati raccolti feedback relativi alla chiarezza dell’interfaccia, alla semplicità di utilizzo e alla comprensione del flusso di prenotazione. 
+
+I risultati ottenuti dai tester hanno permesso di individuare alcuni aspetti migliorabili non evidenziati nelle precedenti fasi di progettazione, portando a piccole modifiche nell’interfaccia utente e nel flusso di navigazione per renderli più intuitivi.
+
+### 8.2 Cambiamenti Apportati dopo i Test
+#### Lato Utente
+- Migliorata la visibilità dei pulsanti di azione principali e la loro disposizione.
+- Aggiunta la possibilità di inserire la quantità di piatti da ordinare.
+
+#### Lato Amministratore
+- Ottimizzata la gestione delle prenotazioni con filtri più intuitivi.
+- Uniformata la grafica delle pagine di amministrazione per una migliore coerenza visiva tra desktop e mobile.
