@@ -275,7 +275,12 @@ main a:hover {
     transition: all 0.1s ease-in-out;
 }
 
-/* Icons */
+/* Icons .*/
+.receipt-icon,
 .calendar-icon {
     color: #942222;
+}
+
+.sub-icon {
+    color: #7A1A1A;
 }
