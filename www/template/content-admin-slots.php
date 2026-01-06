@@ -30,10 +30,14 @@ if (!defined('IN_APP')) {
                 <i class="bi bi-bookmark-plus me-1" aria-hidden="true"></i> Aggiungi
             </button>
         </div>
+        <div class="col-12">
+            <div id="slot-error-message" class="alert alert-danger d-none" role="alert" aria-live="assertive"></div>
+            <div id="slot-success-message" class="alert alert-success d-none" role="alert" aria-live="polite"></div>
+        </div>
     </form>
 
     <!-- SLOT LIST -->
-    <section id="slot_list" class="row m-0 g-2">
+    <section id="slot_list" class="row m-0 g-2" aria-live="polite" aria-atomic="false">
     </section>
 
     <!-- PAGINATION -->

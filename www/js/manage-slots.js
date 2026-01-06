@@ -4,6 +4,28 @@ document.addEventListener("DOMContentLoaded", () => {
     const slotDateInput = document.getElementById("slot_date"); // input type="date"
     const hourInput = document.getElementById("slot_time");
     const addBtn = document.getElementById("add_slot");
+    const errorMessage = document.getElementById("slot-error-message");
+    const successMessage = document.getElementById("slot-success-message");
+
+    // Funzione per mostrare messaggi di errore
+    function showError(msg) {
+        errorMessage.textContent = msg;
+        errorMessage.classList.remove("d-none");
+        successMessage.classList.add("d-none");
+        setTimeout(() => {
+            errorMessage.classList.add("d-none");
+        }, 5000);
+    }
+
+    // Funzione per mostrare messaggi di successo
+    function showSuccess(msg) {
+        successMessage.textContent = msg;
+        successMessage.classList.remove("d-none");
+        errorMessage.classList.add("d-none");
+        setTimeout(() => {
+            successMessage.classList.add("d-none");
+        }, 3000);
+    }
 
     // Imposta la data minima a oggi
     const today = new Date().toISOString().split("T")[0];
@@ -31,12 +53,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const minAllowedTime = new Date(now.getTime() + 15 * 60 * 1000);
         
         if (slotDateTime <= now) {
-            alert("Errore: Non puoi aggiungere uno slot nel passato o nell'ora corrente.");
+            showError("Non puoi aggiungere uno slot nel passato o nell'ora corrente.");
             return;
         }
         
         if (slotDateTime < minAllowedTime) {
-            alert("Errore: Lo slot deve essere almeno 15 minuti dopo l'ora corrente.");
+            showError("Lo slot deve essere almeno 15 minuti dopo l'ora corrente.");
             return;
         }
         
@@ -53,13 +75,14 @@ document.addEventListener("DOMContentLoaded", () => {
             if (data.success) {
                 // Ricarica la lista di slot
                 loadSlots(date);
+                showSuccess("Slot aggiunto con successo");
             } else {
-                alert("Errore: " + (data.error || "Impossibile aggiungere slot"));
+                showError(data.error || "Impossibile aggiungere slot");
             }
         })
         .catch(err => {
             console.error("Errore nella richiesta:", err);
-            alert("Errore nel server");
+            showError("Errore nel server");
         });
     });
 
@@ -85,13 +108,14 @@ document.addEventListener("DOMContentLoaded", () => {
             if (data.success) {
                 // Ricarica la lista di slot
                 loadSlots(slotDate);
+                showSuccess("Slot eliminato con successo");
             } else {
-                alert("Errore: " + (data.error || "Impossibile eliminare slot"));
+                showError(data.error || "Impossibile eliminare slot");
             }
         })
         .catch(err => {
             console.error("Errore nella richiesta:", err);
-            alert("Errore nel server");
+            showError("Errore nel server");
         });
     });
 
@@ -99,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Funzione async per caricare gli slot
     async function loadSlots(selectedDate) {
-        const slotList = document.getElementById("slot_list")
+        const slotList = document.getElementById("slot_list");
         slotList.innerHTML = `<div class="col-12 text-center text-muted">Caricamento...</div>`;
 
         try {
