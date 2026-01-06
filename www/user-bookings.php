@@ -40,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result = $dbh->setNewReservation($userId, $dateTime, $items, $notes);
 
         if ($result['success']) {
-            $_SESSION['success_message'] = "Prenotazione creata con successo!";
             header("Location: single-order.php?reservation_id=" . $result['reservation_id']);
             exit();
         } else {
