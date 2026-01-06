@@ -57,7 +57,7 @@ $status = $r["status"];
                                 <div class="flex-grow-1">
                                     <h3 class="h6 mb-1">
                                         <?php echo htmlspecialchars((string) $item["name"], ENT_QUOTES, 'UTF-8'); ?>
-                                        <span class="text-muted"><?php echo $qty; ?></span>
+                                        <span class="text-muted"> - Quantità: <?php echo $qty; ?></span>
                                     </h3>
                                     <p class="small text-muted mb-0">
                                         <?php echo htmlspecialchars((string) $item["description"], ENT_QUOTES, 'UTF-8'); ?>
