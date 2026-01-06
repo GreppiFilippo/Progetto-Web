@@ -15,7 +15,7 @@ if (!defined('IN_APP')) {
     </header>
 
     <!-- ICONS -->
-    <section class="row mb-4 g-3">
+    <div class="row mb-4 g-3">
         <div class="col-12 col-sm-6 col-lg-3">
             <div class="bg-white border rounded-3 p-3 shadow-sm d-flex align-items-center">
                 <div class="bgicon bg-primary-subtle text-primary me-3">
@@ -63,7 +63,7 @@ if (!defined('IN_APP')) {
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
     <form class="row g-3 mb-4" onsubmit="return false;">
         <div class="col-12 col-md-2">

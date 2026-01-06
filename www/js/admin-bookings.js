@@ -91,9 +91,9 @@ function renderBookingItem(booking) {
             <div class="card shadow-sm h-100">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h3 class="h6 mb-0 text-truncate">
+                        <h2 class="h6 mb-0 text-truncate">
                             #${booking.reservation_id} ${booking.first_name} ${booking.last_name}
-                        </h3>
+                        </h2>
                         ${booking.badge || ''}
                     </div>
 
