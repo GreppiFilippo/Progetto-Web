@@ -12,22 +12,21 @@ if (isAdmin()) {
     exit();
 }
 
-// Base Template
 $templateParams["titolo"] = "Mensa Campus - Profilo Utente";
 $templateParams["user_id"] = $_SESSION["user_id"];
+$templateParams["success"] = (isset($_GET["saved"]) && $_GET["saved"] === "1");
 
-// --- SALVATAGGIO preferenze ---
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // preferenze[] sarà un array di dietary_spec_id
-    $selected = isset($_POST["preferenze"]) ? $_POST["preferenze"] : [];
+    $selected = $_POST["preferenze"] ?? [];
+    $selected = array_map('intval', (array) $selected);
+
     $res = $dbh->saveUserDietarySpecs($templateParams["user_id"], $selected);
 
-    if ($res["success"]) {
-        // redirect per evitare reinvio form al refresh
+    if (!empty($res["success"])) {
         header("Location: user-profile.php?saved=1");
         exit;
     } else {
-        $templateParams["error"] = $res["error"];
+        $templateParams["error"] = $res["error"] ?? "Errore sconosciuto.";
     }
 }
 
@@ -38,14 +37,9 @@ $templateParams["nav_items"] = array(
     getNewNavItem("Profilo", "user-profile.php", "bi bi-person-circle"),
     getNewNavItem("Esci", "logout.php", "bi bi-box-arrow-right me-1")
 );
-$templateParams["link_utili"][] = array(
-    "name" => "Menu",
-    "link" => "menu.php",
-);
-$templateParams["link_utili"][] = array(
-    "name" => "Profilo",
-    "link" => "user-profile.php",
-);
+
+$templateParams["link_utili"][] = array("name" => "Menu", "link" => "menu.php");
+$templateParams["link_utili"][] = array("name" => "Profilo", "link" => "user-profile.php");
 
 $templateParams["content"] = "template/content-user-profile.php";
 $templateParams["dietary_specs"] = $dbh->getDietarySpecifications();
