@@ -18,7 +18,7 @@ $status = $r["status"];
                 <div class="d-flex justify-content-between align-items-start mb-2">
                     <div>
                         <h1 class="h4 mb-2">
-                            <i class="bi bi-receipt text-primary me-2" aria-hidden="true"></i>
+                            <i class="bi bi-receipt me-2" aria-hidden="true"></i>
                             Ordine #<span><?php echo (int) $r["reservation_id"] ?></span>
                         </h1>
                         <p class="text-muted mb-0 pt-2">
