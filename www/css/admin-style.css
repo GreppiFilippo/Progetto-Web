@@ -276,6 +276,6 @@ main a:hover {
 }
 
 /* Icons */
-main i.bi {
+.calendar-icon {
     color: #942222;
 }
