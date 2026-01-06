@@ -25,7 +25,7 @@ if (!defined('IN_APP')) {
       </h1>
 
       <div class="border-0 shadow-sm p-4">
-        <form action="admin-add-dish.php" method="POST" enctype="multipart/form-data" id="dish-form">
+        <form action="" method="POST" enctype="multipart/form-data" id="dish-form">
 
           <!-- ===================== -->
           <!-- IMMAGINE -->
