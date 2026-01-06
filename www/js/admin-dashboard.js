@@ -108,10 +108,9 @@ async function getData() {
         await renderBooking(data.bookings); // qui mostriamo prenotazioni con piatti
         document.getElementById("bookings").textContent = data.bookings_count;
         document.getElementById("users").textContent = data.users_count;
-        document.getElementById("earnings").textContent = data.earnings_today;
+        document.getElementById("earnings").textContent = "€"+Number(data.earnings_today).toFixed(2);
         document.getElementById("dishes").textContent = data.active_dishes;
         document.getElementById("top_dishes").innerHTML = renderTopDishes(data.top_dishes);
-
     } catch (error) {
         console.error("Error fetching booking data:", error);
     }

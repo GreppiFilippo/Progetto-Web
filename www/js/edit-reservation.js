@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
     const reservationId = params.get("reservation_id");
+    const currentPage = params.get("currentPage");
 
     if (!reservationId) return console.error("reservation_id mancante");
 
@@ -36,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 .then(response => response.json())
                 .then(result => {
                     if (result.success) {
-                        window.location.href = "admin-bookings.php";
+                        window.location.href = `admin-bookings.php?currentPage=${currentPage}`;
                     } else {
                         alert("Errore nell'aggiornamento: " + (result.message || ""));
                     }

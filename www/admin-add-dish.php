@@ -44,8 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $errors[] = "Errore DB: " . ($res["error"] ?? "sconosciuto");
         } else {
             // Redirect alla dashboard
-            $previous = $_SERVER['HTTP_REFERER'] ?? 'admin-dashboard.php';
-            header($previous);
+            $previous = 'admin-dashboard.php';
+            header("Location: " . $previous);
             exit;
         }
     }

@@ -1,7 +1,8 @@
 import { isToday, isTomorrow, debounce, renderPagination } from './common-functions.js';
 
+const params = new URLSearchParams(window.location.search);
 let bookingsCache = [];
-let currentPage = 1;
+let currentPage = params.get("currentPage") == null ? 1 : Number(params.get("currentPage"));
 const resultsPerPage = 4;
 
 document.getElementById('date').addEventListener('change', async () => {
@@ -56,7 +57,7 @@ document.addEventListener('click', (e) => {
 
     const bookingId = btn.dataset.id;
     const status = bookingsCache.find(b => b.reservation_id == bookingId).status
-    window.location.href = `admin-edit-reservation.php?reservation_id=${bookingId}&status=${status}`;
+    window.location.href = `admin-edit-reservation.php?reservation_id=${bookingId}&status=${status}&currentPage=${currentPage}`;
 });
 
 
@@ -161,4 +162,4 @@ async function loadTimeSlots() {
     }
 }
 
-loadData();
+loadData(currentPage);

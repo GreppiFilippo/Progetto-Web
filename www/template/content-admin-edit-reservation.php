@@ -134,7 +134,7 @@ if (!defined('IN_APP')) {
                 <section class="card border-0 shadow-sm">
                     <div class="card-body">
                         <div class="d-grid">
-                            <a href="admin-bookings.php" class="btn admin-btn">
+                            <a href="admin-bookings.php?currentPage=<?php echo $_GET["currentPage"]?>" class="btn admin-btn" >
                                 <i class="bi bi-arrow-left me-2" aria-hidden="true"></i>Torna alle Prenotazioni
                             </a>
                         </div>

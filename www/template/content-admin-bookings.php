@@ -65,7 +65,7 @@ if (!defined('IN_APP')) {
         </div>
     </section>
 
-    <form class="row g-3 mb-4">
+    <form class="row g-3 mb-4" onsubmit="return false;">
         <div class="col-12 col-md-2">
             <label for="date" class="form-label">Data</label>
             <input type="date" id="date" class="form-control"></select>

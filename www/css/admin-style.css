@@ -264,3 +264,13 @@ input[type="radio"]:focus-visible,
     align-items: center;
     justify-content: center;
 }
+
+main a {
+    color: #942222;
+}
+
+main a:hover {
+    color: #942222;
+    border-bottom: solid #942222 1.5px;
+    transition: all 0.1s ease-in-out;
+}
