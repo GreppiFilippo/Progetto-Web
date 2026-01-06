@@ -157,7 +157,7 @@ if (!defined('IN_APP')) {
                 </div>
 
                 <div class="card-body py-3">
-                    <div id="riepilogo-container">
+                    <div id="riepilogo-container" aria-live="polite">
                         <div id="riepilogo-items">
                             <div id="riepilogo-placeholder" class="text-center text-muted py-4">
                                 <i class="bi bi-cart-x fs-1" aria-hidden="true"></i>

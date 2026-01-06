@@ -21,7 +21,7 @@ if (!defined('IN_APP')) {
 </head>
 <?php if (!empty($templateParams["scripts"])): ?>
   <?php foreach ($templateParams["scripts"] as $src): ?>
-    <script src="<?php echo htmlspecialchars((string) $src, ENT_QUOTES, 'UTF-8'); ?>"></script>
+    <script src="<?php echo htmlspecialchars((string) $src, ENT_QUOTES, 'UTF-8'); ?>" defer></script>
   <?php endforeach; ?>
 <?php endif; ?>
 

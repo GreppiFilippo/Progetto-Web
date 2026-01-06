@@ -22,7 +22,7 @@ if (!defined('IN_APP')) {
   if (isset($templateParams["js"])):
     foreach ($templateParams["js"] as $script):
       ?>
-      <script src="<?php echo htmlspecialchars((string) $script, ENT_QUOTES, 'UTF-8'); ?>"></script>
+      <script src="<?php echo htmlspecialchars((string) $script, ENT_QUOTES, 'UTF-8'); ?>" defer></script>
       <?php
     endforeach;
   endif;
